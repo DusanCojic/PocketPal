@@ -2,9 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 
-import './temp1.dart';
-import './temp2.dart';
-import 'add.dart';
+import '../screens/expense_screen.dart';
+import '../screens/add_screen.dart';
+import '../screens/income_screen.dart';
+import '../screens/query_screen.dart';
+import '../screens/settings_screen.dart';
 
 class BottomBar extends StatelessWidget {
   final PersistentTabController _controller =
@@ -45,37 +47,50 @@ class BottomBar extends StatelessWidget {
 
   List<Widget> _buildScreens() {
     return [
-      MainScreen(),
+      ExpenseScreen(),
+      IncomeScreen(),
       AddScreen(),
-      SecondScreen(),
+      QueryScreen(),
+      SettingsScreen()
     ];
   }
 
   List<PersistentBottomNavBarItem> _navBarItems(BuildContext context) {
     return [
       PersistentBottomNavBarItem(
-        icon: const Icon(CupertinoIcons.home),
+        icon: const Icon(CupertinoIcons.arrow_right_arrow_left),
         activeColorPrimary: CupertinoColors.activeBlue,
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
-          icon: const Icon(
-            CupertinoIcons.add,
-            color: Colors.white,
-          ),
-          activeColorPrimary: CupertinoColors.activeBlue,
-          inactiveColorPrimary: CupertinoColors.systemGrey,
-          onPressed: (value) {
-            showModalBottomSheet(
-              context: context,
-              builder: (context) {
-                return AddScreen();
-              },
-              isDismissible: true,
-            );
-          }),
+        icon: const Icon(CupertinoIcons.rectangle_stack_person_crop_fill),
+        activeColorPrimary: CupertinoColors.activeBlue,
+        inactiveColorPrimary: CupertinoColors.systemGrey,
+      ),
       PersistentBottomNavBarItem(
-        icon: const Icon(CupertinoIcons.bars),
+        icon: const Icon(
+          CupertinoIcons.add,
+          color: Colors.white,
+        ),
+        activeColorPrimary: CupertinoColors.systemPurple,
+        inactiveColorPrimary: CupertinoColors.systemGrey,
+        onPressed: (value) {
+          showModalBottomSheet(
+            context: context,
+            builder: (context) {
+              return AddScreen();
+            },
+            isDismissible: true,
+          );
+        },
+      ),
+      PersistentBottomNavBarItem(
+        icon: const Icon(CupertinoIcons.search),
+        activeColorPrimary: CupertinoColors.activeBlue,
+        inactiveColorPrimary: CupertinoColors.systemGrey,
+      ),
+      PersistentBottomNavBarItem(
+        icon: const Icon(CupertinoIcons.gear_solid),
         activeColorPrimary: CupertinoColors.activeBlue,
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
