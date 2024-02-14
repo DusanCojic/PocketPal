@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
-@HiveType(typeId: 4)
+part 'saving.g.dart';
+
+@HiveType(typeId: 3)
 class Saving extends HiveObject {
   @HiveField(0)
   String name;

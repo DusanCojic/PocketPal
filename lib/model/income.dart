@@ -1,6 +1,8 @@
 import 'package:hive/hive.dart';
 
-@HiveType(typeId: 3)
+part 'income.g.dart';
+
+@HiveType(typeId: 2)
 class Income extends HiveObject {
   @HiveField(0)
   String source;
