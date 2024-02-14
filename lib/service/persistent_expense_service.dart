@@ -10,7 +10,7 @@ class PersistentExpenseService implements ExpenseService {
 
   @override
   Future<void> deleteExpense(Expense expense) async {
-    // TODO: implement deleteExpense
+    await box.delete(expense.key);
   }
 
   @override
@@ -20,11 +20,13 @@ class PersistentExpenseService implements ExpenseService {
 
   @override
   Future<void> saveExpense(Expense expense) async {
-    // TODO: implement saveExpense
+    await box.add(expense);
   }
 
   @override
   Future<void> updateExpense(Expense expense) async {
-    // TODO: implement updateExpense
+    await box.put(expense.key, expense);
   }
+
+  void dispose() async => await box.close();
 }
