@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 
-@HiveType(typeId: 2)
+part "category.g.dart";
+
+@HiveType(typeId: 1)
 class Category extends HiveObject {
   @HiveField(0)
   String name;
@@ -10,11 +12,14 @@ class Category extends HiveObject {
   String icon;
 
   @HiveField(2)
-  Color color;
+  int colorValue = 0;
 
-  Category({
-    required this.name,
-    required this.icon,
-    required this.color,
-  });
+  Color get color => Color(colorValue);
+  set color(Color color) => colorValue = color.value;
+
+  Category.withColor({required this.name, required this.icon, required color}) {
+    this.color = color;
+  }
+
+  Category({required this.name, required this.icon, required this.colorValue});
 }
