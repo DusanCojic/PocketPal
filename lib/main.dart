@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pocket_pal/model/expense.dart';
 import 'package:pocket_pal/model/income.dart';
 import 'package:pocket_pal/model/saving.dart';
-
+import './widgets/bottom_bar.dart';
 import 'model/category.dart';
 
 void main() async {
@@ -14,6 +15,7 @@ void main() async {
   Hive.registerAdapter(IncomeAdapter());
   Hive.registerAdapter(SavingAdapter());
 
+
   runApp(const MyApp());
 }
 
@@ -22,6 +24,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp();
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: BottomBar(),
+    );
   }
 }

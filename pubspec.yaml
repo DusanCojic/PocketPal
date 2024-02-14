@@ -17,6 +17,8 @@ dependencies:
   hive_flutter: ^1.1.0
   http: ^1.2.0
   hive_generator: ^2.0.1
+  persistent_bottom_nav_bar: ^5.0.2
+
 
 dev_dependencies:
   flutter_test:
