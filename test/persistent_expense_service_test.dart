@@ -9,22 +9,23 @@ import 'package:path_provider_platform_interface/path_provider_platform_interfac
 import 'fake_path_provider_platform.dart';
 
 void main() {
-  setUpAll(() async {
-    PathProviderPlatform.instance = FakePathProviderPlatform();
-    await Hive.initFlutter();
+  group("Persistent Expense basic service tests", () {
+    setUpAll(() async {
+      PathProviderPlatform.instance = FakePathProviderPlatform();
+      await Hive.initFlutter();
 
-    Hive.registerAdapter<Category>(CategoryAdapter());
-    Hive.registerAdapter<Expense>(ExpenseAdapter());
+      Hive.registerAdapter<Category>(CategoryAdapter());
+      Hive.registerAdapter<Expense>(ExpenseAdapter());
 
-    final box = await Hive.openBox<Expense>(
-      "testExpenseBox",
-    );
+      final box = await Hive.openBox<Expense>(
+        "testExpenseBox",
+      );
 
-    await box.clear();
-    await box.flush();
-    await box.close();
-  });
-  group("Expense service tests", () {
+      await box.clear();
+      await box.flush();
+      await box.close();
+    });
+
     test(
       "Get All Expenses Should return nothing",
       () async => getAllExpensesShouldReturnNothing(),

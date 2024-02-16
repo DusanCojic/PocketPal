@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:pocket_pal/model/category.dart';
 import 'package:pocket_pal/model/expense.dart';
 
 import '../interface/expense_service.dart';
@@ -28,5 +29,47 @@ class PersistentExpenseService implements ExpenseService {
     await box.put(expense.key, expense);
   }
 
-  void dispose() async => await box.close();
+  Future<void> dispose() async => await box.close();
+
+  @override
+  Future<List<Expense>> filterByCategories(List<Category> category) async {
+    // TODO: implement filterByCategories
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Expense>> filterByCategory(Category category) async {
+    // TODO: implement filterByCategory
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Expense>> getThisMonthExpenses() async {
+    // TODO: implement getLastMonthExpenses
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Expense>> getThisWeekExpenses() async {
+    // TODO: implement getLastWeekExpenses
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Expense>> getLastYearExpenses() async {
+    // TODO: implement getLastYearExpenses
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Expense>> getTodayExpenses() async {
+    // TODO: implement getTodayExpenses
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<List<Expense>> getYTDExpenses() async {
+    // TODO: implement getYTDExpenses
+    throw UnimplementedError();
+  }
 }

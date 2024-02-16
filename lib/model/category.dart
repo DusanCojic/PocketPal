@@ -22,4 +22,10 @@ class Category extends HiveObject {
   }
 
   Category({required this.name, required this.icon, required this.colorValue});
+
+  factory Category.fromJson(json) => Category(
+        name: json["name"],
+        icon: json["icon"],
+        colorValue: json["colorValue"],
+      );
 }
