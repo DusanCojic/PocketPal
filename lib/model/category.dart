@@ -28,4 +28,15 @@ class Category extends HiveObject {
         icon: json["icon"],
         colorValue: json["colorValue"],
       );
+
+  @override
+  bool operator ==(other) {
+    if (other is Category) {
+      return name == other.name &&
+          icon == other.icon &&
+          colorValue == other.colorValue;
+    }
+
+    return false;
+  }
 }

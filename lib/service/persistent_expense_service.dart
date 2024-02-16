@@ -33,43 +33,62 @@ class PersistentExpenseService implements ExpenseService {
 
   @override
   Future<List<Expense>> filterByCategories(List<Category> category) async {
-    // TODO: implement filterByCategories
-    throw UnimplementedError();
+    return box.values
+        .cast<Expense>()
+        .where((element) => category.any((cat) => element.category == cat))
+        .toList();
   }
 
   @override
   Future<List<Expense>> filterByCategory(Category category) async {
-    // TODO: implement filterByCategory
-    throw UnimplementedError();
+    return box.values
+        .cast<Expense>()
+        .where((element) => element.category == category)
+        .toList();
   }
 
   @override
   Future<List<Expense>> getThisMonthExpenses() async {
-    // TODO: implement getLastMonthExpenses
-    throw UnimplementedError();
+    DateTime thirtyDaysAgo = DateTime.now().subtract(const Duration(days: 30));
+    return getExpensesAfter(thirtyDaysAgo);
   }
 
   @override
   Future<List<Expense>> getThisWeekExpenses() async {
-    // TODO: implement getLastWeekExpenses
-    throw UnimplementedError();
+    DateTime weekAgo = DateTime.now().subtract(const Duration(days: 7));
+    return getExpensesAfter(weekAgo);
   }
 
   @override
   Future<List<Expense>> getLastYearExpenses() async {
-    // TODO: implement getLastYearExpenses
-    throw UnimplementedError();
+    DateTime yearAgo = DateTime.now().subtract(const Duration(days: 365));
+    return getExpensesAfter(yearAgo);
   }
 
   @override
   Future<List<Expense>> getTodayExpenses() async {
-    // TODO: implement getTodayExpenses
-    throw UnimplementedError();
+    DateTime today = DateTime.now();
+    return box.values
+        .cast<Expense>()
+        .where((element) =>
+            element.date.day == today.day &&
+            element.date.month == today.month &&
+            element.date.year == today.year)
+        .toList();
   }
 
   @override
   Future<List<Expense>> getYTDExpenses() async {
-    // TODO: implement getYTDExpenses
-    throw UnimplementedError();
+    return box.values
+        .cast<Expense>()
+        .where((element) => element.date.year == DateTime.now().year)
+        .toList();
+  }
+
+  Future<List<Expense>> getExpensesAfter(DateTime dateAfter) async {
+    return box.values
+        .cast<Expense>()
+        .where((element) => element.date.isAfter(dateAfter))
+        .toList();
   }
 }
