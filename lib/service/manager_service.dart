@@ -1,4 +1,5 @@
 import 'package:pocket_pal/interface/data_service.dart';
+import 'package:pocket_pal/service/persistent_data.service.dart';
 
 class ManagerService {
   ManagerService._internal();
@@ -7,7 +8,10 @@ class ManagerService {
 
   late DataService? _service;
 
-  void initialize() {}
+  Future<void> initialize() async {
+    _service = PersistentDataService();
+    await _service?.initialize();
+  }
 
   DataService get service {
     if (_service == null) throw "Service not initialized";
