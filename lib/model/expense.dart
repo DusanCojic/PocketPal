@@ -24,4 +24,13 @@ class Expense extends HiveObject {
     required this.date,
     required this.category,
   });
+
+  factory Expense.fromJson(dynamic json) => Expense(
+        name: json["name"],
+        amount: (json["amount"] as num).toDouble(),
+        date: DateTime.parse(json["date"]),
+        category: Category.fromJson(
+          json["category"],
+        ),
+      );
 }
