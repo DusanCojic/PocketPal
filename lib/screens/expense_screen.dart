@@ -31,9 +31,4 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
       ),
     );
   }
-
-  Future<double> getTotalExpenses() async {
-    await Future.delayed(const Duration(seconds: 1));
-    return 24537.32;
-  }
 }

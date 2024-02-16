@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../service/manager_service.dart';
+
 class ExpenseCard extends StatefulWidget {
   const ExpenseCard({super.key});
 
@@ -59,7 +61,10 @@ class _ExpenseCardState extends State<ExpenseCard> {
   }
 
   Future<double> getTotalExpenses() async {
-    await Future.delayed(const Duration(seconds: 1));
-    return 24513.32;
+    var list =
+        await ManagerService().service.getExpenseService().getAllExpenses();
+    double sum = 0;
+    list.forEach((element) => sum += element.amount);
+    return sum;
   }
 }
