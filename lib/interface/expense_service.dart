@@ -1,6 +1,7 @@
 import 'package:pocket_pal/model/category.dart';
 
 import '../model/expense.dart';
+import '../util/time_period.dart';
 
 abstract class ExpenseService {
   Future<List<Expense>> getAllExpenses();
@@ -8,11 +9,21 @@ abstract class ExpenseService {
   Future<void> deleteExpense(Expense expense);
   Future<void> updateExpense(Expense expense);
 
-  Future<List<Expense>> getTodayExpenses();
-  Future<List<Expense>> getThisWeekExpenses();
-  Future<List<Expense>> getThisMonthExpenses();
-  Future<List<Expense>> getYTDExpenses();
-  Future<List<Expense>> getLastYearExpenses();
+  Future<double> getTotalExpense({
+    TimePeriod period = TimePeriod.today,
+    DateTime? from,
+    DateTime? to,
+  });
+
+  Future<double> totalExpensesByCategory(Category category);
+  Future<double> totalExpensesByCategories(List<Category> category);
+
+  Future<List<Expense>> getExpenses({
+    TimePeriod period = TimePeriod.today,
+    DateTime? from,
+    DateTime? to,
+  });
+
   Future<List<Expense>> filterByCategory(Category category);
   Future<List<Expense>> filterByCategories(List<Category> category);
 }

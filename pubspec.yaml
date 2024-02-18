@@ -20,6 +20,7 @@ dependencies:
   persistent_bottom_nav_bar: ^5.0.2
 
   # Testing packages
+  mockito: ^5.4.4
   clock: ^1.1.1
 
 

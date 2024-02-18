@@ -1,8 +1,12 @@
 import 'package:hive/hive.dart';
+import 'package:pocket_pal/extension/expense_list_extension.dart';
 import 'package:pocket_pal/model/category.dart';
 import 'package:pocket_pal/model/expense.dart';
+import 'package:pocket_pal/util/time_period.dart';
 
 import '../interface/expense_service.dart';
+import '../extension/persistent_expense_service_filter_extension.dart';
+import '../extension/persistent_expense_service_total_extension.dart';
 
 class PersistentExpenseService implements ExpenseService {
   final Box box;
@@ -48,47 +52,56 @@ class PersistentExpenseService implements ExpenseService {
   }
 
   @override
-  Future<List<Expense>> getThisMonthExpenses() async {
-    DateTime thirtyDaysAgo = DateTime.now().subtract(const Duration(days: 30));
-    return getExpensesAfter(thirtyDaysAgo);
+  Future<double> getTotalExpense({
+    TimePeriod period = TimePeriod.today,
+    DateTime? from,
+    DateTime? to,
+  }) async {
+    switch (period) {
+      case TimePeriod.today:
+        return await getTotalTodaysExpense();
+      case TimePeriod.thisWeek:
+        return await getTotalWeeksExpense();
+      case TimePeriod.thisMonth:
+        return await getTotalMonthsExpense();
+      case TimePeriod.ytd:
+        return await getTotalYtdExpense();
+      case TimePeriod.lastYear:
+        return await getTotalYearExpense();
+      case TimePeriod.custom:
+        return await getTotalCustomPeriodExpense(from, to);
+    }
   }
 
   @override
-  Future<List<Expense>> getThisWeekExpenses() async {
-    DateTime weekAgo = DateTime.now().subtract(const Duration(days: 7));
-    return getExpensesAfter(weekAgo);
+  Future<List<Expense>> getExpenses({
+    TimePeriod period = TimePeriod.today,
+    DateTime? from,
+    DateTime? to,
+  }) async {
+    switch (period) {
+      case TimePeriod.today:
+        return await getTodayExpenses();
+      case TimePeriod.thisWeek:
+        return await getThisWeekExpenses();
+      case TimePeriod.thisMonth:
+        return await getThisMonthExpenses();
+      case TimePeriod.ytd:
+        return await getYTDExpenses();
+      case TimePeriod.lastYear:
+        return await getLastYearExpenses();
+      case TimePeriod.custom:
+        return await getCustomPeriodExpenses(from, to);
+    }
   }
 
   @override
-  Future<List<Expense>> getLastYearExpenses() async {
-    DateTime yearAgo = DateTime.now().subtract(const Duration(days: 365));
-    return getExpensesAfter(yearAgo);
+  Future<double> totalExpensesByCategories(List<Category> category) async {
+    return (await filterByCategories(category)).sum();
   }
 
   @override
-  Future<List<Expense>> getTodayExpenses() async {
-    DateTime today = DateTime.now();
-    return box.values
-        .cast<Expense>()
-        .where((element) =>
-            element.date.day == today.day &&
-            element.date.month == today.month &&
-            element.date.year == today.year)
-        .toList();
-  }
-
-  @override
-  Future<List<Expense>> getYTDExpenses() async {
-    return box.values
-        .cast<Expense>()
-        .where((element) => element.date.year == DateTime.now().year)
-        .toList();
-  }
-
-  Future<List<Expense>> getExpensesAfter(DateTime dateAfter) async {
-    return box.values
-        .cast<Expense>()
-        .where((element) => element.date.isAfter(dateAfter))
-        .toList();
+  Future<double> totalExpensesByCategory(Category category) async {
+    return (await filterByCategory(category)).sum();
   }
 }
