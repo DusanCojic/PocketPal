@@ -26,11 +26,13 @@ class PersistentExpenseService implements ExpenseService {
   @override
   Future<void> saveExpense(Expense expense) async {
     await box.add(expense);
+    await box.flush();
   }
 
   @override
   Future<void> updateExpense(Expense expense) async {
     await box.put(expense.key, expense);
+    await box.flush();
   }
 
   Future<void> dispose() async => await box.close();
