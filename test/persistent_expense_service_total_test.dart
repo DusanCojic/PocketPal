@@ -1,14 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:clock/clock.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive_flutter/adapters.dart';
+import 'package:pocket_pal/extension/persistent_expense_service_total_extension.dart';
 import 'package:pocket_pal/model/category.dart';
 import 'package:pocket_pal/model/expense.dart';
 import 'package:pocket_pal/service/persistent_expense_service.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
-import 'package:pocket_pal/util/time_period.dart';
 
 import 'fake_path_provider_platform.dart';
 import 'persistent_expense_service_filter_test.dart';
@@ -81,6 +80,11 @@ void persistentExpenseTotalServiceTests() {
   );
 
   test(
+    "Get total expenses for custom period",
+    () async => getTotalForCustomPeriod(service),
+  );
+
+  test(
     "Total expenses based on category",
     () async => totalExpensesBasedOnCategory(service),
   );
@@ -92,53 +96,50 @@ void persistentExpenseTotalServiceTests() {
 }
 
 void todaysTotalExpenses(PersistentExpenseService service) async {
-  withClock(Clock.fixed(DateTime(2024, 2, 16)), () async {
-    double todaysExpensesList = await service.getTotalExpense(
-      period: TimePeriod.today,
-    );
+  double todaysExpensesList = await service.getTotalExpensesForExactDate(
+    DateTime(2024, 2, 16),
+  );
 
-    expect(todaysExpensesList, 6);
-  });
+  expect(todaysExpensesList, 6);
 }
 
 void lastWeeksTotalExpenses(PersistentExpenseService service) async {
-  withClock(Clock.fixed(DateTime(2024, 2, 16)), () async {
-    double todaysExpensesList = await service.getTotalExpense(
-      period: TimePeriod.thisWeek,
-    );
+  double todaysExpensesList = await service.getTotalExpensesAfter(
+    DateTime(2024, 2, 16).subtract(const Duration(days: 7)),
+  );
 
-    expect(todaysExpensesList, 21);
-  });
+  expect(todaysExpensesList, 21);
 }
 
 void lastMonthsTotalExpenses(PersistentExpenseService service) async {
-  withClock(Clock.fixed(DateTime(2024, 2, 16)), () async {
-    double todaysExpensesList = await service.getTotalExpense(
-      period: TimePeriod.thisMonth,
-    );
+  double todaysExpensesList = await service.getTotalExpensesAfter(
+    DateTime(2024, 2, 16).subtract(const Duration(days: 30)),
+  );
 
-    expect(todaysExpensesList, 45);
-  });
+  expect(todaysExpensesList, 45);
 }
 
 void ytdTotalExpenses(PersistentExpenseService service) async {
-  withClock(Clock.fixed(DateTime(2024, 2, 16)), () async {
-    double todaysExpensesList = await service.getTotalExpense(
-      period: TimePeriod.ytd,
-    );
+  double todaysExpensesList = await service.getTotalExpensesForYear(2024);
 
-    expect(todaysExpensesList, 78);
-  });
+  expect(todaysExpensesList, 78);
 }
 
 void lastYearTotalExpenses(PersistentExpenseService service) async {
-  withClock(Clock.fixed(DateTime(2024, 2, 16)), () async {
-    double todaysExpensesList = await service.getTotalExpense(
-      period: TimePeriod.lastYear,
-    );
+  double todaysExpensesList = await service.getTotalExpensesAfter(
+    DateTime(2024, 2, 16).subtract(const Duration(days: 365)),
+  );
 
-    expect(todaysExpensesList, 120);
-  });
+  expect(todaysExpensesList, 120);
+}
+
+void getTotalForCustomPeriod(PersistentExpenseService service) async {
+  double totalCustom = await service.getTotalCustomPeriodExpense(
+    DateTime(2024, 2, 14),
+    DateTime(2024, 2, 17),
+  );
+
+  expect(totalCustom, 21);
 }
 
 void totalExpensesBasedOnCategory(PersistentExpenseService service) async {

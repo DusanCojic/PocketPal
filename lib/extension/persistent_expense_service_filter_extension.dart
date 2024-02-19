@@ -21,21 +21,23 @@ extension PersistentExpenseFilterExtension on PersistentExpenseService {
   }
 
   Future<List<Expense>> getTodayExpenses() async {
-    return box.values
-        .cast<Expense>()
-        .filterForGivenDate(currentDate())
-        .toList();
+    return getExpensesForExactDate(currentDate());
   }
 
   Future<List<Expense>> getYTDExpenses() async {
-    return box.values
-        .cast<Expense>()
-        .filterGivenYear(currentDate().year)
-        .toList();
+    return getExpensesForYear(currentDate().year);
   }
 
   Future<List<Expense>> getExpensesAfter(DateTime dateAfter) async {
     return box.values.cast<Expense>().filterAfterDate(dateAfter).toList();
+  }
+
+  Future<List<Expense>> getExpensesForYear(int year) async {
+    return box.values.cast<Expense>().filterGivenYear(year).toList();
+  }
+
+  Future<List<Expense>> getExpensesForExactDate(DateTime date) async {
+    return box.values.cast<Expense>().filterForGivenDate(date).toList();
   }
 
   Future<List<Expense>> getCustomPeriodExpenses(
