@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_pal/util/time_period.dart';
 
 import '../service/manager_service.dart';
 
@@ -61,10 +62,9 @@ class _ExpenseCardState extends State<ExpenseCard> {
   }
 
   Future<double> getTotalExpenses() async {
-    var list =
-        await ManagerService().service.getExpenseService().getAllExpenses();
-    double sum = 0;
-    list.forEach((element) => sum += element.amount);
-    return sum;
+    return await ManagerService()
+        .service
+        .getExpenseService()
+        .getTotalExpense(period: TimePeriod.today);
   }
 }
