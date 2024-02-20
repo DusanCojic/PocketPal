@@ -24,10 +24,8 @@ class PersistentDataService implements DataService {
     Hive.registerAdapter(IncomeAdapter());
     Hive.registerAdapter(SavingAdapter());
 
-    Hive.openBox("expenses").then(
-      (value) => _expenseService = PersistentExpenseService(
-        box: value,
-      ),
+    _expenseService = PersistentExpenseService(
+      box: await Hive.openBox("expenses"),
     );
   }
 }

@@ -12,6 +12,8 @@ class BottomBar extends StatelessWidget {
   final PersistentTabController _controller =
       PersistentTabController(initialIndex: 0);
 
+  int currentIndex = 0;
+
   BottomBar({super.key});
 
   @override
@@ -41,15 +43,20 @@ class BottomBar extends StatelessWidget {
         curve: Curves.ease,
         duration: Duration(milliseconds: 200),
       ),
+      onItemSelected: (index) => {
+        currentIndex = index,
+      },
       navBarStyle: NavBarStyle.style15,
     );
   }
 
   List<Widget> _buildScreens() {
     return [
-      ExpenseScreen(),
+      const ExpenseScreen(),
       IncomeScreen(),
-      AddScreen(),
+      AddScreen(
+        pressedFromPage: currentIndex,
+      ),
       QueryScreen(),
       SettingsScreen()
     ];
@@ -76,12 +83,17 @@ class BottomBar extends StatelessWidget {
         inactiveColorPrimary: CupertinoColors.systemGrey,
         onPressed: (value) {
           showModalBottomSheet(
-            context: context,
-            builder: (context) {
-              return AddScreen();
-            },
-            isDismissible: true,
-          );
+              context: context,
+              builder: (context) {
+                return Padding(
+                  padding: const EdgeInsets.only(top: 40.0),
+                  child: AddScreen(
+                    pressedFromPage: currentIndex,
+                  ),
+                );
+              },
+              isDismissible: true,
+              isScrollControlled: true);
         },
       ),
       PersistentBottomNavBarItem(

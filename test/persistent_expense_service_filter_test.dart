@@ -10,7 +10,6 @@ import 'package:pocket_pal/service/persistent_expense_service.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
 import 'fake_path_provider_platform.dart';
-import 'persistent_expense_service_filter_test.dart';
 
 void main() {
   group(
