@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_constructors
-
 import 'package:flutter/material.dart';
 
 class AddExpense extends StatefulWidget {
@@ -10,7 +8,23 @@ class AddExpense extends StatefulWidget {
 }
 
 class _AddExpenseState extends State<AddExpense> {
-  List<String> categories = ['Groceries', 'Bills', 'Subscription'];
+  List<String> categories = [
+    'Groceries',
+    'Bills',
+    'Subscription',
+    'Shopping',
+    'Rent',
+    'Transportation',
+    'Health',
+    'Maintenance',
+    'Travel',
+    'Gifts',
+    'Taxes',
+    'Personal Care',
+    'Investments',
+    'Clothing',
+    'Other',
+  ];
   late String dropdownValue;
 
   final TextEditingController _nameController = TextEditingController();
@@ -24,50 +38,30 @@ class _AddExpenseState extends State<AddExpense> {
     if (categories.isNotEmpty) {
       dropdownValue = categories.first;
     } else {
-      dropdownValue = 'abc';
+      dropdownValue = 'No categories';
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        const Padding(
-          padding: EdgeInsets.only(top: 20.0),
-          child: Text(
-            "Add Expense:",
-            style: TextStyle(fontSize: 20.0),
+    return SizedBox(
+      height: 450,
+      child: Column(
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(top: 20.0),
+            child: Text(
+              "Add Expense:",
+              style: TextStyle(fontSize: 20.0),
+            ),
           ),
-        ),
-        Form(
-          key: GlobalKey<FormState>(),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: _nameController,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        width: 3,
-                      ),
-                      borderRadius: BorderRadius.circular(50.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Colors.blueAccent,
-                      ),
-                      borderRadius: BorderRadius.circular(50.0),
-                    ),
-                    labelText: "Name",
-                    contentPadding: const EdgeInsets.only(left: 20),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 15.0),
-                  child: TextFormField(
+          Form(
+            key: GlobalKey<FormState>(),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [
+                  TextFormField(
                     controller: _amountController,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
@@ -83,90 +77,146 @@ class _AddExpenseState extends State<AddExpense> {
                         ),
                         borderRadius: BorderRadius.circular(50.0),
                       ),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          color: Colors.blueAccent,
+                        ),
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
                       labelText: "Amount",
                       contentPadding: const EdgeInsets.only(left: 20),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 15.0),
-                  child: TextFormField(
-                    controller: _dateController,
-                    decoration: InputDecoration(
-                      labelText: 'Date',
-                      filled: false,
-                      prefixIcon: const Icon(Icons.calendar_today),
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          width: 3,
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15.0),
+                    child: TextFormField(
+                      controller: _dateController,
+                      decoration: InputDecoration(
+                        contentPadding:
+                            const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                        labelText: 'Date',
+                        filled: false,
+                        prefixIcon: const Icon(Icons.calendar_today),
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            width: 3,
+                          ),
+                          borderRadius: BorderRadius.circular(50.0),
                         ),
-                        borderRadius: BorderRadius.circular(50.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Colors.blueAccent,
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Colors.blueAccent,
+                          ),
+                          borderRadius: BorderRadius.circular(50.0),
                         ),
-                        borderRadius: BorderRadius.circular(50.0),
-                      ),
-                    ),
-                    readOnly: true,
-                    onTap: () {
-                      _selectDate();
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 15.0),
-                  child: DropdownButtonFormField<String>(
-                    hint: const Text('Select a category'),
-                    value: dropdownValue,
-                    focusColor: Colors.transparent,
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(50.0),
-                        borderSide: BorderSide(
-                          color: Colors.blueAccent,
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Colors.blueAccent,
+                          ),
+                          borderRadius: BorderRadius.circular(50.0),
                         ),
                       ),
-                    ),
-                    onChanged: (value) {
-                      setState(() {
-                        dropdownValue = value!;
-                      });
-                    },
-                    items: categories
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 15.0),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueAccent,
-                      minimumSize: Size(250, 48),
-                    ),
-                    onPressed: () {
-                      print(_nameController.text);
-                      print(_amountController.text);
-                      print(_dateController.text);
-                      print(dropdownValue);
-                    },
-                    child: const Text(
-                      'Add',
-                      style: TextStyle(color: Colors.white),
+                      readOnly: true,
+                      onTap: () {
+                        _selectDate();
+                      },
                     ),
                   ),
-                ),
-              ],
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15.0),
+                    child: DropdownButtonFormField<String>(
+                      alignment: Alignment.centerRight,
+                      isExpanded: true,
+                      hint: const Text('Select a category'),
+                      value: dropdownValue,
+                      focusColor: Colors.transparent,
+                      decoration: InputDecoration(
+                        contentPadding:
+                            const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(50.0),
+                          borderSide: const BorderSide(
+                            color: Colors.blueAccent,
+                          ),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Colors.blueAccent,
+                          ),
+                          borderRadius: BorderRadius.circular(50.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Colors.blueAccent,
+                          ),
+                          borderRadius: BorderRadius.circular(50.0),
+                        ),
+                      ),
+                      onChanged: (value) {
+                        setState(() {
+                          dropdownValue = value!;
+                        });
+                      },
+                      items: categories
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem(
+                          value: value,
+                          child: Center(
+                            child: Text(value),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15.0),
+                    child: TextFormField(
+                      controller: _nameController,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            width: 3,
+                          ),
+                          borderRadius: BorderRadius.circular(50.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Colors.blueAccent,
+                          ),
+                          borderRadius: BorderRadius.circular(50.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Colors.blueAccent,
+                          ),
+                          borderRadius: BorderRadius.circular(50.0),
+                        ),
+                        labelText: "Description",
+                        contentPadding: const EdgeInsets.only(left: 20),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15.0),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blueAccent,
+                        minimumSize: const Size(250, 48),
+                      ),
+                      onPressed: () {},
+                      child: const Text(
+                        'Add',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 

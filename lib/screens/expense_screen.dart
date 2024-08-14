@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_pal/model/expense.dart';
 import 'package:pocket_pal/widgets/expense_card.dart';
+import 'package:pocket_pal/widgets/expense_list.dart';
+import 'package:pocket_pal/widgets/total_expense_card.dart';
 
 class ExpenseScreen extends StatefulWidget {
   const ExpenseScreen({super.key});
@@ -23,9 +26,10 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
             ],
           ),
         ),
-        child: const Column(
-          children: [
-            ExpenseCard(),
+        child: ListView(
+          children: const [
+            TotalExpenseCard(),
+            ExpenseList(),
           ],
         ),
       ),

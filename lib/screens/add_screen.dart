@@ -15,16 +15,11 @@ class AddScreen extends StatelessWidget {
       case 0:
         return const AddExpense();
       case 1:
-        return const Center(
-          child: Text('Pressed from account page'),
-        );
-      case 3:
-        return const Center(
-          child: Text('Pressed from query page'),
-        );
-      case 4:
-        return const Center(
-          child: Text('Pressed from settings page'),
+        return const SizedBox(
+          height: 450,
+          child: Center(
+            child: Text('Pressed from income screen'),
+          ),
         );
       default:
         return const AddExpense();

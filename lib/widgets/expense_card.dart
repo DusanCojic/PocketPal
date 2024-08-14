@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pocket_pal/util/time_period.dart';
-
-import '../service/manager_service.dart';
 
 class ExpenseCard extends StatefulWidget {
   const ExpenseCard({super.key});
@@ -13,58 +10,59 @@ class ExpenseCard extends StatefulWidget {
 class _ExpenseCardState extends State<ExpenseCard> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(10),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Card(
-        child: Container(
-          height: 130,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Colors.blueAccent.withOpacity(0.5),
-                Colors.purpleAccent.withOpacity(0.5),
-              ],
-            ),
-            borderRadius: BorderRadius.circular(15),
-          ),
-          child: Center(
-            child: FutureBuilder<double>(
-              future: getTotalExpenses(),
-              builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
-                return RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontFamily: 'Roboto',
-                      fontSize: 15.0,
-                    ),
-                    children: [
-                      const TextSpan(text: 'Total Expense:\n'),
-                      TextSpan(
-                        text: '\$${snapshot.data.toString()}',
-                        style: const TextStyle(
-                          fontSize: 25.0,
-                          fontWeight: FontWeight.bold,
+        color: const Color.fromRGBO(255, 255, 255, 1.0),
+        child: SizedBox(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height / 10,
+          child: const Row(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15.0),
+                child: Text("Icon"),
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Grocieries",
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
+                        Padding(
+                          padding: EdgeInsets.only(right: 10.0),
+                          child: Text(
+                            "\$142.32",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    Text(
+                      "05.08.2024",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        color: Colors.grey,
                       ),
-                    ],
-                  ),
-                );
-              },
-            ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
-  }
-
-  Future<double> getTotalExpenses() async {
-    return await ManagerService()
-        .service
-        .getExpenseService()
-        .getTotalExpense(period: TimePeriod.today);
   }
 }
