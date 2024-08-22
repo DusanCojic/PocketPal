@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_pal/model/expense.dart';
 
 class ExpenseCard extends StatefulWidget {
-  const ExpenseCard({super.key});
+  Expense expense;
+
+  ExpenseCard({super.key, required this.expense});
 
   @override
   State<ExpenseCard> createState() => _ExpenseCardState();
@@ -17,9 +20,9 @@ class _ExpenseCardState extends State<ExpenseCard> {
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height / 10,
-          child: const Row(
+          child: Row(
             children: [
-              Padding(
+              const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 15.0),
                 child: Text("Icon"),
               ),
@@ -32,17 +35,17 @@ class _ExpenseCardState extends State<ExpenseCard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          "Grocieries",
-                          style: TextStyle(
+                          widget.expense.category.name,
+                          style: const TextStyle(
                             fontSize: 16.0,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(right: 10.0),
+                          padding: const EdgeInsets.only(right: 10.0),
                           child: Text(
-                            "\$142.32",
-                            style: TextStyle(
+                            '\$${widget.expense.amount.toString()}',
+                            style: const TextStyle(
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -50,8 +53,8 @@ class _ExpenseCardState extends State<ExpenseCard> {
                       ],
                     ),
                     Text(
-                      "05.08.2024",
-                      style: TextStyle(
+                      '${widget.expense.date.year}-${widget.expense.date.month}-${widget.expense.date.day}',
+                      style: const TextStyle(
                         fontWeight: FontWeight.w500,
                         color: Colors.grey,
                       ),
