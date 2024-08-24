@@ -7,7 +7,7 @@ part 'expense.g.dart';
 @HiveType(typeId: 0)
 class Expense extends HiveObject {
   @HiveField(0)
-  String name;
+  String description;
 
   @HiveField(1)
   double amount;
@@ -19,14 +19,14 @@ class Expense extends HiveObject {
   Category category;
 
   Expense({
-    required this.name,
+    required this.description,
     required this.amount,
     required this.date,
     required this.category,
   });
 
   factory Expense.fromJson(dynamic json) => Expense(
-        name: json["name"],
+        description: json["description"],
         amount: (json["amount"] as num).toDouble(),
         date: DateTime.parse(json["date"]),
         category: Category.fromJson(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pocket_pal/model/expense.dart';
-import 'package:pocket_pal/service/manager_service.dart';
+import 'package:pocket_pal/widgets/add_category.dart';
 
 class AddExpense extends StatefulWidget {
   const AddExpense({super.key});
@@ -10,23 +9,7 @@ class AddExpense extends StatefulWidget {
 }
 
 class _AddExpenseState extends State<AddExpense> {
-  List<String> categories = [
-    'Groceries',
-    'Bills',
-    'Subscription',
-    'Shopping',
-    'Rent',
-    'Transportation',
-    'Health',
-    'Maintenance',
-    'Travel',
-    'Gifts',
-    'Taxes',
-    'Personal Care',
-    'Investments',
-    'Clothing',
-    'Other',
-  ];
+  List<String> categories = [];
   late String dropdownValue;
 
   final TextEditingController _nameController = TextEditingController();
@@ -168,7 +151,14 @@ class _AddExpenseState extends State<AddExpense> {
                               borderRadius: BorderRadius.circular(50.0),
                             ),
                             child: IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (context) {
+                                    return const AddCategory();
+                                  },
+                                );
+                              },
                               icon: const Icon(
                                 Icons.add,
                                 size: 25.0,
@@ -181,7 +171,7 @@ class _AddExpenseState extends State<AddExpense> {
                           child: DropdownButtonFormField<String>(
                             alignment: Alignment.centerRight,
                             isExpanded: true,
-                            hint: const Text('Select a category'),
+                            hint: const Text('No categories'),
                             value: dropdownValue,
                             focusColor: Colors.transparent,
                             decoration: InputDecoration(

@@ -83,17 +83,18 @@ class BottomBar extends StatelessWidget {
         inactiveColorPrimary: CupertinoColors.systemGrey,
         onPressed: (value) {
           showModalBottomSheet(
-              context: context,
-              builder: (context) {
-                return Padding(
-                  padding: const EdgeInsets.only(top: 40.0),
-                  child: AddScreen(
-                    pressedFromPage: currentIndex,
-                  ),
-                );
-              },
-              isDismissible: true,
-              isScrollControlled: true);
+            context: context,
+            builder: (context) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 40.0),
+                child: AddScreen(
+                  pressedFromPage: currentIndex,
+                ),
+              );
+            },
+            isDismissible: true,
+            isScrollControlled: true,
+          );
         },
       ),
       PersistentBottomNavBarItem(

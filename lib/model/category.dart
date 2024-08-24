@@ -9,7 +9,7 @@ class Category extends HiveObject {
   String name;
 
   @HiveField(1)
-  String icon;
+  IconData icon;
 
   @HiveField(2)
   int colorValue = 0;
