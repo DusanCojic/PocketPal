@@ -9,7 +9,7 @@ class Category extends HiveObject {
   String name;
 
   @HiveField(1)
-  IconData icon;
+  int iconCode = 0;
 
   @HiveField(2)
   int colorValue = 0;
@@ -17,15 +17,17 @@ class Category extends HiveObject {
   Color get color => Color(colorValue);
   set color(Color color) => colorValue = color.value;
 
-  Category.withColor({required this.name, required this.icon, required color}) {
+  Category.withColor(
+      {required this.name, required this.iconCode, required color}) {
     this.color = color;
   }
 
-  Category({required this.name, required this.icon, required this.colorValue});
+  Category(
+      {required this.name, required this.iconCode, required this.colorValue});
 
   factory Category.fromJson(json) => Category(
         name: json["name"],
-        icon: json["icon"],
+        iconCode: json["iconCode"],
         colorValue: json["colorValue"],
       );
 
@@ -33,7 +35,7 @@ class Category extends HiveObject {
   bool operator ==(other) {
     if (other is Category) {
       return name == other.name &&
-          icon == other.icon &&
+          iconCode == other.iconCode &&
           colorValue == other.colorValue;
     }
 

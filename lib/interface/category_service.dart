@@ -5,4 +5,5 @@ abstract class CategoryService {
   Future<void> saveCategory(Category category);
   Future<void> deleteCategory(Category category);
   Future<void> updateCategory(Category category);
+  Future<Category> getCategoryByName(String name);
 }

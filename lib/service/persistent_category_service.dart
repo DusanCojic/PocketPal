@@ -29,5 +29,13 @@ class PersistentCategoryService implements CategoryService {
     await box.flush();
   }
 
+  @override
+  Future<Category> getCategoryByName(String name) async {
+    return box.values
+        .cast<Category>()
+        .toList()
+        .firstWhere((element) => element.name == name);
+  }
+
   Future<void> dispose() async => await box.close();
 }

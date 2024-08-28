@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pocket_pal/model/expense.dart';
-import 'package:pocket_pal/widgets/expense_card.dart';
 import 'package:pocket_pal/widgets/expense_list.dart';
 import 'package:pocket_pal/widgets/total_expense_card.dart';
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pocket_pal/model/expense.dart';
 
+// ignore: must_be_immutable
 class ExpenseCard extends StatefulWidget {
   Expense expense;
 

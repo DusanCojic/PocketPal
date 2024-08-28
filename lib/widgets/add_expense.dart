@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_pal/model/category.dart';
+import 'package:pocket_pal/model/expense.dart';
+import 'package:pocket_pal/service/manager_service.dart';
 import 'package:pocket_pal/widgets/add_category.dart';
 
 class AddExpense extends StatefulWidget {
@@ -10,22 +13,27 @@ class AddExpense extends StatefulWidget {
 
 class _AddExpenseState extends State<AddExpense> {
   List<String> categories = [];
-  late String dropdownValue;
+  String? dropdownValue;
 
-  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _amountController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
 
-    if (categories.isNotEmpty) {
-      dropdownValue = categories.first;
-    } else {
-      dropdownValue = 'No categories';
-    }
+    initializeCategories();
   }
+
+  void initializeCategories() async {
+    List<Category> cats = await getCategories();
+    setState(() {
+      categories = cats.map((category) => category.name).toList();
+    });
+  }
+
+  List<bool> fieldEmptyChecks = List.filled(3, false);
 
   @override
   Widget build(BuildContext context) {
@@ -47,9 +55,12 @@ class _AddExpenseState extends State<AddExpense> {
               child: Column(
                 children: [
                   TextFormField(
-                    controller: _nameController,
-                    keyboardType: TextInputType.text,
+                    controller: _amountController,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
+                      errorText: fieldEmptyChecks[0]
+                          ? "This field cannot be empty"
+                          : null,
                       border: OutlineInputBorder(
                         borderSide: const BorderSide(
                           width: 3,
@@ -68,37 +79,8 @@ class _AddExpenseState extends State<AddExpense> {
                         ),
                         borderRadius: BorderRadius.circular(50.0),
                       ),
-                      labelText: "Name",
+                      labelText: "Amount",
                       contentPadding: const EdgeInsets.only(left: 20),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 15.0),
-                    child: TextFormField(
-                      controller: _amountController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            width: 3,
-                          ),
-                          borderRadius: BorderRadius.circular(50.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.blueAccent,
-                          ),
-                          borderRadius: BorderRadius.circular(50.0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.blueAccent,
-                          ),
-                          borderRadius: BorderRadius.circular(50.0),
-                        ),
-                        labelText: "Amount",
-                        contentPadding: const EdgeInsets.only(left: 20),
-                      ),
                     ),
                   ),
                   Padding(
@@ -106,6 +88,9 @@ class _AddExpenseState extends State<AddExpense> {
                     child: TextFormField(
                       controller: _dateController,
                       decoration: InputDecoration(
+                        errorText: fieldEmptyChecks[1]
+                            ? "This field cannot be empty"
+                            : null,
                         contentPadding:
                             const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
                         labelText: 'Date',
@@ -155,7 +140,9 @@ class _AddExpenseState extends State<AddExpense> {
                                 showModalBottomSheet(
                                   context: context,
                                   builder: (context) {
-                                    return const AddCategory();
+                                    return AddCategory(
+                                      onCategoryAdded: initializeCategories,
+                                    );
                                   },
                                 );
                               },
@@ -171,10 +158,13 @@ class _AddExpenseState extends State<AddExpense> {
                           child: DropdownButtonFormField<String>(
                             alignment: Alignment.centerRight,
                             isExpanded: true,
-                            hint: const Text('No categories'),
+                            hint: const Text('Select a category'),
                             value: dropdownValue,
                             focusColor: Colors.transparent,
                             decoration: InputDecoration(
+                              errorText: fieldEmptyChecks[2]
+                                  ? "This field cannot be empty"
+                                  : null,
                               contentPadding: const EdgeInsets.fromLTRB(
                                   20.0, 10.0, 20.0, 10.0),
                               border: OutlineInputBorder(
@@ -198,21 +188,52 @@ class _AddExpenseState extends State<AddExpense> {
                             ),
                             onChanged: (value) {
                               setState(() {
-                                dropdownValue = value!;
+                                dropdownValue = value;
                               });
                             },
-                            items: categories
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem(
-                                value: value,
-                                child: Center(
-                                  child: Text(value),
-                                ),
-                              );
-                            }).toList(),
+                            items: categories.isEmpty
+                                ? []
+                                : categories.map<DropdownMenuItem<String>>(
+                                    (String value) {
+                                    return DropdownMenuItem(
+                                      value: value,
+                                      child: Center(
+                                        child: Text(value),
+                                      ),
+                                    );
+                                  }).toList(),
                           ),
                         ),
                       ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 15.0),
+                    child: TextFormField(
+                      controller: _descriptionController,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            width: 3,
+                          ),
+                          borderRadius: BorderRadius.circular(50.0),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Colors.blueAccent,
+                          ),
+                          borderRadius: BorderRadius.circular(50.0),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            color: Colors.blueAccent,
+                          ),
+                          borderRadius: BorderRadius.circular(50.0),
+                        ),
+                        labelText: "Description",
+                        contentPadding: const EdgeInsets.only(left: 20),
+                      ),
                     ),
                   ),
                   Padding(
@@ -222,7 +243,31 @@ class _AddExpenseState extends State<AddExpense> {
                         backgroundColor: Colors.blueAccent,
                         minimumSize: const Size(250, 48),
                       ),
-                      onPressed: () {},
+                      onPressed: () async {
+                        setState(() {
+                          fieldEmptyChecks[0] = _amountController.text.isEmpty;
+                          fieldEmptyChecks[1] = _dateController.text.isEmpty;
+                          fieldEmptyChecks[2] =
+                              dropdownValue == null ? true : false;
+                        });
+
+                        if (fieldEmptyChecks.any((element) => element)) {
+                          return;
+                        }
+
+                        String categoryName = dropdownValue ?? "";
+                        Category category =
+                            await getCategoryFromName(categoryName);
+
+                        Expense newExpense = Expense(
+                          amount: double.parse(_amountController.text),
+                          date: DateTime.parse(_dateController.text),
+                          category: category,
+                          description: _descriptionController.text,
+                        );
+
+                        await saveExpense(newExpense);
+                      },
                       child: const Text(
                         'Add',
                         style: TextStyle(color: Colors.white),
@@ -251,5 +296,20 @@ class _AddExpenseState extends State<AddExpense> {
         _dateController.text = picked.toString().split(" ")[0];
       });
     }
+  }
+
+  Future<List<Category>> getCategories() async {
+    return ManagerService().service.getCategoryService().getCategories();
+  }
+
+  Future<Category> getCategoryFromName(String name) async {
+    return await ManagerService()
+        .service
+        .getCategoryService()
+        .getCategoryByName(name);
+  }
+
+  Future<void> saveExpense(Expense expense) async {
+    await ManagerService().service.getExpenseService().saveExpense(expense);
   }
 }
