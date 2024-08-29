@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_pal/interface/subscriber.dart';
 import 'package:pocket_pal/util/time_period.dart';
 
 import '../service/manager_service.dart';
@@ -10,7 +11,14 @@ class TotalExpenseCard extends StatefulWidget {
   State<TotalExpenseCard> createState() => _TotalExpenseCardState();
 }
 
-class _TotalExpenseCardState extends State<TotalExpenseCard> {
+class _TotalExpenseCardState extends State<TotalExpenseCard>
+    implements Subscriber {
+  @override
+  void dispose() {
+    ManagerService().service.getExpenseService().unsubscribe(this);
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -65,6 +73,11 @@ class _TotalExpenseCardState extends State<TotalExpenseCard> {
     return await ManagerService()
         .service
         .getExpenseService()
-        .getTotalExpense(period: TimePeriod.today);
+        .getTotalExpense(sub: this, period: TimePeriod.thisMonth);
+  }
+
+  @override
+  void update() {
+    setState(() {});
   }
 }

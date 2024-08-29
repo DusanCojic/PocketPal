@@ -1,7 +1,9 @@
 import 'package:hive/hive.dart';
 import 'package:pocket_pal/extension/expense_list_extension.dart';
+import 'package:pocket_pal/interface/subscriber.dart';
 import 'package:pocket_pal/model/category.dart';
 import 'package:pocket_pal/model/expense.dart';
+import 'package:pocket_pal/model/observable.dart';
 import 'package:pocket_pal/util/time_period.dart';
 
 import '../interface/expense_service.dart';
@@ -10,6 +12,7 @@ import '../extension/persistent_expense_service_total_extension.dart';
 
 class PersistentExpenseService implements ExpenseService {
   final Box box;
+  final Observable expensesChangeNotifier = Observable();
 
   PersistentExpenseService({required this.box});
 
@@ -19,7 +22,8 @@ class PersistentExpenseService implements ExpenseService {
   }
 
   @override
-  Future<List<Expense>> getAllExpenses() async {
+  Future<List<Expense>> getAllExpenses(Subscriber? sub) async {
+    if (sub != null) expensesChangeNotifier.subscribe(sub);
     return box.values.cast<Expense>().toList();
   }
 
@@ -27,6 +31,7 @@ class PersistentExpenseService implements ExpenseService {
   Future<void> saveExpense(Expense expense) async {
     await box.add(expense);
     await box.flush();
+    expensesChangeNotifier.notifySubscribers();
   }
 
   @override
@@ -55,10 +60,12 @@ class PersistentExpenseService implements ExpenseService {
 
   @override
   Future<double> getTotalExpense({
+    Subscriber? sub,
     TimePeriod period = TimePeriod.today,
     DateTime? from,
     DateTime? to,
   }) async {
+    if (sub != null) expensesChangeNotifier.subscribe(sub);
     switch (period) {
       case TimePeriod.today:
         return await getTotalTodaysExpense();
@@ -105,5 +112,10 @@ class PersistentExpenseService implements ExpenseService {
   @override
   Future<double> totalExpensesByCategory(Category category) async {
     return (await filterByCategory(category)).sum();
+  }
+
+  @override
+  void unsubscribe(Subscriber sub) {
+    expensesChangeNotifier.unsubscribe(sub);
   }
 }

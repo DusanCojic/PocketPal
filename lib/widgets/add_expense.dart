@@ -4,6 +4,7 @@ import 'package:pocket_pal/model/expense.dart';
 import 'package:pocket_pal/service/manager_service.dart';
 import 'package:pocket_pal/widgets/add_category.dart';
 
+// ignore: must_be_immutable
 class AddExpense extends StatefulWidget {
   const AddExpense({super.key});
 
@@ -267,6 +268,13 @@ class _AddExpenseState extends State<AddExpense> {
                         );
 
                         await saveExpense(newExpense);
+
+                        _amountController.clear();
+                        _dateController.clear();
+                        _descriptionController.clear();
+                        setState(() {
+                          dropdownValue = null;
+                        });
                       },
                       child: const Text(
                         'Add',

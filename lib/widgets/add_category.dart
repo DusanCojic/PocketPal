@@ -148,6 +148,12 @@ class _AddCategoryState extends State<AddCategory> {
                             .saveCategory(newCategory);
 
                         widget.onCategoryAdded();
+
+                        _nameCotroller.clear();
+                        setState(() {
+                          currentColor = Colors.blueAccent;
+                          icon = Icons.home;
+                        });
                       },
                       child: const Text(
                         "Add",

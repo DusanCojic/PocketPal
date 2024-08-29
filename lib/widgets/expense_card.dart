@@ -23,9 +23,14 @@ class _ExpenseCardState extends State<ExpenseCard> {
           height: MediaQuery.of(context).size.height / 10,
           child: Row(
             children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15.0),
-                child: Text("Icon"),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: Icon(
+                  IconData(widget.expense.category.iconCode,
+                      fontFamily: "MaterialIcons"),
+                  color: widget.expense.category.color,
+                  size: 35.0,
+                ),
               ),
               Expanded(
                 child: Column(

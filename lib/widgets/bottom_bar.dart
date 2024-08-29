@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:pocket_pal/model/observable.dart';
 
 import '../screens/expense_screen.dart';
 import '../screens/add_screen.dart';
@@ -9,6 +10,8 @@ import '../screens/query_screen.dart';
 import '../screens/settings_screen.dart';
 
 class BottomBar extends StatelessWidget {
+  Observable expensesChangeNotifier = Observable();
+
   final PersistentTabController _controller =
       PersistentTabController(initialIndex: 0);
 
@@ -52,10 +55,13 @@ class BottomBar extends StatelessWidget {
 
   List<Widget> _buildScreens() {
     return [
-      const ExpenseScreen(),
+      ExpenseScreen(
+        expensesChangeNotifier: expensesChangeNotifier,
+      ),
       IncomeScreen(),
       AddScreen(
         pressedFromPage: currentIndex,
+        expensesChangeNotifier: expensesChangeNotifier,
       ),
       QueryScreen(),
       SettingsScreen()
@@ -89,6 +95,7 @@ class BottomBar extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 40.0),
                 child: AddScreen(
                   pressedFromPage: currentIndex,
+                  expensesChangeNotifier: expensesChangeNotifier,
                 ),
               );
             },
