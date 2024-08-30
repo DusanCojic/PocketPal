@@ -44,6 +44,17 @@ class _AddCategoryState extends State<AddCategory> {
       height: 300,
       child: Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 20.0),
+            child: Container(
+              width: 35,
+              height: 7,
+              decoration: BoxDecoration(
+                color: Colors.black12,
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+            ),
+          ),
           const Padding(
             padding: EdgeInsets.only(top: 20.0),
             child: Text(
@@ -66,19 +77,19 @@ class _AddCategoryState extends State<AddCategory> {
                         borderSide: const BorderSide(
                           width: 3,
                         ),
-                        borderRadius: BorderRadius.circular(50.0),
+                        borderRadius: BorderRadius.circular(20.0),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderSide: const BorderSide(
                           color: Colors.blueAccent,
                         ),
-                        borderRadius: BorderRadius.circular(50.0),
+                        borderRadius: BorderRadius.circular(20.0),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderSide: const BorderSide(
                           color: Colors.blueAccent,
                         ),
-                        borderRadius: BorderRadius.circular(50.0),
+                        borderRadius: BorderRadius.circular(20.0),
                       ),
                       labelText: "Name",
                       contentPadding: const EdgeInsets.only(left: 20),

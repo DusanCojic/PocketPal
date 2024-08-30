@@ -17,7 +17,11 @@ class _ExpenseCardState extends State<ExpenseCard> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Card(
-        color: const Color.fromRGBO(255, 255, 255, 1.0),
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        color: Colors.white,
         child: SizedBox(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height / 10,
@@ -25,11 +29,19 @@ class _ExpenseCardState extends State<ExpenseCard> {
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                child: Icon(
-                  IconData(widget.expense.category.iconCode,
-                      fontFamily: "MaterialIcons"),
-                  color: widget.expense.category.color,
-                  size: 35.0,
+                child: Container(
+                  width: 46,
+                  height: 46,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: widget.expense.category.color,
+                  ),
+                  child: Icon(
+                    IconData(widget.expense.category.iconCode,
+                        fontFamily: "MaterialIcons"),
+                    color: Colors.white,
+                    size: 30.0,
+                  ),
                 ),
               ),
               Expanded(
@@ -43,15 +55,16 @@ class _ExpenseCardState extends State<ExpenseCard> {
                         Text(
                           widget.expense.category.name,
                           style: const TextStyle(
-                            fontSize: 16.0,
+                            fontSize: 17.0,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(right: 10.0),
+                          padding: const EdgeInsets.only(right: 20.0),
                           child: Text(
                             '\$${widget.expense.amount.toString()}',
                             style: const TextStyle(
+                              fontSize: 17.0,
                               fontWeight: FontWeight.w600,
                             ),
                           ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pocket_pal/interface/subscriber.dart';
 import 'package:pocket_pal/util/time_period.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../service/manager_service.dart';
 
@@ -24,45 +25,51 @@ class _TotalExpenseCardState extends State<TotalExpenseCard>
     return Container(
       padding: const EdgeInsets.all(10),
       child: Card(
+        elevation: 15.0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
+        ),
         child: Container(
           height: 130,
+          width: 500,
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Colors.blueAccent.withOpacity(0.5),
-                Colors.purpleAccent.withOpacity(0.5),
-              ],
+            image: const DecorationImage(
+              image: AssetImage("../../assets/sun-tornado.png"),
+              fit: BoxFit.cover,
             ),
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: BorderRadius.circular(30),
           ),
-          child: Center(
-            child: FutureBuilder<double>(
-              future: getTotalExpenses(),
-              builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
-                return RichText(
-                  textAlign: TextAlign.center,
+          child: FutureBuilder<double>(
+            future: getTotalExpenses(),
+            builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 35.0, left: 30.0),
+                child: RichText(
                   text: TextSpan(
                     style: const TextStyle(
-                      color: Colors.black,
-                      fontFamily: 'Roboto',
+                      color: Colors.white,
                       fontSize: 15.0,
                     ),
                     children: [
-                      const TextSpan(text: 'Total Expense:\n'),
+                      const TextSpan(
+                        text: "Total Expense\n",
+                        style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
                       TextSpan(
                         text: '\$${snapshot.data.toString()}',
                         style: const TextStyle(
-                          fontSize: 25.0,
+                          fontSize: 35.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
           ),
         ),
       ),

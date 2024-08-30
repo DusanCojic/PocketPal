@@ -32,8 +32,11 @@ class BottomBar extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       stateManagement: true,
       hideNavigationBarWhenKeyboardShows: true,
-      decoration: NavBarDecoration(
-        borderRadius: BorderRadius.circular(10.0),
+      decoration: const NavBarDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(25.0),
+          topRight: Radius.circular(25.0),
+        ),
       ),
       popAllScreensOnTapOfSelectedTab: true,
       popActionScreens: PopActionScreensType.all,
@@ -71,21 +74,27 @@ class BottomBar extends StatelessWidget {
   List<PersistentBottomNavBarItem> _navBarItems(BuildContext context) {
     return [
       PersistentBottomNavBarItem(
-        icon: const Icon(CupertinoIcons.arrow_right_arrow_left),
-        activeColorPrimary: CupertinoColors.activeBlue,
-        inactiveColorPrimary: CupertinoColors.systemGrey,
-      ),
-      PersistentBottomNavBarItem(
-        icon: const Icon(CupertinoIcons.rectangle_stack_person_crop_fill),
+        icon: const Icon(
+          Icons.home_rounded,
+          size: 30.0,
+        ),
         activeColorPrimary: CupertinoColors.activeBlue,
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(
-          CupertinoIcons.add,
+          Icons.wallet_outlined,
+          size: 30.0,
+        ),
+        activeColorPrimary: CupertinoColors.activeBlue,
+        inactiveColorPrimary: CupertinoColors.systemGrey,
+      ),
+      PersistentBottomNavBarItem(
+        icon: const Icon(
+          Icons.add,
           color: Colors.white,
         ),
-        activeColorPrimary: CupertinoColors.systemPurple,
+        activeColorPrimary: Colors.orangeAccent,
         inactiveColorPrimary: CupertinoColors.systemGrey,
         onPressed: (value) {
           showModalBottomSheet(
@@ -105,12 +114,18 @@ class BottomBar extends StatelessWidget {
         },
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(CupertinoIcons.search),
+        icon: const Icon(
+          Icons.bar_chart_rounded,
+          size: 30.0,
+        ),
         activeColorPrimary: CupertinoColors.activeBlue,
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(CupertinoIcons.gear_solid),
+        icon: const Icon(
+          Icons.settings,
+          size: 30.0,
+        ),
         activeColorPrimary: CupertinoColors.activeBlue,
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),

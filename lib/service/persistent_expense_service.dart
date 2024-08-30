@@ -19,6 +19,7 @@ class PersistentExpenseService implements ExpenseService {
   @override
   Future<void> deleteExpense(Expense expense) async {
     await box.delete(expense.key);
+    expensesChangeNotifier.notifySubscribers();
   }
 
   @override

@@ -17,16 +17,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topRight,
-            end: Alignment.bottomLeft,
-            colors: [
-              Color.fromRGBO(254, 254, 248, 0.8),
-              Colors.white,
-            ],
-          ),
-        ),
+        color: const Color.fromRGBO(233, 234, 236, 0.2),
         child: const Column(
           children: [
             TotalExpenseCard(),

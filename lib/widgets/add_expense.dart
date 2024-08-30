@@ -42,8 +42,16 @@ class _AddExpenseState extends State<AddExpense> {
       height: 450,
       child: Column(
         children: [
+          Container(
+            width: 35,
+            height: 7,
+            decoration: BoxDecoration(
+              color: Colors.black12,
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+          ),
           const Padding(
-            padding: EdgeInsets.only(top: 20.0),
+            padding: EdgeInsets.only(top: 10.0),
             child: Text(
               "Add Expense:",
               style: TextStyle(fontSize: 20.0),
@@ -59,6 +67,7 @@ class _AddExpenseState extends State<AddExpense> {
                     controller: _amountController,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
+                      fillColor: Colors.white,
                       errorText: fieldEmptyChecks[0]
                           ? "This field cannot be empty"
                           : null,
@@ -66,19 +75,19 @@ class _AddExpenseState extends State<AddExpense> {
                         borderSide: const BorderSide(
                           width: 3,
                         ),
-                        borderRadius: BorderRadius.circular(50.0),
+                        borderRadius: BorderRadius.circular(20.0),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderSide: const BorderSide(
                           color: Colors.blueAccent,
                         ),
-                        borderRadius: BorderRadius.circular(50.0),
+                        borderRadius: BorderRadius.circular(20.0),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderSide: const BorderSide(
                           color: Colors.blueAccent,
                         ),
-                        borderRadius: BorderRadius.circular(50.0),
+                        borderRadius: BorderRadius.circular(20.0),
                       ),
                       labelText: "Amount",
                       contentPadding: const EdgeInsets.only(left: 20),
@@ -101,19 +110,19 @@ class _AddExpenseState extends State<AddExpense> {
                           borderSide: const BorderSide(
                             width: 3,
                           ),
-                          borderRadius: BorderRadius.circular(50.0),
+                          borderRadius: BorderRadius.circular(20.0),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: const BorderSide(
                             color: Colors.blueAccent,
                           ),
-                          borderRadius: BorderRadius.circular(50.0),
+                          borderRadius: BorderRadius.circular(20.0),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: const BorderSide(
                             color: Colors.blueAccent,
                           ),
-                          borderRadius: BorderRadius.circular(50.0),
+                          borderRadius: BorderRadius.circular(20.0),
                         ),
                       ),
                       readOnly: true,
@@ -134,7 +143,7 @@ class _AddExpenseState extends State<AddExpense> {
                                 color: Colors.blueAccent,
                                 width: 1.0,
                               ),
-                              borderRadius: BorderRadius.circular(50.0),
+                              borderRadius: BorderRadius.circular(20.0),
                             ),
                             child: IconButton(
                               onPressed: () {
@@ -169,7 +178,7 @@ class _AddExpenseState extends State<AddExpense> {
                               contentPadding: const EdgeInsets.fromLTRB(
                                   20.0, 10.0, 20.0, 10.0),
                               border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(50.0),
+                                borderRadius: BorderRadius.circular(20.0),
                                 borderSide: const BorderSide(
                                   color: Colors.blueAccent,
                                 ),
@@ -178,13 +187,13 @@ class _AddExpenseState extends State<AddExpense> {
                                 borderSide: const BorderSide(
                                   color: Colors.blueAccent,
                                 ),
-                                borderRadius: BorderRadius.circular(50.0),
+                                borderRadius: BorderRadius.circular(20.0),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderSide: const BorderSide(
                                   color: Colors.blueAccent,
                                 ),
-                                borderRadius: BorderRadius.circular(50.0),
+                                borderRadius: BorderRadius.circular(20.0),
                               ),
                             ),
                             onChanged: (value) {
@@ -218,19 +227,19 @@ class _AddExpenseState extends State<AddExpense> {
                           borderSide: const BorderSide(
                             width: 3,
                           ),
-                          borderRadius: BorderRadius.circular(50.0),
+                          borderRadius: BorderRadius.circular(20.0),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderSide: const BorderSide(
                             color: Colors.blueAccent,
                           ),
-                          borderRadius: BorderRadius.circular(50.0),
+                          borderRadius: BorderRadius.circular(20.0),
                         ),
                         enabledBorder: OutlineInputBorder(
                           borderSide: const BorderSide(
                             color: Colors.blueAccent,
                           ),
-                          borderRadius: BorderRadius.circular(50.0),
+                          borderRadius: BorderRadius.circular(20.0),
                         ),
                         labelText: "Description",
                         contentPadding: const EdgeInsets.only(left: 20),

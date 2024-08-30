@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pocket_pal/interface/subscriber.dart';
 import 'package:pocket_pal/model/expense.dart';
+import 'package:pocket_pal/screens/expense_screen.dart';
 import 'package:pocket_pal/service/manager_service.dart';
 import 'package:pocket_pal/widgets/expense_card.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class ExpenseList extends StatefulWidget {
   const ExpenseList({super.key});
@@ -40,7 +42,22 @@ class _ExpenseListState extends State<ExpenseList> implements Subscriber {
           return ListView.builder(
             itemCount: expenses.length,
             itemBuilder: (context, index) {
-              return ExpenseCard(expense: expenses[index]);
+              return Slidable(
+                key: ValueKey(index - expenses[index].hashCode),
+                endActionPane: ActionPane(
+                  motion: const DrawerMotion(),
+                  children: [
+                    SlidableAction(
+                      onPressed: (context) => removeExpense(expenses[index]),
+                      backgroundColor: Colors.redAccent,
+                      foregroundColor: Colors.white,
+                      icon: Icons.delete,
+                      label: 'Delete',
+                    ),
+                  ],
+                ),
+                child: ExpenseCard(expense: expenses[index]),
+              );
             },
           );
         },
@@ -53,6 +70,10 @@ class _ExpenseListState extends State<ExpenseList> implements Subscriber {
         .service
         .getExpenseService()
         .getAllExpenses(this);
+  }
+
+  Future<void> removeExpense(Expense expense) async {
+    await ManagerService().service.getExpenseService().deleteExpense(expense);
   }
 
   @override
