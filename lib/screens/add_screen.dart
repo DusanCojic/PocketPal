@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pocket_pal/widgets/add_expense.dart';
 
+// ignore: must_be_immutable
 class AddScreen extends StatelessWidget {
   int pressedFromPage = 0;
 

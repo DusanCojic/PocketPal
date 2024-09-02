@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pocket_pal/model/category.dart';
 import 'package:pocket_pal/model/expense.dart';
 import 'package:pocket_pal/service/manager_service.dart';
-import 'package:pocket_pal/widgets/bottom_bar.dart';
 import 'package:pocket_pal/widgets/input_field_style.dart';
 import 'package:intl/intl.dart';
 

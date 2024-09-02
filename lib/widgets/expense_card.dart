@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pocket_pal/model/expense.dart';
-import 'package:pocket_pal/widgets/bottom_bar.dart';
 import 'package:pocket_pal/widgets/full_expense_view.dart';
 
 // ignore: must_be_immutable

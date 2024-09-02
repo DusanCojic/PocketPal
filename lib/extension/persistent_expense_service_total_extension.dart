@@ -1,4 +1,3 @@
-import '../model/expense.dart';
 import 'expense_list_extension.dart';
 import 'persistent_expense_service_filter_extension.dart';
 

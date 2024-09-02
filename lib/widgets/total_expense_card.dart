@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pocket_pal/interface/subscriber.dart';
 import 'package:pocket_pal/util/time_period.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 import '../service/manager_service.dart';
 

@@ -19,11 +19,18 @@ class PersistentCategoryService implements CategoryService {
   @override
   Future<List<Category>> getCategories(Subscriber? sub) async {
     if (sub != null) categoriesChangeNotifier.subscribe(sub);
-    return box.values.cast<Category>().toList();
+    return box.values.cast<Category>().toList().sublist(1);
+  }
+
+  @override
+  Future<bool> categoryExists(Category category) async {
+    List<Category> categories = await getCategories(null);
+    return categories.any((element) => element.name == category.name);
   }
 
   @override
   Future<void> saveCategory(Category category) async {
+    if (await categoryExists(category)) return;
     await box.add(category);
     await box.flush();
     categoriesChangeNotifier.notifySubscribers();
