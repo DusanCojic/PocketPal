@@ -39,6 +39,7 @@ class PersistentExpenseService implements ExpenseService {
   Future<void> updateExpense(Expense expense) async {
     await box.put(expense.key, expense);
     await box.flush();
+    expensesChangeNotifier.notifySubscribers();
   }
 
   Future<void> dispose() async => await box.close();
@@ -113,6 +114,11 @@ class PersistentExpenseService implements ExpenseService {
   @override
   Future<double> totalExpensesByCategory(Category category) async {
     return (await filterByCategory(category)).sum();
+  }
+
+  @override
+  void subscribe(Subscriber sub) {
+    expensesChangeNotifier.subscribe(sub);
   }
 
   @override

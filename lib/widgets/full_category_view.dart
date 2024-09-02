@@ -1,26 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
+import 'package:flutter_iconpicker/flutter_iconpicker.dart';
 import 'package:pocket_pal/model/category.dart';
 import 'package:pocket_pal/service/manager_service.dart';
 import 'package:pocket_pal/widgets/input_field_style.dart';
 
-class AddCategory extends StatefulWidget {
-  final Function onCategoryAdded;
+class FullCategoryView extends StatefulWidget {
+  final Category category;
+  final Function onCategoryEditted;
 
-  const AddCategory({super.key, required this.onCategoryAdded});
+  const FullCategoryView({
+    super.key,
+    required this.category,
+    required this.onCategoryEditted,
+  });
 
   @override
-  State<StatefulWidget> createState() => _AddCategoryState();
+  State<StatefulWidget> createState() => _FullCategoryViewState();
 }
 
-class _AddCategoryState extends State<AddCategory> {
+class _FullCategoryViewState extends State<FullCategoryView> {
   final TextEditingController _nameCotroller = TextEditingController();
 
   IconData? icon = Icons.home;
 
   Color currentColor = Colors.blueAccent;
   Color pickerColor = Colors.blueAccent;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _nameCotroller.text = widget.category.name;
+    currentColor = Color(widget.category.colorValue);
+    icon = IconData(
+      widget.category.iconCode,
+      fontFamily: 'MaterialIcons',
+    );
+  }
 
   _pickIcon() async {
     icon = await showIconPicker(
@@ -59,7 +76,7 @@ class _AddCategoryState extends State<AddCategory> {
           const Padding(
             padding: EdgeInsets.only(top: 20.0),
             child: Text(
-              "Add Category:",
+              "View and edit a category:",
               style: TextStyle(
                 fontSize: 26.0,
                 fontWeight: FontWeight.bold,
@@ -129,31 +146,27 @@ class _AddCategoryState extends State<AddCategory> {
                           isNameEmpty = _nameCotroller.text.isEmpty;
                         });
 
-                        if (isNameEmpty) {
-                          return;
+                        if ((_nameCotroller.text == widget.category.name &&
+                                currentColor.value ==
+                                    widget.category.colorValue) ||
+                            isNameEmpty) {
+                          if (icon != null &&
+                              icon?.codePoint == widget.category.iconCode) {
+                            return;
+                          }
                         }
 
-                        Category newCategory = Category(
-                          name: _nameCotroller.text,
-                          iconCode: icon?.codePoint ?? Icons.home.codePoint,
-                          colorValue: currentColor.value,
-                        );
+                        widget.category.name = _nameCotroller.text;
+                        widget.category.colorValue = currentColor.value;
+                        widget.category.iconCode =
+                            icon?.codePoint ?? Icons.home.codePoint;
 
-                        await ManagerService()
-                            .service
-                            .getCategoryService()
-                            .saveCategory(newCategory);
+                        await updateCategory(widget.category);
 
-                        widget.onCategoryAdded();
-
-                        _nameCotroller.clear();
-                        setState(() {
-                          currentColor = Colors.blueAccent;
-                          icon = Icons.home;
-                        });
+                        widget.onCategoryEditted();
                       },
                       child: const Text(
-                        "Add",
+                        "Edit",
                         style: TextStyle(color: Colors.white),
                       ),
                     ),
@@ -194,5 +207,12 @@ class _AddCategoryState extends State<AddCategory> {
         );
       },
     );
+  }
+
+  Future<void> updateCategory(Category category) async {
+    await ManagerService()
+        .service
+        .getCategoryService()
+        .updateCategory(category);
   }
 }

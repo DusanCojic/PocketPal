@@ -1,29 +1,39 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
-import 'package:pocket_pal/model/observable.dart';
 
 import '../screens/expense_screen.dart';
 import '../screens/add_screen.dart';
 import '../screens/income_screen.dart';
-import '../screens/query_screen.dart';
+import '../screens/stats_screen.dart';
 import '../screens/settings_screen.dart';
 
 class BottomBar extends StatelessWidget {
-  Observable expensesChangeNotifier = Observable();
+  static const BottomBar instance = BottomBar._internal();
 
-  final PersistentTabController _controller =
+  const BottomBar._internal();
+
+  factory BottomBar() => instance;
+
+  static final PersistentTabController _controller =
       PersistentTabController(initialIndex: 0);
 
-  int currentIndex = 0;
+  static bool hideNavBar = false;
 
-  BottomBar({super.key});
+  PersistentTabController get getController => _controller;
+
+  static int currentIndex = 0;
+
+  void hideBottomBar() => hideNavBar = true;
+  void showBottomBar() => hideNavBar = false;
 
   @override
   Widget build(BuildContext context) {
     return PersistentTabView(
       context,
       controller: _controller,
+      navBarHeight: 70,
+      hideNavigationBar: hideNavBar,
       screens: _buildScreens(),
       items: _navBarItems(context),
       confineInSafeArea: true,
@@ -58,13 +68,10 @@ class BottomBar extends StatelessWidget {
 
   List<Widget> _buildScreens() {
     return [
-      ExpenseScreen(
-        expensesChangeNotifier: expensesChangeNotifier,
-      ),
+      const ExpenseScreen(),
       IncomeScreen(),
       AddScreen(
         pressedFromPage: currentIndex,
-        expensesChangeNotifier: expensesChangeNotifier,
       ),
       QueryScreen(),
       SettingsScreen()
@@ -76,7 +83,7 @@ class BottomBar extends StatelessWidget {
       PersistentBottomNavBarItem(
         icon: const Icon(
           Icons.home_rounded,
-          size: 30.0,
+          size: 35.0,
         ),
         activeColorPrimary: CupertinoColors.activeBlue,
         inactiveColorPrimary: CupertinoColors.systemGrey,
@@ -84,7 +91,7 @@ class BottomBar extends StatelessWidget {
       PersistentBottomNavBarItem(
         icon: const Icon(
           Icons.wallet_outlined,
-          size: 30.0,
+          size: 35.0,
         ),
         activeColorPrimary: CupertinoColors.activeBlue,
         inactiveColorPrimary: CupertinoColors.systemGrey,
@@ -93,6 +100,7 @@ class BottomBar extends StatelessWidget {
         icon: const Icon(
           Icons.add,
           color: Colors.white,
+          size: 35.0,
         ),
         activeColorPrimary: Colors.orangeAccent,
         inactiveColorPrimary: CupertinoColors.systemGrey,
@@ -104,7 +112,6 @@ class BottomBar extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 40.0),
                 child: AddScreen(
                   pressedFromPage: currentIndex,
-                  expensesChangeNotifier: expensesChangeNotifier,
                 ),
               );
             },
@@ -116,7 +123,7 @@ class BottomBar extends StatelessWidget {
       PersistentBottomNavBarItem(
         icon: const Icon(
           Icons.bar_chart_rounded,
-          size: 30.0,
+          size: 35.0,
         ),
         activeColorPrimary: CupertinoColors.activeBlue,
         inactiveColorPrimary: CupertinoColors.systemGrey,
@@ -124,7 +131,7 @@ class BottomBar extends StatelessWidget {
       PersistentBottomNavBarItem(
         icon: const Icon(
           Icons.settings,
-          size: 30.0,
+          size: 35.0,
         ),
         activeColorPrimary: CupertinoColors.activeBlue,
         inactiveColorPrimary: CupertinoColors.systemGrey,

@@ -29,5 +29,6 @@ abstract class ExpenseService {
   Future<List<Expense>> filterByCategory(Category category);
   Future<List<Expense>> filterByCategories(List<Category> category);
 
+  void subscribe(Subscriber sub);
   void unsubscribe(Subscriber sub);
 }

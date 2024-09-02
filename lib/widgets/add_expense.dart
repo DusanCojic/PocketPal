@@ -3,6 +3,7 @@ import 'package:pocket_pal/model/category.dart';
 import 'package:pocket_pal/model/expense.dart';
 import 'package:pocket_pal/service/manager_service.dart';
 import 'package:pocket_pal/widgets/add_category.dart';
+import 'package:pocket_pal/widgets/input_field_style.dart';
 
 // ignore: must_be_immutable
 class AddExpense extends StatefulWidget {
@@ -39,7 +40,7 @@ class _AddExpenseState extends State<AddExpense> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 450,
+      height: 480,
       child: Column(
         children: [
           Container(
@@ -51,10 +52,14 @@ class _AddExpenseState extends State<AddExpense> {
             ),
           ),
           const Padding(
-            padding: EdgeInsets.only(top: 10.0),
+            padding: EdgeInsets.only(top: 20.0),
             child: Text(
               "Add Expense:",
-              style: TextStyle(fontSize: 20.0),
+              style: TextStyle(
+                fontSize: 26.0,
+                fontWeight: FontWeight.bold,
+                color: Colors.blueAccent,
+              ),
             ),
           ),
           Form(
@@ -66,64 +71,20 @@ class _AddExpenseState extends State<AddExpense> {
                   TextFormField(
                     controller: _amountController,
                     keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      fillColor: Colors.white,
-                      errorText: fieldEmptyChecks[0]
-                          ? "This field cannot be empty"
-                          : null,
-                      border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          width: 3,
-                        ),
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Colors.blueAccent,
-                        ),
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Colors.blueAccent,
-                        ),
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      labelText: "Amount",
-                      contentPadding: const EdgeInsets.only(left: 20),
+                    decoration: customInputDecoration(
+                      label: "Amount",
+                      emptyCheck: fieldEmptyChecks[0],
+                      icon: null,
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 15.0),
                     child: TextFormField(
                       controller: _dateController,
-                      decoration: InputDecoration(
-                        errorText: fieldEmptyChecks[1]
-                            ? "This field cannot be empty"
-                            : null,
-                        contentPadding:
-                            const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                        labelText: 'Date',
-                        filled: false,
-                        prefixIcon: const Icon(Icons.calendar_today),
-                        border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            width: 3,
-                          ),
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.blueAccent,
-                          ),
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.blueAccent,
-                          ),
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
+                      decoration: customInputDecoration(
+                        label: "Date",
+                        emptyCheck: fieldEmptyChecks[1],
+                        icon: Icons.calendar_month_rounded,
                       ),
                       readOnly: true,
                       onTap: () {
@@ -139,10 +100,7 @@ class _AddExpenseState extends State<AddExpense> {
                           padding: const EdgeInsets.only(right: 5.0),
                           child: Container(
                             decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.blueAccent,
-                                width: 1.0,
-                              ),
+                              color: Colors.blueAccent,
                               borderRadius: BorderRadius.circular(20.0),
                             ),
                             child: IconButton(
@@ -160,7 +118,7 @@ class _AddExpenseState extends State<AddExpense> {
                                 Icons.add,
                                 size: 25.0,
                               ),
-                              color: Colors.blueAccent,
+                              color: Colors.white,
                             ),
                           ),
                         ),
@@ -222,27 +180,10 @@ class _AddExpenseState extends State<AddExpense> {
                     child: TextFormField(
                       controller: _descriptionController,
                       keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            width: 3,
-                          ),
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.blueAccent,
-                          ),
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            color: Colors.blueAccent,
-                          ),
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        labelText: "Description",
-                        contentPadding: const EdgeInsets.only(left: 20),
+                      decoration: customInputDecoration(
+                        label: "Description",
+                        emptyCheck: false,
+                        icon: null,
                       ),
                     ),
                   ),
@@ -316,7 +257,7 @@ class _AddExpenseState extends State<AddExpense> {
   }
 
   Future<List<Category>> getCategories() async {
-    return ManagerService().service.getCategoryService().getCategories();
+    return ManagerService().service.getCategoryService().getCategories(null);
   }
 
   Future<Category> getCategoryFromName(String name) async {

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pocket_pal/interface/subscriber.dart';
 import 'package:pocket_pal/model/expense.dart';
-import 'package:pocket_pal/screens/expense_screen.dart';
 import 'package:pocket_pal/service/manager_service.dart';
 import 'package:pocket_pal/widgets/expense_card.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -39,26 +38,30 @@ class _ExpenseListState extends State<ExpenseList> implements Subscriber {
           }
 
           final expenses = snapshot.data!.reversed.toList();
-          return ListView.builder(
-            itemCount: expenses.length,
-            itemBuilder: (context, index) {
-              return Slidable(
-                key: ValueKey(index - expenses[index].hashCode),
-                endActionPane: ActionPane(
-                  motion: const DrawerMotion(),
-                  children: [
-                    SlidableAction(
-                      onPressed: (context) => removeExpense(expenses[index]),
-                      backgroundColor: Colors.redAccent,
-                      foregroundColor: Colors.white,
-                      icon: Icons.delete,
-                      label: 'Delete',
-                    ),
-                  ],
-                ),
-                child: ExpenseCard(expense: expenses[index]),
-              );
-            },
+          expenses.sort((a, b) => b.date.compareTo(a.date));
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 30.0),
+            child: ListView.builder(
+              itemCount: expenses.length,
+              itemBuilder: (context, index) {
+                return Slidable(
+                  key: ValueKey(index - expenses[index].hashCode),
+                  endActionPane: ActionPane(
+                    motion: const DrawerMotion(),
+                    children: [
+                      SlidableAction(
+                        onPressed: (context) => removeExpense(expenses[index]),
+                        backgroundColor: Colors.redAccent,
+                        foregroundColor: Colors.white,
+                        icon: Icons.delete,
+                        label: 'Delete',
+                      ),
+                    ],
+                  ),
+                  child: ExpenseCard(expense: expenses[index]),
+                );
+              },
+            ),
           );
         },
       ),
@@ -66,6 +69,7 @@ class _ExpenseListState extends State<ExpenseList> implements Subscriber {
   }
 
   Future<List<Expense>> buildList() async {
+    ManagerService().service.getCategoryService().subscribe(this);
     return await ManagerService()
         .service
         .getExpenseService()

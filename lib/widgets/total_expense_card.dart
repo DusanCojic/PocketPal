@@ -42,6 +42,9 @@ class _TotalExpenseCardState extends State<TotalExpenseCard>
           child: FutureBuilder<double>(
             future: getTotalExpenses(),
             builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
+              String totalExpense = snapshot.hasData && snapshot.data != null
+                  ? '\$${snapshot.data!.toStringAsFixed(2)}'
+                  : '\$0.00';
               return Padding(
                 padding: const EdgeInsets.only(top: 35.0, left: 30.0),
                 child: RichText(
@@ -59,7 +62,7 @@ class _TotalExpenseCardState extends State<TotalExpenseCard>
                         ),
                       ),
                       TextSpan(
-                        text: '\$${snapshot.data.toString()}',
+                        text: totalExpense,
                         style: const TextStyle(
                           fontSize: 35.0,
                           fontWeight: FontWeight.bold,
