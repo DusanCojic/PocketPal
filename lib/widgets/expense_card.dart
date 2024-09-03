@@ -45,10 +45,12 @@ class _ExpenseCardState extends State<ExpenseCard> {
                     height: 46,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: widget.expense.category.color,
+                      color: widget.expense.category?.color,
                     ),
                     child: Icon(
-                      IconData(widget.expense.category.iconCode,
+                      IconData(
+                          widget.expense.category?.iconCode ??
+                              Icons.home.codePoint,
                           fontFamily: "MaterialIcons"),
                       color: Colors.white,
                       size: 30.0,
@@ -64,7 +66,7 @@ class _ExpenseCardState extends State<ExpenseCard> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            widget.expense.category.name,
+                            widget.expense.category?.name ?? "Name not found",
                             style: const TextStyle(
                               fontSize: 17.0,
                               fontWeight: FontWeight.w600,

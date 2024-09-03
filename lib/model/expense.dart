@@ -16,21 +16,23 @@ class Expense extends HiveObject {
   DateTime date;
 
   @HiveField(3)
-  Category category;
+  int categoryId;
+
+  Category? category;
 
   Expense({
     required this.description,
     required this.amount,
     required this.date,
-    required this.category,
+    required this.categoryId,
   });
 
   factory Expense.fromJson(dynamic json) => Expense(
         description: json["description"],
         amount: (json["amount"] as num).toDouble(),
         date: DateTime.parse(json["date"]),
-        category: Category.fromJson(
-          json["category"],
-        ),
+        categoryId: (json["categoryId"] as num).toInt(),
       );
+
+  void setCategory(Category cat) => category = cat;
 }

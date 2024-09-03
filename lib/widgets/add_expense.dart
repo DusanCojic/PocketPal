@@ -213,9 +213,11 @@ class _AddExpenseState extends State<AddExpense> {
                         Expense newExpense = Expense(
                           amount: double.parse(_amountController.text),
                           date: DateTime.parse(_dateController.text),
-                          category: category,
+                          categoryId: category.key,
                           description: _descriptionController.text,
                         );
+
+                        newExpense.setCategory(category);
 
                         await saveExpense(newExpense);
 

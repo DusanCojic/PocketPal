@@ -30,7 +30,7 @@ class _FullExpenseViewState extends State<FullExpenseView> {
 
     _amountController.text = widget.expense.amount.toString();
     _dateController.text = DateFormat('yyyy-MM-dd').format(widget.expense.date);
-    dropdownValue = widget.expense.category.name;
+    dropdownValue = widget.expense.category?.name;
     _descriptionController.text = widget.expense.description;
   }
 
@@ -182,7 +182,7 @@ class _FullExpenseViewState extends State<FullExpenseView> {
                                   widget.expense.amount.toString() &&
                               DateTime.parse(_dateController.text) ==
                                   widget.expense.date &&
-                              dropdownValue == widget.expense.category.name &&
+                              dropdownValue == widget.expense.category?.name &&
                               _descriptionController.text ==
                                   widget.expense.description) {
                             return;
