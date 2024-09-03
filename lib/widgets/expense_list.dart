@@ -70,10 +70,17 @@ class _ExpenseListState extends State<ExpenseList> implements Subscriber {
 
   Future<List<Expense>> buildList() async {
     ManagerService().service.getCategoryService().subscribe(this);
-    return await ManagerService()
-        .service
-        .getExpenseService()
-        .getAllExpenses(this);
+    List<Expense> expenses =
+        await ManagerService().service.getExpenseService().getAllExpenses(this);
+
+    for (Expense expense in expenses) {
+      expense.setCategory(await ManagerService()
+          .service
+          .getCategoryService()
+          .getCategoryById(expense.categoryId));
+    }
+
+    return expenses;
   }
 
   Future<void> removeExpense(Expense expense) async {

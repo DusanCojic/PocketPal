@@ -166,7 +166,7 @@ class _FullCategoryViewState extends State<FullCategoryView> {
                         widget.onCategoryEditted();
                       },
                       child: const Text(
-                        "Edit",
+                        "Save",
                         style: TextStyle(color: Colors.white),
                       ),
                     ),

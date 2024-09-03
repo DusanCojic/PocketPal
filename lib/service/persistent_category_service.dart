@@ -57,6 +57,11 @@ class PersistentCategoryService implements CategoryService {
         .firstWhere((element) => element.name == name);
   }
 
+  @override
+  Future<Category> getCategoryById(int categoryId) async {
+    return box.get(categoryId);
+  }
+
   Future<void> dispose() async => await box.close();
 
   @override

@@ -8,6 +8,7 @@ abstract class CategoryService {
   Future<void> deleteCategory(Category category);
   Future<void> updateCategory(Category category);
   Future<Category> getCategoryByName(String name);
+  Future<Category> getCategoryById(int categoryId);
   void subscribe(Subscriber sub);
   void unsubscribe(Subscriber sub);
 }

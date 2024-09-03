@@ -83,41 +83,55 @@ class _CategoryListState extends State<CategoryList> implements Subscriber {
                     if (category.name == "Uncategorized") {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Card(
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30.0),
-                          ),
-                          color: Colors.white,
-                          child: SizedBox(
-                            width: MediaQuery.of(context).size.width - 30,
-                            height: MediaQuery.of(context).size.height / 10,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 20.0),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    width: 46,
-                                    height: 46,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: category.color,
+                        child: GestureDetector(
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return FullCategoryView(
+                                  category: category,
+                                  onCategoryEditted: getCategories,
+                                );
+                              },
+                            );
+                          },
+                          child: Card(
+                            elevation: 0,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                            ),
+                            color: Colors.white,
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width - 30,
+                              height: MediaQuery.of(context).size.height / 10,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 20.0),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: 46,
+                                      height: 46,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: category.color,
+                                      ),
+                                      child: Icon(
+                                        IconData(category.iconCode,
+                                            fontFamily: "MaterialIcons"),
+                                        color: Colors.white,
+                                        size: 30.0,
+                                      ),
                                     ),
-                                    child: Icon(
-                                      IconData(category.iconCode,
-                                          fontFamily: "MaterialIcons"),
-                                      color: Colors.white,
-                                      size: 30.0,
+                                    Padding(
+                                      padding:
+                                          const EdgeInsets.only(left: 20.0),
+                                      child: Text(
+                                        category.name,
+                                        style: const TextStyle(fontSize: 18.0),
+                                      ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 20.0),
-                                    child: Text(
-                                      category.name,
-                                      style: const TextStyle(fontSize: 18.0),
-                                    ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           ),
