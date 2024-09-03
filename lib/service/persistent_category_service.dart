@@ -3,6 +3,7 @@ import 'package:pocket_pal/interface/category_service.dart';
 import 'package:pocket_pal/interface/subscriber.dart';
 import 'package:pocket_pal/model/category.dart';
 import 'package:pocket_pal/model/observable.dart';
+import 'package:pocket_pal/service/manager_service.dart';
 
 class PersistentCategoryService implements CategoryService {
   final Box box;
@@ -13,13 +14,18 @@ class PersistentCategoryService implements CategoryService {
   @override
   Future<void> deleteCategory(Category category) async {
     await box.delete(category.key);
+    Category uncategorized = await getCategoryByName("Uncategorized");
+    await ManagerService().service.getExpenseService().replaceCategory(
+          category,
+          uncategorized,
+        );
     categoriesChangeNotifier.notifySubscribers();
   }
 
   @override
   Future<List<Category>> getCategories(Subscriber? sub) async {
     if (sub != null) categoriesChangeNotifier.subscribe(sub);
-    return box.values.cast<Category>().toList().sublist(1);
+    return box.values.cast<Category>().toList();
   }
 
   @override

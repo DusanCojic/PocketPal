@@ -17,6 +17,8 @@ abstract class ExpenseService {
     DateTime? to,
   });
 
+  Future<void> replaceCategory(Category categoryToReplace, Category cateogry);
+
   Future<double> totalExpensesByCategory(Category category);
   Future<double> totalExpensesByCategories(List<Category> category);
 

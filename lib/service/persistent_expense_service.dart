@@ -17,6 +17,17 @@ class PersistentExpenseService implements ExpenseService {
   PersistentExpenseService({required this.box});
 
   @override
+  Future<void> replaceCategory(
+      Category categoryToReplace, Category category) async {
+    List<Expense> expenses = await getAllExpenses(null);
+    for (Expense expense in expenses) {
+      if (expense.category == categoryToReplace) {
+        expense.category = category;
+      }
+    }
+  }
+
+  @override
   Future<void> deleteExpense(Expense expense) async {
     await box.delete(expense.key);
     expensesChangeNotifier.notifySubscribers();
