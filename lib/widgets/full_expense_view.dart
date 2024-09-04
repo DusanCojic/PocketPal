@@ -196,9 +196,11 @@ class _FullExpenseViewState extends State<FullExpenseView> {
                               double.parse(_amountController.text);
                           widget.expense.date =
                               DateTime.parse(_dateController.text);
-                          widget.expense.category = category;
+                          widget.expense.categoryId = category.key;
                           widget.expense.description =
                               _descriptionController.text;
+
+                          widget.expense.setCategory(category);
 
                           await updateExpense(widget.expense);
                         },
