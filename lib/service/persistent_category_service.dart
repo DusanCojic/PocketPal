@@ -13,12 +13,12 @@ class PersistentCategoryService implements CategoryService {
 
   @override
   Future<void> deleteCategory(Category category) async {
-    await box.delete(category.key);
     Category uncategorized = await getCategoryByName("Uncategorized");
     await ManagerService().service.getExpenseService().replaceCategory(
           category,
           uncategorized,
         );
+    await box.delete(category.key);
     categoriesChangeNotifier.notifySubscribers();
   }
 
@@ -59,7 +59,7 @@ class PersistentCategoryService implements CategoryService {
 
   @override
   Future<Category> getCategoryById(int categoryId) async {
-    return box.get(categoryId);
+    return await box.get(categoryId);
   }
 
   Future<void> dispose() async => await box.close();

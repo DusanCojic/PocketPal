@@ -1,9 +1,11 @@
+import 'package:flutter/foundation.dart' as nesto;
 import 'package:hive/hive.dart';
 import 'package:pocket_pal/extension/expense_list_extension.dart';
 import 'package:pocket_pal/interface/subscriber.dart';
 import 'package:pocket_pal/model/category.dart';
 import 'package:pocket_pal/model/expense.dart';
 import 'package:pocket_pal/model/observable.dart';
+import 'package:pocket_pal/service/manager_service.dart';
 import 'package:pocket_pal/util/time_period.dart';
 
 import '../interface/expense_service.dart';
@@ -22,7 +24,9 @@ class PersistentExpenseService implements ExpenseService {
     List<Expense> expenses = await getAllExpenses(null);
     for (Expense expense in expenses) {
       if (expense.category == categoryToReplace) {
-        expense.category = category;
+        expense.setCategory(category);
+        expense.categoryId = category.key;
+        await updateExpense(expense);
       }
     }
   }
@@ -36,7 +40,16 @@ class PersistentExpenseService implements ExpenseService {
   @override
   Future<List<Expense>> getAllExpenses(Subscriber? sub) async {
     if (sub != null) expensesChangeNotifier.subscribe(sub);
-    return box.values.cast<Expense>().toList();
+    var x = box.values.cast<Expense>();
+    if (nesto.kDebugMode) {
+      x.forEach((element) async {
+        element.category = await ManagerService()
+            .service
+            .getCategoryService()
+            .getCategoryById(element.categoryId);
+      });
+    }
+    return x.toList();
   }
 
   @override

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pocket_pal/interface/subscriber.dart';
+import 'package:pocket_pal/model/category.dart';
 import 'package:pocket_pal/model/expense.dart';
 import 'package:pocket_pal/service/manager_service.dart';
 import 'package:pocket_pal/widgets/expense_card.dart';
@@ -70,17 +71,11 @@ class _ExpenseListState extends State<ExpenseList> implements Subscriber {
 
   Future<List<Expense>> buildList() async {
     ManagerService().service.getCategoryService().subscribe(this);
-    List<Expense> expenses =
-        await ManagerService().service.getExpenseService().getAllExpenses(this);
 
-    for (Expense expense in expenses) {
-      expense.setCategory(await ManagerService()
-          .service
-          .getCategoryService()
-          .getCategoryById(expense.categoryId));
-    }
-
-    return expenses;
+    return await ManagerService()
+        .service
+        .getExpenseService()
+        .getAllExpenses(this);
   }
 
   Future<void> removeExpense(Expense expense) async {

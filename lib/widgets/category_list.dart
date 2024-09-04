@@ -215,21 +215,6 @@ class _CategoryListState extends State<CategoryList> implements Subscriber {
   }
 
   Future<void> deleteCategory(Category cat) async {
-    List<Expense> expenses = await ManagerService()
-        .service
-        .getExpenseService()
-        .filterByCategory(cat);
-
-    Category uncategorized = await ManagerService()
-        .service
-        .getCategoryService()
-        .getCategoryByName('Uncategorized');
-
-    for (Expense ex in expenses) {
-      ex.category = uncategorized;
-      await ManagerService().service.getExpenseService().updateExpense(ex);
-    }
-
     await ManagerService().service.getCategoryService().deleteCategory(cat);
   }
 
