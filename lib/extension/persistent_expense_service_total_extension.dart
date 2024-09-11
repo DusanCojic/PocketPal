@@ -1,3 +1,5 @@
+import 'package:pocket_pal/model/expense.dart';
+
 import 'expense_list_extension.dart';
 import 'persistent_expense_service_filter_extension.dart';
 
@@ -22,6 +24,10 @@ extension PersistentExpenseTotalExtension on PersistentExpenseService {
 
   Future<double> getTotalYearExpense() async {
     return (await getLastYearExpenses()).sum();
+  }
+
+  Future<double> getTotalAllExpenses() async {
+    return (await getAllExpenses(null)).sum();
   }
 
   Future<double> getTotalExpensesAfter(DateTime dateAfter) async {

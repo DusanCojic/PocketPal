@@ -4,5 +4,6 @@ enum TimePeriod {
   thisMonth,
   ytd,
   lastYear,
+  all,
   custom,
 }

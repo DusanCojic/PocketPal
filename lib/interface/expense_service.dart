@@ -19,17 +19,24 @@ abstract class ExpenseService {
 
   Future<void> replaceCategory(Category categoryToReplace, Category cateogry);
 
-  Future<double> totalExpensesByCategory(Category category);
-  Future<double> totalExpensesByCategories(List<Category> category);
+  Future<double> totalExpensesByCategory(Category category, Subscriber? sub);
+  Future<double> totalExpensesByCategories(
+      List<Category> category, Subscriber? sub);
+  Future<double> totalExpensesByPeriodAndCategory(TimePeriod period,
+      Category category, Subscriber? sub, DateTime? from, DateTime? to);
 
   Future<List<Expense>> getExpenses({
     TimePeriod period = TimePeriod.today,
+    Subscriber? sub,
     DateTime? from,
     DateTime? to,
   });
 
-  Future<List<Expense>> filterByCategory(Category category);
-  Future<List<Expense>> filterByCategories(List<Category> category);
+  Future<List<Expense>> filterByCategory(Category category, Subscriber? sub);
+  Future<List<Expense>> filterByCategories(
+      List<Category> category, Subscriber? sub);
+  Future<List<Expense>> filterByPeriodAndCategory(TimePeriod period,
+      Category category, Subscriber? sub, DateTime? from, DateTime? to);
 
   void subscribe(Subscriber sub);
   void unsubscribe(Subscriber sub);
