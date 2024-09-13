@@ -41,14 +41,13 @@ class PersistentExpenseService implements ExpenseService {
   Future<List<Expense>> getAllExpenses(Subscriber? sub) async {
     if (sub != null) expensesChangeNotifier.subscribe(sub);
     var expenses = box.values.cast<Expense>();
-    if (foundation.kDebugMode) {
-      expenses.forEach((element) async {
-        element.category = await ManagerService()
-            .service
-            .getCategoryService()
-            .getCategoryById(element.categoryId);
-      });
-    }
+    expenses.forEach((element) async {
+      element.category = await ManagerService()
+          .service
+          .getCategoryService()
+          .getCategoryById(element.categoryId);
+    });
+
     return expenses.toList();
   }
 
@@ -72,20 +71,38 @@ class PersistentExpenseService implements ExpenseService {
   Future<List<Expense>> filterByCategories(
       List<Category> category, Subscriber? sub) async {
     if (sub != null) expensesChangeNotifier.subscribe(sub);
-    return box.values
+    List<Expense> expenses = box.values
         .cast<Expense>()
         .where((element) => category.any((cat) => element.category == cat))
         .toList();
+
+    expenses.forEach((element) async {
+      element.category = await ManagerService()
+          .service
+          .getCategoryService()
+          .getCategoryById(element.categoryId);
+    });
+
+    return expenses;
   }
 
   @override
   Future<List<Expense>> filterByCategory(
       Category category, Subscriber? sub) async {
     if (sub != null) expensesChangeNotifier.subscribe(sub);
-    return box.values
+    List<Expense> expenses = box.values
         .cast<Expense>()
         .where((element) => element.category == category)
         .toList();
+
+    expenses.forEach((element) async {
+      element.category = await ManagerService()
+          .service
+          .getCategoryService()
+          .getCategoryById(element.categoryId);
+    });
+
+    return expenses;
   }
 
   List<Expense> filterExpenseListByCategory(
@@ -98,26 +115,46 @@ class PersistentExpenseService implements ExpenseService {
       Category category, Subscriber? sub, DateTime? from, DateTime? to) async {
     if (sub != null) expensesChangeNotifier.subscribe(sub);
 
+    late List<Expense> expenses;
+
     switch (period) {
       case TimePeriod.today:
-        return filterExpenseListByCategory(await getTodayExpenses(), category);
+        expenses =
+            filterExpenseListByCategory(await getTodayExpenses(), category);
+        break;
       case TimePeriod.thisWeek:
-        return filterExpenseListByCategory(
-            await getThisWeekExpenses(), category);
+        expenses =
+            filterExpenseListByCategory(await getThisWeekExpenses(), category);
+        break;
       case TimePeriod.thisMonth:
-        return filterExpenseListByCategory(
-            await getThisMonthExpenses(), category);
+        expenses =
+            filterExpenseListByCategory(await getThisMonthExpenses(), category);
+        break;
       case TimePeriod.ytd:
-        return filterExpenseListByCategory(await getYTDExpenses(), category);
+        expenses =
+            filterExpenseListByCategory(await getYTDExpenses(), category);
+        break;
       case TimePeriod.lastYear:
-        return filterExpenseListByCategory(
-            await getLastYearExpenses(), category);
+        expenses =
+            filterExpenseListByCategory(await getLastYearExpenses(), category);
+        break;
       case TimePeriod.all:
-        return filterExpenseListByCategory(await getExpenses(), category);
+        expenses = filterExpenseListByCategory(await getExpenses(), category);
+        break;
       case TimePeriod.custom:
-        return filterExpenseListByCategory(
+        expenses = filterExpenseListByCategory(
             await getCustomPeriodExpenses(from, to), category);
+        break;
     }
+
+    expenses.forEach((element) async {
+      element.category = await ManagerService()
+          .service
+          .getCategoryService()
+          .getCategoryById(element.categoryId);
+    });
+
+    return expenses;
   }
 
   @override
@@ -155,22 +192,40 @@ class PersistentExpenseService implements ExpenseService {
   }) async {
     if (sub != null) expensesChangeNotifier.subscribe(sub);
 
+    late List<Expense> expenses;
+
     switch (period) {
       case TimePeriod.today:
-        return await getTodayExpenses();
+        expenses = await getTodayExpenses();
+        break;
       case TimePeriod.thisWeek:
-        return await getThisWeekExpenses();
+        expenses = await getThisWeekExpenses();
+        break;
       case TimePeriod.thisMonth:
-        return await getThisMonthExpenses();
+        expenses = await getThisMonthExpenses();
+        break;
       case TimePeriod.ytd:
-        return await getYTDExpenses();
+        expenses = await getYTDExpenses();
+        break;
       case TimePeriod.lastYear:
-        return await getLastYearExpenses();
+        expenses = await getLastYearExpenses();
+        break;
       case TimePeriod.all:
-        return await getAllExpensesList();
+        expenses = await getAllExpensesList();
+        break;
       case TimePeriod.custom:
-        return await getCustomPeriodExpenses(from, to);
+        expenses = await getCustomPeriodExpenses(from, to);
+        break;
     }
+
+    expenses.forEach((element) async {
+      element.category = await ManagerService()
+          .service
+          .getCategoryService()
+          .getCategoryById(element.categoryId);
+    });
+
+    return expenses;
   }
 
   @override

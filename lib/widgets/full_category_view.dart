@@ -76,7 +76,7 @@ class _FullCategoryViewState extends State<FullCategoryView> {
           const Padding(
             padding: EdgeInsets.only(top: 20.0),
             child: Text(
-              "View and edit a category:",
+              "View and edit a category",
               style: TextStyle(
                 fontSize: 26.0,
                 fontWeight: FontWeight.bold,
@@ -106,7 +106,7 @@ class _FullCategoryViewState extends State<FullCategoryView> {
                           onPressed: _pickIcon,
                           style: ElevatedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(
-                                vertical: 20.0, horizontal: 20.0),
+                                vertical: 13.0, horizontal: 20.0),
                           ),
                           child: const Text("Select an icon"),
                         ),

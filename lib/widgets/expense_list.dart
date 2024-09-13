@@ -7,13 +7,14 @@ import 'package:pocket_pal/util/time_period.dart';
 import 'package:pocket_pal/widgets/expense_card.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 
+// ignore: must_be_immutable
 class ExpenseList extends StatefulWidget {
-  String periodFilter;
+  TimePeriod periodFilter;
   String categoryFilter;
 
   ExpenseList({
     super.key,
-    this.periodFilter = "This month",
+    this.periodFilter = TimePeriod.thisMonth,
     this.categoryFilter = "All categories",
   });
 
@@ -81,80 +82,25 @@ class _ExpenseListState extends State<ExpenseList> implements Subscriber {
   }
 
   Future<List<Expense>> buildList(
-      String periodFilter, String categoryFilter) async {
+      TimePeriod periodFilter, String categoryFilter) async {
     ManagerService().service.getCategoryService().subscribe(this);
 
     if (categoryFilter == "All categories") {
-      switch (periodFilter) {
-        case "This month":
-          return await ManagerService()
-              .service
-              .getExpenseService()
-              .getExpenses(period: TimePeriod.thisMonth, sub: this);
-        case "Today":
-          return await ManagerService()
-              .service
-              .getExpenseService()
-              .getExpenses(period: TimePeriod.today, sub: this);
-        case "This week":
-          return await ManagerService()
-              .service
-              .getExpenseService()
-              .getExpenses(period: TimePeriod.thisWeek, sub: this);
-        case "This year":
-          return await ManagerService()
-              .service
-              .getExpenseService()
-              .getExpenses(period: TimePeriod.lastYear, sub: this);
-        case "All":
-          return await ManagerService()
-              .service
-              .getExpenseService()
-              .getAllExpenses(this);
-      }
+      return await ManagerService().service.getExpenseService().getExpenses(
+            period: periodFilter,
+            sub: this,
+          );
     } else {
       Category category = await ManagerService()
           .service
           .getCategoryService()
           .getCategoryByName(categoryFilter);
 
-      switch (periodFilter) {
-        case "This month":
-          return await ManagerService()
-              .service
-              .getExpenseService()
-              .filterByPeriodAndCategory(
-                  TimePeriod.thisMonth, category, this, null, null);
-        case "Today":
-          return await ManagerService()
-              .service
-              .getExpenseService()
-              .filterByPeriodAndCategory(
-                  TimePeriod.today, category, this, null, null);
-        case "This week":
-          return await ManagerService()
-              .service
-              .getExpenseService()
-              .filterByPeriodAndCategory(
-                  TimePeriod.thisWeek, category, this, null, null);
-        case "This year":
-          return await ManagerService()
-              .service
-              .getExpenseService()
-              .filterByPeriodAndCategory(
-                  TimePeriod.ytd, category, this, null, null);
-        case "All":
-          return await ManagerService()
-              .service
-              .getExpenseService()
-              .filterByCategory(category, this);
-      }
+      return await ManagerService()
+          .service
+          .getExpenseService()
+          .filterByPeriodAndCategory(periodFilter, category, this, null, null);
     }
-
-    return ManagerService()
-        .service
-        .getExpenseService()
-        .getExpenses(period: TimePeriod.thisMonth, sub: this);
   }
 
   Future<void> removeExpense(Expense expense) async {

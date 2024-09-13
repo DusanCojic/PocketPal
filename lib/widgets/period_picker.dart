@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_pal/util/time_period.dart';
 
 // ignore: must_be_immutable
 class PeriodPicker extends StatefulWidget {
-  final Function(String) onSelected;
+  final Function(TimePeriod) onSelected;
 
   const PeriodPicker({super.key, required this.onSelected});
 
@@ -20,12 +21,13 @@ class _PeriodPickerState extends State<PeriodPicker> {
   ];
 
   late String chosen = periods[0];
+  late TimePeriod period = TimePeriod.thisMonth;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      height: 300.0,
+      height: 400.0,
       child: Column(
         children: [
           Padding(
@@ -66,9 +68,27 @@ class _PeriodPickerState extends State<PeriodPicker> {
                   onTap: () {
                     setState(() {
                       chosen = periods[index];
+
+                      switch (chosen) {
+                        case "This month":
+                          period = TimePeriod.thisMonth;
+                          break;
+                        case "Today":
+                          period = TimePeriod.today;
+                          break;
+                        case "This week":
+                          period = TimePeriod.thisWeek;
+                          break;
+                        case "This year":
+                          period = TimePeriod.ytd;
+                          break;
+                        case "All":
+                          period = TimePeriod.all;
+                          break;
+                      }
                     });
 
-                    widget.onSelected(chosen);
+                    widget.onSelected(period);
 
                     Navigator.pop(context);
                   },

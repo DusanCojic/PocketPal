@@ -20,6 +20,7 @@ class _ExpenseCardState extends State<ExpenseCard> {
         showModalBottomSheet(
           context: context,
           useRootNavigator: true,
+          isScrollControlled: true,
           builder: (BuildContext context) {
             return FullExpenseView(expense: widget.expense);
           },

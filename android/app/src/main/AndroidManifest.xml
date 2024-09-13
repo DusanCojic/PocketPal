@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="pocket_pal"
+        android:label="PockerPal"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

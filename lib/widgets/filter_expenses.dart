@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_pal/util/time_period.dart';
 import 'package:pocket_pal/widgets/category_picker.dart';
 import 'package:pocket_pal/widgets/period_picker.dart';
 
 class FilterExpenses extends StatefulWidget {
-  final Function(String) onPeriodChanged;
+  final Function(TimePeriod) onPeriodChanged;
   final Function(String) onCategorySelected;
 
   const FilterExpenses({
@@ -17,10 +18,10 @@ class FilterExpenses extends StatefulWidget {
 }
 
 class _FilterExpensesState extends State<FilterExpenses> {
-  String period = "This month";
+  TimePeriod period = TimePeriod.thisMonth;
   String category = "All categories";
 
-  void handleSelectedPeriod(String newPeriod) {
+  void handleSelectedPeriod(TimePeriod newPeriod) {
     setState(() {
       period = newPeriod;
     });
@@ -61,12 +62,12 @@ class _FilterExpensesState extends State<FilterExpenses> {
               elevation: 0,
               padding: const EdgeInsets.symmetric(
                 horizontal: 40.0,
-                vertical: 17.0,
+                vertical: 10.0,
               ),
               backgroundColor: const Color.fromARGB(255, 235, 235, 235),
             ),
             child: Text(
-              period,
+              getPeriodName(period),
               style: const TextStyle(
                 color: Colors.black,
               ),
@@ -91,7 +92,7 @@ class _FilterExpensesState extends State<FilterExpenses> {
               elevation: 0,
               padding: const EdgeInsets.symmetric(
                 horizontal: 40.0,
-                vertical: 17.0,
+                vertical: 10.0,
               ),
               backgroundColor: const Color.fromARGB(255, 235, 235, 235),
             ),
@@ -105,5 +106,24 @@ class _FilterExpensesState extends State<FilterExpenses> {
         ],
       ),
     );
+  }
+
+  String getPeriodName(TimePeriod period) {
+    switch (period) {
+      case TimePeriod.thisMonth:
+        return "This month";
+      case TimePeriod.today:
+        return "Today";
+      case TimePeriod.thisWeek:
+        return "This week";
+      case TimePeriod.ytd:
+        return "This year";
+      case TimePeriod.all:
+        return "All";
+      case TimePeriod.lastYear:
+        return "Last year";
+      case TimePeriod.custom:
+        return "";
+    }
   }
 }

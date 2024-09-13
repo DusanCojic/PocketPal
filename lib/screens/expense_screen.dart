@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_pal/util/time_period.dart';
 import 'package:pocket_pal/widgets/expense_list.dart';
 import 'package:pocket_pal/widgets/filter_expenses.dart';
 import 'package:pocket_pal/widgets/total_expense_card.dart';
@@ -11,10 +12,10 @@ class ExpenseScreen extends StatefulWidget {
 }
 
 class _ExpenseScreenState extends State<ExpenseScreen> {
-  String period = "This month";
+  TimePeriod period = TimePeriod.thisMonth;
   String category = "All categories";
 
-  void setPeriod(String newPeriod) {
+  void setPeriod(TimePeriod newPeriod) {
     setState(() {
       period = newPeriod;
     });

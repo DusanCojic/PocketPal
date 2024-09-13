@@ -5,14 +5,15 @@ import 'package:pocket_pal/util/time_period.dart';
 
 import '../service/manager_service.dart';
 
+// ignore: must_be_immutable
 class TotalExpenseCard extends StatefulWidget {
-  String periodFilter = "This month";
-  String categoryFilter = "All categories";
+  TimePeriod periodFilter;
+  String categoryFilter;
 
   TotalExpenseCard({
     super.key,
-    required this.periodFilter,
-    required this.categoryFilter,
+    this.periodFilter = TimePeriod.thisMonth,
+    this.categoryFilter = "All categories",
   });
 
   @override
@@ -40,8 +41,8 @@ class _TotalExpenseCardState extends State<TotalExpenseCard>
           height: 130,
           width: 500,
           decoration: BoxDecoration(
-            image: const DecorationImage(
-              image: AssetImage("../../assets/sun-tornado.png"),
+            image: DecorationImage(
+              image: Image.asset('assets/sun-tornado.png').image,
               fit: BoxFit.cover,
             ),
             borderRadius: BorderRadius.circular(30),
@@ -90,79 +91,24 @@ class _TotalExpenseCardState extends State<TotalExpenseCard>
   }
 
   Future<double> getTotalExpenses(
-      String periodFilter, String categoryFilter) async {
+      TimePeriod periodFilter, String categoryFilter) async {
     if (categoryFilter == "All categories") {
-      switch (periodFilter) {
-        case "This month":
-          return await ManagerService()
-              .service
-              .getExpenseService()
-              .getTotalExpense(period: TimePeriod.thisMonth, sub: this);
-        case "Today":
-          return await ManagerService()
-              .service
-              .getExpenseService()
-              .getTotalExpense(period: TimePeriod.today, sub: this);
-        case "This week":
-          return await ManagerService()
-              .service
-              .getExpenseService()
-              .getTotalExpense(period: TimePeriod.thisWeek, sub: this);
-        case "This year":
-          return await ManagerService()
-              .service
-              .getExpenseService()
-              .getTotalExpense(period: TimePeriod.lastYear, sub: this);
-        case "All":
-          return await ManagerService()
-              .service
-              .getExpenseService()
-              .getTotalExpense(period: TimePeriod.all, sub: this);
-      }
+      return await ManagerService()
+          .service
+          .getExpenseService()
+          .getTotalExpense(period: periodFilter, sub: this);
     } else {
       Category category = await ManagerService()
           .service
           .getCategoryService()
           .getCategoryByName(categoryFilter);
 
-      switch (periodFilter) {
-        case "This month":
-          return await ManagerService()
-              .service
-              .getExpenseService()
-              .totalExpensesByPeriodAndCategory(
-                  TimePeriod.thisMonth, category, this, null, null);
-        case "Today":
-          return await ManagerService()
-              .service
-              .getExpenseService()
-              .totalExpensesByPeriodAndCategory(
-                  TimePeriod.today, category, this, null, null);
-        case "This week":
-          return await ManagerService()
-              .service
-              .getExpenseService()
-              .totalExpensesByPeriodAndCategory(
-                  TimePeriod.thisWeek, category, this, null, null);
-        case "This year":
-          return await ManagerService()
-              .service
-              .getExpenseService()
-              .totalExpensesByPeriodAndCategory(
-                  TimePeriod.ytd, category, this, null, null);
-        case "All":
-          return await ManagerService()
-              .service
-              .getExpenseService()
-              .totalExpensesByPeriodAndCategory(
-                  TimePeriod.all, category, this, null, null);
-      }
+      return await ManagerService()
+          .service
+          .getExpenseService()
+          .totalExpensesByPeriodAndCategory(
+              periodFilter, category, this, null, null);
     }
-
-    return ManagerService()
-        .service
-        .getExpenseService()
-        .getTotalExpense(period: TimePeriod.thisMonth, sub: this);
   }
 
   @override
