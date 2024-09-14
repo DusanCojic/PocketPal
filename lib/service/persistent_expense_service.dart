@@ -138,7 +138,8 @@ class PersistentExpenseService implements ExpenseService {
             filterExpenseListByCategory(await getLastYearExpenses(), category);
         break;
       case TimePeriod.all:
-        expenses = filterExpenseListByCategory(await getExpenses(), category);
+        expenses = filterExpenseListByCategory(
+            await getExpenses(period: TimePeriod.all), category);
         break;
       case TimePeriod.custom:
         expenses = filterExpenseListByCategory(
