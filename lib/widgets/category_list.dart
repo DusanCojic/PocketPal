@@ -27,8 +27,13 @@ class _CategoryListState extends State<CategoryList> implements Subscriber {
         onPressed: () {
           showModalBottomSheet(
             context: context,
+            isScrollControlled: true,
+            useRootNavigator: true,
             builder: (BuildContext context) {
-              return AddCategory(onCategoryAdded: getCategories);
+              return Padding(
+                padding: MediaQuery.of(context).viewInsets,
+                child: AddCategory(onCategoryAdded: getCategories),
+              );
             },
           );
         },

@@ -33,7 +33,7 @@ class _TotalExpenseCardState extends State<TotalExpenseCard>
     return Container(
       padding: const EdgeInsets.all(10),
       child: Card(
-        elevation: 15.0,
+        elevation: 8.0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
         ),

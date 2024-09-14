@@ -32,7 +32,7 @@ class BottomBar extends StatelessWidget {
     return PersistentTabView(
       context,
       controller: _controller,
-      navBarHeight: 63,
+      navBarHeight: 61,
       hideNavigationBar: hideNavBar,
       screens: _buildScreens(),
       items: _navBarItems(context),
@@ -108,8 +108,11 @@ class BottomBar extends StatelessWidget {
           showModalBottomSheet(
             context: context,
             builder: (context) {
-              return AddScreen(
-                pressedFromPage: currentIndex,
+              return Padding(
+                padding: MediaQuery.of(context).viewInsets,
+                child: AddScreen(
+                  pressedFromPage: currentIndex,
+                ),
               );
             },
             isDismissible: true,

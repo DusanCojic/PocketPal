@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:pocket_pal/model/category.dart';
 
 import 'package:pocket_pal/service/manager_service.dart';
@@ -6,6 +7,14 @@ import './widgets/bottom_bar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(
+      statusBarColor: Colors.white,
+      statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarColor: Colors.white,
+    ),
+  );
+
   await ManagerService().initialize();
 
   Category uncategorized = Category(

@@ -22,7 +22,10 @@ class _ExpenseCardState extends State<ExpenseCard> {
           useRootNavigator: true,
           isScrollControlled: true,
           builder: (BuildContext context) {
-            return FullExpenseView(expense: widget.expense);
+            return Padding(
+              padding: MediaQuery.of(context).viewInsets,
+              child: FullExpenseView(expense: widget.expense),
+            );
           },
         );
       },
@@ -36,14 +39,14 @@ class _ExpenseCardState extends State<ExpenseCard> {
           color: Colors.white,
           child: SizedBox(
             width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height / 10,
+            height: MediaQuery.of(context).size.height / 12,
             child: Row(
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: Container(
-                    width: 46,
-                    height: 46,
+                    width: 42,
+                    height: 42,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: widget.expense.category?.color,
@@ -54,7 +57,7 @@ class _ExpenseCardState extends State<ExpenseCard> {
                               Icons.home.codePoint,
                           fontFamily: "MaterialIcons"),
                       color: Colors.white,
-                      size: 30.0,
+                      size: 27.0,
                     ),
                   ),
                 ),
@@ -69,7 +72,7 @@ class _ExpenseCardState extends State<ExpenseCard> {
                           Text(
                             widget.expense.category?.name ?? "Name not found",
                             style: const TextStyle(
-                              fontSize: 17.0,
+                              fontSize: 16.0,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -78,7 +81,7 @@ class _ExpenseCardState extends State<ExpenseCard> {
                             child: Text(
                               '\$${widget.expense.amount.toStringAsFixed(2)}',
                               style: const TextStyle(
-                                fontSize: 17.0,
+                                fontSize: 15.0,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -90,6 +93,7 @@ class _ExpenseCardState extends State<ExpenseCard> {
                         style: const TextStyle(
                           fontWeight: FontWeight.w500,
                           color: Colors.grey,
+                          fontSize: 13.0,
                         ),
                       ),
                     ],

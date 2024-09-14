@@ -39,14 +39,14 @@ class _AddExpenseState extends State<AddExpense> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: EdgeInsets.only(
+    return Padding(
+      padding: const EdgeInsets.only(
         top: 15.0,
-        bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       child: SizedBox(
         height: 500,
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             Container(
               width: 35,
@@ -111,9 +111,15 @@ class _AddExpenseState extends State<AddExpense> {
                                 onPressed: () {
                                   showModalBottomSheet(
                                     context: context,
+                                    isScrollControlled: true,
+                                    useRootNavigator: true,
                                     builder: (context) {
-                                      return AddCategory(
-                                        onCategoryAdded: initializeCategories,
+                                      return Padding(
+                                        padding:
+                                            MediaQuery.of(context).viewInsets,
+                                        child: AddCategory(
+                                          onCategoryAdded: initializeCategories,
+                                        ),
                                       );
                                     },
                                   );

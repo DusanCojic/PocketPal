@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart' as foundation;
 import 'package:hive/hive.dart';
 import 'package:pocket_pal/extension/expense_list_extension.dart';
 import 'package:pocket_pal/interface/subscriber.dart';

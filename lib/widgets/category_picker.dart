@@ -35,7 +35,7 @@ class _CategoryPickerState extends State<CategoryPicker> {
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      height: 320.0,
+      height: 400.0,
       child: Column(
         children: [
           Padding(
