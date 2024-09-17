@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pocket_pal/model/category.dart';
 import 'package:pocket_pal/model/expense.dart';
 import 'package:pocket_pal/service/manager_service.dart';
@@ -26,6 +27,7 @@ class _AddExpenseState extends State<AddExpense> {
     super.initState();
 
     initializeCategories();
+    _dateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
   }
 
   void initializeCategories() async {
@@ -222,7 +224,8 @@ class _AddExpenseState extends State<AddExpense> {
                               await getCategoryFromName(categoryName);
 
                           Expense newExpense = Expense(
-                            amount: double.parse(_amountController.text),
+                            amount: double.parse(
+                                _amountController.text.replaceAll(',', '.')),
                             date: DateTime.parse(_dateController.text),
                             categoryId: category.key,
                             description: _descriptionController.text,

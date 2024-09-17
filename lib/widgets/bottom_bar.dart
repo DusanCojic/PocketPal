@@ -18,14 +18,9 @@ class BottomBar extends StatelessWidget {
   static final PersistentTabController _controller =
       PersistentTabController(initialIndex: 0);
 
-  static bool hideNavBar = false;
-
   PersistentTabController get getController => _controller;
 
   static int currentIndex = 0;
-
-  void hideBottomBar() => hideNavBar = true;
-  void showBottomBar() => hideNavBar = false;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +28,6 @@ class BottomBar extends StatelessWidget {
       context,
       controller: _controller,
       navBarHeight: 61,
-      hideNavigationBar: hideNavBar,
       screens: _buildScreens(),
       items: _navBarItems(context),
       confineInSafeArea: true,
@@ -74,7 +68,7 @@ class BottomBar extends StatelessWidget {
         pressedFromPage: currentIndex,
       ),
       QueryScreen(),
-      SettingsScreen()
+      const SettingsScreen()
     ];
   }
 
@@ -85,7 +79,7 @@ class BottomBar extends StatelessWidget {
           Icons.home_rounded,
           size: 35.0,
         ),
-        activeColorPrimary: CupertinoColors.activeBlue,
+        activeColorPrimary: CupertinoColors.activeBlue.withOpacity(0.9),
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
@@ -93,7 +87,7 @@ class BottomBar extends StatelessWidget {
           Icons.wallet_outlined,
           size: 35.0,
         ),
-        activeColorPrimary: CupertinoColors.activeBlue,
+        activeColorPrimary: CupertinoColors.activeBlue.withOpacity(0.9),
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
@@ -102,7 +96,7 @@ class BottomBar extends StatelessWidget {
           color: Colors.white,
           size: 35.0,
         ),
-        activeColorPrimary: Colors.orangeAccent,
+        activeColorPrimary: const Color(0xFFFFB200).withOpacity(0.9),
         inactiveColorPrimary: CupertinoColors.systemGrey,
         onPressed: (value) {
           showModalBottomSheet(
@@ -125,7 +119,7 @@ class BottomBar extends StatelessWidget {
           Icons.bar_chart_rounded,
           size: 35.0,
         ),
-        activeColorPrimary: CupertinoColors.activeBlue,
+        activeColorPrimary: CupertinoColors.activeBlue.withOpacity(0.9),
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
@@ -133,7 +127,7 @@ class BottomBar extends StatelessWidget {
           Icons.settings,
           size: 35.0,
         ),
-        activeColorPrimary: CupertinoColors.activeBlue,
+        activeColorPrimary: CupertinoColors.activeBlue.withOpacity(0.9),
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
     ];

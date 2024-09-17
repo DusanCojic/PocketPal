@@ -64,9 +64,13 @@ class _ExpenseListState extends State<ExpenseList> implements Subscriber {
                     children: [
                       SlidableAction(
                         onPressed: (context) => removeExpense(expenses[index]),
-                        backgroundColor: Colors.redAccent,
-                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.redAccent.withOpacity(0.2),
+                        foregroundColor: Colors.redAccent,
                         icon: Icons.delete,
+                        borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(50),
+                          bottomLeft: Radius.circular(50),
+                        ),
                         label: 'Delete',
                       ),
                     ],

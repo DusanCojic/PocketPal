@@ -37,7 +37,7 @@ class _CategoryListState extends State<CategoryList> implements Subscriber {
             },
           );
         },
-        backgroundColor: Colors.orangeAccent,
+        backgroundColor: const Color(0xFFFFB200).withOpacity(0.9),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(50.0),
         ),
@@ -126,12 +126,12 @@ class _CategoryListState extends State<CategoryList> implements Subscriber {
                                       height: 46,
                                       decoration: BoxDecoration(
                                         shape: BoxShape.circle,
-                                        color: category.color,
+                                        color: category.color.withOpacity(0.1),
                                       ),
                                       child: Icon(
                                         IconData(category.iconCode,
                                             fontFamily: "MaterialIcons"),
-                                        color: Colors.white,
+                                        color: category.color,
                                         size: 30.0,
                                       ),
                                     ),
@@ -160,8 +160,13 @@ class _CategoryListState extends State<CategoryList> implements Subscriber {
                               onPressed: (context) async {
                                 await deleteCategory(categories[index]);
                               },
-                              backgroundColor: Colors.redAccent,
-                              foregroundColor: Colors.white,
+                              backgroundColor:
+                                  Colors.redAccent.withOpacity(0.2),
+                              foregroundColor: Colors.redAccent,
+                              borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(30),
+                                bottomLeft: Radius.circular(30),
+                              ),
                               icon: Icons.delete,
                               label: 'Delete',
                             ),
@@ -172,10 +177,14 @@ class _CategoryListState extends State<CategoryList> implements Subscriber {
                             onTap: () {
                               showModalBottomSheet(
                                 context: context,
+                                isScrollControlled: true,
                                 builder: (BuildContext context) {
-                                  return FullCategoryView(
-                                    category: category,
-                                    onCategoryEditted: getCategories,
+                                  return Padding(
+                                    padding: MediaQuery.of(context).viewInsets,
+                                    child: FullCategoryView(
+                                      category: category,
+                                      onCategoryEditted: getCategories,
+                                    ),
                                   );
                                 },
                               );
@@ -198,12 +207,13 @@ class _CategoryListState extends State<CategoryList> implements Subscriber {
                                         height: 46,
                                         decoration: BoxDecoration(
                                           shape: BoxShape.circle,
-                                          color: category.color,
+                                          color:
+                                              category.color.withOpacity(0.1),
                                         ),
                                         child: Icon(
                                           IconData(category.iconCode,
                                               fontFamily: "MaterialIcons"),
-                                          color: Colors.white,
+                                          color: category.color,
                                           size: 30.0,
                                         ),
                                       ),

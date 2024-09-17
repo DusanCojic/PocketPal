@@ -45,18 +45,18 @@ class _ExpenseCardState extends State<ExpenseCard> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15.0),
                   child: Container(
-                    width: 42,
-                    height: 42,
+                    width: 44,
+                    height: 44,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: widget.expense.category?.color,
+                      color: widget.expense.category?.color.withOpacity(0.1),
                     ),
                     child: Icon(
                       IconData(
                           widget.expense.category?.iconCode ??
                               Icons.home.codePoint,
                           fontFamily: "MaterialIcons"),
-                      color: Colors.white,
+                      color: widget.expense.category?.color,
                       size: 27.0,
                     ),
                   ),

@@ -64,7 +64,7 @@ class _FilterExpensesState extends State<FilterExpenses> {
                 horizontal: 40.0,
                 vertical: 10.0,
               ),
-              backgroundColor: const Color.fromARGB(255, 238, 238, 238),
+              backgroundColor: const Color.fromARGB(255, 245, 245, 245),
             ),
             child: Text(
               getPeriodName(period),
@@ -94,7 +94,7 @@ class _FilterExpensesState extends State<FilterExpenses> {
                 horizontal: 40.0,
                 vertical: 10.0,
               ),
-              backgroundColor: const Color.fromARGB(255, 238, 238, 238),
+              backgroundColor: const Color.fromARGB(255, 245, 245, 245),
             ),
             child: Text(
               category,

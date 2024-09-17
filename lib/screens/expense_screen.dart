@@ -36,9 +36,31 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
         color: const Color.fromRGBO(233, 234, 236, 0.2),
         child: Column(
           children: [
-            TotalExpenseCard(
-              periodFilter: period,
-              categoryFilter: category,
+            Stack(
+              alignment: Alignment.topCenter,
+              children: [
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height / 5,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: Image.asset("assets/sun-tornado.png").image,
+                      fit: BoxFit.cover,
+                    ),
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(45),
+                      bottomRight: Radius.circular(45),
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(top: 55.0),
+                  child: TotalExpenseCard(
+                    periodFilter: period,
+                    categoryFilter: category,
+                  ),
+                ),
+              ],
             ),
             FilterExpenses(
               onPeriodChanged: setPeriod,

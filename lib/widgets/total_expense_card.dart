@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pocket_pal/interface/subscriber.dart';
 import 'package:pocket_pal/model/category.dart';
@@ -33,18 +34,15 @@ class _TotalExpenseCardState extends State<TotalExpenseCard>
     return Container(
       padding: const EdgeInsets.all(10),
       child: Card(
-        elevation: 8.0,
+        elevation: 0,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30),
         ),
         child: Container(
           height: 130,
-          width: 500,
+          width: 360,
           decoration: BoxDecoration(
-            image: DecorationImage(
-              image: Image.asset('assets/sun-tornado.png').image,
-              fit: BoxFit.cover,
-            ),
+            color: Colors.white,
             borderRadius: BorderRadius.circular(30),
           ),
           child: FutureBuilder<double>(
@@ -70,13 +68,15 @@ class _TotalExpenseCardState extends State<TotalExpenseCard>
                         style: TextStyle(
                           fontSize: 16.0,
                           fontWeight: FontWeight.w700,
+                          color: Colors.black38,
                         ),
                       ),
                       TextSpan(
                         text: totalExpense,
-                        style: const TextStyle(
-                          fontSize: 35.0,
+                        style: TextStyle(
+                          fontSize: 42.0,
                           fontWeight: FontWeight.bold,
+                          color: CupertinoColors.activeBlue.withOpacity(0.9),
                         ),
                       ),
                     ],
