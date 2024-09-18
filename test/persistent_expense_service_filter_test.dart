@@ -1,12 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:pocket_pal/extension/persistent_expense_service_filter_extension.dart';
 import 'package:pocket_pal/model/category.dart';
 import 'package:pocket_pal/model/expense.dart';
 import 'package:pocket_pal/service/persistent_expense_service.dart';
+// ignore: depend_on_referenced_packages
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
 import 'fake_path_provider_platform.dart';
@@ -98,9 +100,9 @@ void todaysExpenses(PersistentExpenseService service) async {
   );
 
   expect(todaysExpensesList.length, 3);
-  expect(todaysExpensesList[0].name, "1");
-  expect(todaysExpensesList[1].name, "2");
-  expect(todaysExpensesList[2].name, "3");
+  expect(todaysExpensesList[0].description, "1");
+  expect(todaysExpensesList[1].description, "2");
+  expect(todaysExpensesList[2].description, "3");
 }
 
 void lastWeeksExpenses(PersistentExpenseService service) async {
@@ -109,9 +111,9 @@ void lastWeeksExpenses(PersistentExpenseService service) async {
   );
 
   expect(lastWeekExpensesList.length, 6);
-  expect(lastWeekExpensesList[3].name, "4");
-  expect(lastWeekExpensesList[4].name, "5");
-  expect(lastWeekExpensesList[5].name, "6");
+  expect(lastWeekExpensesList[3].description, "4");
+  expect(lastWeekExpensesList[4].description, "5");
+  expect(lastWeekExpensesList[5].description, "6");
 }
 
 void lastMonthsExpenses(PersistentExpenseService service) async {
@@ -120,18 +122,18 @@ void lastMonthsExpenses(PersistentExpenseService service) async {
   );
 
   expect(thisMonthExpensesList.length, 9);
-  expect(thisMonthExpensesList[6].name, "7");
-  expect(thisMonthExpensesList[7].name, "8");
-  expect(thisMonthExpensesList[8].name, "9");
+  expect(thisMonthExpensesList[6].description, "7");
+  expect(thisMonthExpensesList[7].description, "8");
+  expect(thisMonthExpensesList[8].description, "9");
 }
 
 void ytdExpenses(PersistentExpenseService service) async {
   List<Expense> lastWeekExpensesList = await service.getExpensesForYear(2024);
 
   expect(lastWeekExpensesList.length, 12);
-  expect(lastWeekExpensesList[9].name, "10");
-  expect(lastWeekExpensesList[10].name, "11");
-  expect(lastWeekExpensesList[11].name, "12");
+  expect(lastWeekExpensesList[9].description, "10");
+  expect(lastWeekExpensesList[10].description, "11");
+  expect(lastWeekExpensesList[11].description, "12");
 }
 
 void lastYearExpenses(PersistentExpenseService service) async {
@@ -140,9 +142,9 @@ void lastYearExpenses(PersistentExpenseService service) async {
   );
 
   expect(lastWeekExpensesList.length, 15);
-  expect(lastWeekExpensesList[12].name, "13");
-  expect(lastWeekExpensesList[13].name, "14");
-  expect(lastWeekExpensesList[14].name, "15");
+  expect(lastWeekExpensesList[12].description, "13");
+  expect(lastWeekExpensesList[13].description, "14");
+  expect(lastWeekExpensesList[14].description, "15");
 }
 
 void getExpensesForCustomPeriod(PersistentExpenseService service) async {
@@ -152,34 +154,39 @@ void getExpensesForCustomPeriod(PersistentExpenseService service) async {
   );
 
   expect(lastWeekExpensesList.length, 6);
-  expect(lastWeekExpensesList[0].name, "1");
-  expect(lastWeekExpensesList[1].name, "2");
-  expect(lastWeekExpensesList[2].name, "3");
-  expect(lastWeekExpensesList[3].name, "4");
-  expect(lastWeekExpensesList[4].name, "5");
-  expect(lastWeekExpensesList[5].name, "6");
+  expect(lastWeekExpensesList[0].description, "1");
+  expect(lastWeekExpensesList[1].description, "2");
+  expect(lastWeekExpensesList[2].description, "3");
+  expect(lastWeekExpensesList[3].description, "4");
+  expect(lastWeekExpensesList[4].description, "5");
+  expect(lastWeekExpensesList[5].description, "6");
 }
 
 void filterExpensesBasedOnCategory(PersistentExpenseService service) async {
-  Category category = Category(name: "2", icon: "i", colorValue: 0);
-  List<Expense> lastWeekExpensesList = await service.filterByCategory(category);
+  Category category =
+      Category(name: "2", iconCode: Icons.home.codePoint, colorValue: 0);
+  List<Expense> lastWeekExpensesList =
+      await service.filterByCategory(category, null);
 
   expect(lastWeekExpensesList.length, 1);
-  expect(lastWeekExpensesList[0].name, "14");
+  expect(lastWeekExpensesList[0].description, "14");
 }
 
 void filterExpensesBasedOnCategories(PersistentExpenseService service) async {
-  Category category = Category(name: "2", icon: "i", colorValue: 0);
-  Category category2 = Category(name: "3", icon: "i", colorValue: 0);
+  Category category =
+      Category(name: "2", iconCode: Icons.home.codePoint, colorValue: 0);
+  Category category2 =
+      Category(name: "3", iconCode: Icons.home.codePoint, colorValue: 0);
 
   List<Expense> lastWeekExpensesList = await service.filterByCategories(
     [
       category,
       category2,
     ],
+    null,
   );
 
   expect(lastWeekExpensesList.length, 2);
-  expect(lastWeekExpensesList[0].name, "10");
-  expect(lastWeekExpensesList[1].name, "14");
+  expect(lastWeekExpensesList[0].description, "10");
+  expect(lastWeekExpensesList[1].description, "14");
 }

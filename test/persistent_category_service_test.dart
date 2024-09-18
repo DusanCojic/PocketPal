@@ -1,9 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pocket_pal/model/category.dart';
 import 'package:pocket_pal/service/persistent_category_service.dart';
 
+// ignore: depend_on_referenced_packages
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'fake_path_provider_platform.dart';
 
@@ -32,12 +33,12 @@ void persistentCategoryServiceTests() {
     List<Category> testCategories = [
       Category(
         name: "1",
-        icon: "1",
+        iconCode: Icons.home.codePoint,
         colorValue: 1,
       ),
       Category(
         name: "2",
-        icon: "2",
+        iconCode: Icons.access_alarm.codePoint,
         colorValue: 2,
       )
     ];
@@ -79,48 +80,49 @@ void persistentCategoryServiceTests() {
 }
 
 void updateCategory(PersistentCategoryService service) async {
-  List<Category> categories = await service.getCategories();
+  List<Category> categories = await service.getCategories(null);
 
   Category category = categories[1];
 
   category.name = "4";
-  category.icon = "4";
+  category.iconCode = Icons.shopping_cart.codePoint;
 
   await service.updateCategory(category);
 
-  categories = await service.getCategories();
+  categories = await service.getCategories(null);
 
   expect(categories[1].name, "4");
-  expect(categories[1].icon, "4");
+  expect(categories[1].iconCode, Icons.shopping_cart.codePoint);
 }
 
 void deleteCategory(PersistentCategoryService service) async {
-  List<Category> categories = await service.getCategories();
+  List<Category> categories = await service.getCategories(null);
 
   Category category = categories[1];
 
   await service.deleteCategory(category);
 
-  categories = await service.getCategories();
+  categories = await service.getCategories(null);
 
   expect(categories[0].name, "1");
   expect(categories[1].name, "3");
 }
 
 void saveCategory(PersistentCategoryService service) async {
-  Category newCategory = Category(name: "3", icon: "3", colorValue: 0);
+  Category newCategory =
+      Category(name: "3", iconCode: Icons.home.codePoint, colorValue: 0);
 
   await service.saveCategory(newCategory);
 
-  List<Category> categories = await service.getCategories();
+  List<Category> categories = await service.getCategories(null);
 
   expect(categories.length, 3);
   expect(categories[2].name, "3");
-  expect(categories[2].icon, "3");
+  expect(categories[2].iconCode, Icons.home.codePoint);
 }
 
 void getAllCategories(PersistentCategoryService service) async {
-  List<Category> categories = await service.getCategories();
+  List<Category> categories = await service.getCategories(null);
 
   expect(categories.length, 2);
   expect(categories[0].name, "1");

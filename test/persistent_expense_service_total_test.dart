@@ -1,16 +1,17 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:pocket_pal/extension/persistent_expense_service_total_extension.dart';
 import 'package:pocket_pal/model/category.dart';
 import 'package:pocket_pal/model/expense.dart';
 import 'package:pocket_pal/service/persistent_expense_service.dart';
+// ignore: depend_on_referenced_packages
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
 import 'fake_path_provider_platform.dart';
-import 'persistent_expense_service_filter_test.dart';
 
 void main() {
   group(
@@ -143,21 +144,25 @@ void getTotalForCustomPeriod(PersistentExpenseService service) async {
 }
 
 void totalExpensesBasedOnCategory(PersistentExpenseService service) async {
-  Category category = Category(name: "2", icon: "i", colorValue: 0);
-  double totalExpense = await service.totalExpensesByCategory(category);
+  Category category =
+      Category(name: "2", iconCode: Icons.home.codePoint, colorValue: 0);
+  double totalExpense = await service.totalExpensesByCategory(category, null);
 
   expect(totalExpense, 14);
 }
 
 void totalExpensesBasedOnCategories(PersistentExpenseService service) async {
-  Category category = Category(name: "2", icon: "i", colorValue: 0);
-  Category category2 = Category(name: "3", icon: "i", colorValue: 0);
+  Category category =
+      Category(name: "2", iconCode: Icons.home.codePoint, colorValue: 0);
+  Category category2 =
+      Category(name: "3", iconCode: Icons.home.codePoint, colorValue: 0);
 
   double totalExpense = await service.totalExpensesByCategories(
     [
       category,
       category2,
     ],
+    null,
   );
 
   expect(totalExpense, 24);

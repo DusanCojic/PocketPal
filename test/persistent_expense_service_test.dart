@@ -4,6 +4,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:pocket_pal/model/category.dart';
 import 'package:pocket_pal/model/expense.dart';
 import 'package:pocket_pal/service/persistent_expense_service.dart';
+// ignore: depend_on_referenced_packages
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
 import 'fake_path_provider_platform.dart';
@@ -68,7 +69,7 @@ void getAllExpensesShouldReturnNothing() async {
       ),
     );
 
-    final expenses = await service.getAllExpenses();
+    final expenses = await service.getAllExpenses(null);
     expect(expenses, []);
   } finally {
     await clearAll(service);
@@ -80,22 +81,22 @@ void getAllExpenses() async {
   try {
     Category category = Category.withColor(
       name: "C1",
-      icon: "I1",
+      iconCode: Icons.home.codePoint,
       color: Colors.black,
     );
 
     List<Expense> mockExpected = [
       Expense(
-        name: "1",
+        description: "1",
         amount: 1,
         date: DateTime(2024, 2, 11),
-        category: category,
+        categoryId: category.key,
       ),
       Expense(
-        name: "2",
+        description: "2",
         amount: 2,
         date: DateTime(2024, 2, 12),
-        category: category,
+        categoryId: category.key,
       ),
     ];
 
@@ -108,10 +109,10 @@ void getAllExpenses() async {
     await service.box.add(mockExpected[0]);
     await service.box.add(mockExpected[1]);
 
-    final expenses = await service.getAllExpenses();
+    final expenses = await service.getAllExpenses(null);
 
     expect(expenses.length, 2);
-    expect(expenses[0].name, "1");
+    expect(expenses[0].description, "1");
   } finally {
     await clearAll(service);
   }
@@ -126,18 +127,20 @@ void saveExpense() async {
   try {
     final current = DateTime.now();
     final expense = Expense(
-      name: "a",
+      description: "a",
       amount: 1,
       date: current,
-      category: Category.withColor(name: "a", icon: "b", color: Colors.white),
+      categoryId: Category.withColor(
+              name: "a", iconCode: Icons.home.codePoint, color: Colors.white)
+          .key,
     );
 
     await service.saveExpense(expense);
 
-    final expenses = await service.getAllExpenses();
+    final expenses = await service.getAllExpenses(null);
 
     expect(expenses.length, 1);
-    expect(expenses[0].name, "a");
+    expect(expenses[0].description, "a");
     expect(expenses[0].amount, 1);
     expect(expenses[0].date, current);
   } finally {
@@ -150,22 +153,22 @@ void updateExpenseEntity() async {
   try {
     Category category = Category.withColor(
       name: "C1",
-      icon: "I1",
+      iconCode: Icons.home.codePoint,
       color: Colors.black,
     );
 
     List<Expense> mockExpected = [
       Expense(
-        name: "1",
+        description: "1",
         amount: 1,
         date: DateTime(2024, 2, 11),
-        category: category,
+        categoryId: category.key,
       ),
       Expense(
-        name: "2",
+        description: "2",
         amount: 2,
         date: DateTime(2024, 2, 12),
-        category: category,
+        categoryId: category.key,
       ),
     ];
 
@@ -178,21 +181,21 @@ void updateExpenseEntity() async {
     await service.saveExpense(mockExpected[0]);
     await service.saveExpense(mockExpected[1]);
 
-    var expenses = await service.getAllExpenses();
+    var expenses = await service.getAllExpenses(null);
     expect(expenses.length, 2);
-    expect(expenses[0].name, "1");
-    expect(expenses[1].name, "2");
+    expect(expenses[0].description, "1");
+    expect(expenses[1].description, "2");
 
-    expenses[0].name = "1 new name";
-    expenses[1].name = "2 new name";
+    expenses[0].description = "1 new name";
+    expenses[1].description = "2 new name";
 
     await service.updateExpense(expenses[0]);
     await service.updateExpense(expenses[1]);
 
-    expenses = await service.getAllExpenses();
+    expenses = await service.getAllExpenses(null);
     expect(expenses.length, 2);
-    expect(expenses[0].name, "1 new name");
-    expect(expenses[1].name, "2 new name");
+    expect(expenses[0].description, "1 new name");
+    expect(expenses[1].description, "2 new name");
   } finally {
     await clearAll(service);
   }
@@ -203,22 +206,22 @@ void deleteExpenseEntity() async {
   try {
     Category category = Category.withColor(
       name: "C1",
-      icon: "I1",
+      iconCode: Icons.home.codePoint,
       color: Colors.black,
     );
 
     List<Expense> mockExpected = [
       Expense(
-        name: "1",
+        description: "1",
         amount: 1,
         date: DateTime(2024, 2, 11),
-        category: category,
+        categoryId: category.key,
       ),
       Expense(
-        name: "2",
+        description: "2",
         amount: 2,
         date: DateTime(2024, 2, 12),
-        category: category,
+        categoryId: category.key,
       ),
     ];
 
@@ -231,16 +234,16 @@ void deleteExpenseEntity() async {
     await service.saveExpense(mockExpected[0]);
     await service.saveExpense(mockExpected[1]);
 
-    var expenses = await service.getAllExpenses();
+    var expenses = await service.getAllExpenses(null);
     expect(expenses.length, 2);
-    expect(expenses[0].name, "1");
-    expect(expenses[1].name, "2");
+    expect(expenses[0].description, "1");
+    expect(expenses[1].description, "2");
 
     await service.deleteExpense(expenses[0]);
 
-    expenses = await service.getAllExpenses();
+    expenses = await service.getAllExpenses(null);
     expect(expenses.length, 1);
-    expect(expenses[0].name, "2");
+    expect(expenses[0].description, "2");
   } finally {
     await clearAll(service);
   }
