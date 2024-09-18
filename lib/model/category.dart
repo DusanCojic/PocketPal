@@ -27,8 +27,8 @@ class Category extends HiveObject {
 
   factory Category.fromJson(json) => Category(
         name: json["name"],
-        iconCode: json["iconCode"],
-        colorValue: json["colorValue"],
+        iconCode: (json["iconCode"] as num).toInt(),
+        colorValue: (json["colorValue"] as num).toInt(),
       );
 
   @override
