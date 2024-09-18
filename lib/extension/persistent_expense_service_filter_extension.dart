@@ -6,13 +6,24 @@ extension PersistentExpenseFilterExtension on PersistentExpenseService {
   DateTime currentDate() => DateTime.now();
 
   Future<List<Expense>> getThisMonthExpenses() async {
-    DateTime thirtyDaysAgo = currentDate().subtract(const Duration(days: 30));
-    return getExpensesAfter(thirtyDaysAgo);
+    DateTime now = currentDate();
+    DateTime startOfMonth = DateTime(now.year, now.month, 1);
+    DateTime lastDayOfPreviousMonth =
+        startOfMonth.subtract(const Duration(days: 1));
+    DateTime startOfNextMonth = DateTime(now.year, now.month + 1, 1);
+
+    return getCustomPeriodExpenses(lastDayOfPreviousMonth, startOfNextMonth);
   }
 
   Future<List<Expense>> getThisWeekExpenses() async {
-    DateTime weekAgo = currentDate().subtract(const Duration(days: 7));
-    return getExpensesAfter(weekAgo);
+    DateTime now = currentDate();
+
+    int daysToSubtract = now.weekday - DateTime.monday;
+    DateTime startOfWeek = now.subtract(Duration(days: daysToSubtract + 1));
+
+    DateTime endOfWeek = startOfWeek.add(const Duration(days: 7));
+
+    return getCustomPeriodExpenses(startOfWeek, endOfWeek);
   }
 
   Future<List<Expense>> getLastYearExpenses() async {
@@ -26,6 +37,10 @@ extension PersistentExpenseFilterExtension on PersistentExpenseService {
 
   Future<List<Expense>> getYTDExpenses() async {
     return getExpensesForYear(currentDate().year);
+  }
+
+  Future<List<Expense>> getAllExpensesList() async {
+    return box.values.cast<Expense>().toList();
   }
 
   Future<List<Expense>> getExpensesAfter(DateTime dateAfter) async {

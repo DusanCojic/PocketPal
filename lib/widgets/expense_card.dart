@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:pocket_pal/util/time_period.dart';
+import 'package:pocket_pal/model/expense.dart';
+import 'package:pocket_pal/widgets/full_expense_view.dart';
 
-import '../service/manager_service.dart';
-
+// ignore: must_be_immutable
 class ExpenseCard extends StatefulWidget {
-  const ExpenseCard({super.key});
+  Expense expense;
+
+  ExpenseCard({super.key, required this.expense});
 
   @override
   State<ExpenseCard> createState() => _ExpenseCardState();
@@ -13,58 +15,95 @@ class ExpenseCard extends StatefulWidget {
 class _ExpenseCardState extends State<ExpenseCard> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(10),
-      child: Card(
-        child: Container(
-          height: 130,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Colors.blueAccent.withOpacity(0.5),
-                Colors.purpleAccent.withOpacity(0.5),
-              ],
-            ),
-            borderRadius: BorderRadius.circular(15),
+    return GestureDetector(
+      onTap: () {
+        showModalBottomSheet(
+          context: context,
+          useRootNavigator: true,
+          isScrollControlled: true,
+          builder: (BuildContext context) {
+            return Padding(
+              padding: MediaQuery.of(context).viewInsets,
+              child: FullExpenseView(expense: widget.expense),
+            );
+          },
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        child: Card(
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30.0),
           ),
-          child: Center(
-            child: FutureBuilder<double>(
-              future: getTotalExpenses(),
-              builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
-                return RichText(
-                  textAlign: TextAlign.center,
-                  text: TextSpan(
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontFamily: 'Roboto',
-                      fontSize: 15.0,
+          color: Colors.white,
+          child: SizedBox(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height / 12,
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: widget.expense.category?.color.withOpacity(0.1),
                     ),
+                    child: Icon(
+                      IconData(
+                          widget.expense.category?.iconCode ??
+                              Icons.home.codePoint,
+                          fontFamily: "MaterialIcons"),
+                      color: widget.expense.category?.color,
+                      size: 27.0,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const TextSpan(text: 'Total Expense:\n'),
-                      TextSpan(
-                        text: '\$${snapshot.data.toString()}',
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            widget.expense.category?.name ?? "Name not found",
+                            style: const TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(right: 20.0),
+                            child: Text(
+                              '\$${widget.expense.amount.toStringAsFixed(2)}',
+                              style: const TextStyle(
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        '${widget.expense.date.year}-${widget.expense.date.month}-${widget.expense.date.day}',
                         style: const TextStyle(
-                          fontSize: 25.0,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.grey,
+                          fontSize: 13.0,
                         ),
                       ),
                     ],
                   ),
-                );
-              },
+                ),
+              ],
             ),
           ),
         ),
       ),
     );
-  }
-
-  Future<double> getTotalExpenses() async {
-    return await ManagerService()
-        .service
-        .getExpenseService()
-        .getTotalExpense(period: TimePeriod.today);
   }
 }

@@ -5,20 +5,29 @@ import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import '../screens/expense_screen.dart';
 import '../screens/add_screen.dart';
 import '../screens/income_screen.dart';
-import '../screens/query_screen.dart';
+import '../screens/stats_screen.dart';
 import '../screens/settings_screen.dart';
 
 class BottomBar extends StatelessWidget {
-  final PersistentTabController _controller =
+  static const BottomBar instance = BottomBar._internal();
+
+  const BottomBar._internal();
+
+  factory BottomBar() => instance;
+
+  static final PersistentTabController _controller =
       PersistentTabController(initialIndex: 0);
 
-  BottomBar({super.key});
+  PersistentTabController get getController => _controller;
+
+  static int currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return PersistentTabView(
       context,
       controller: _controller,
+      navBarHeight: 61,
       screens: _buildScreens(),
       items: _navBarItems(context),
       confineInSafeArea: true,
@@ -27,8 +36,11 @@ class BottomBar extends StatelessWidget {
       resizeToAvoidBottomInset: true,
       stateManagement: true,
       hideNavigationBarWhenKeyboardShows: true,
-      decoration: NavBarDecoration(
-        borderRadius: BorderRadius.circular(10.0),
+      decoration: const NavBarDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(25.0),
+          topRight: Radius.circular(25.0),
+        ),
       ),
       popAllScreensOnTapOfSelectedTab: true,
       popActionScreens: PopActionScreensType.all,
@@ -41,57 +53,81 @@ class BottomBar extends StatelessWidget {
         curve: Curves.ease,
         duration: Duration(milliseconds: 200),
       ),
+      onItemSelected: (index) => {
+        currentIndex = index,
+      },
       navBarStyle: NavBarStyle.style15,
     );
   }
 
   List<Widget> _buildScreens() {
     return [
-      ExpenseScreen(),
+      const ExpenseScreen(),
       IncomeScreen(),
-      AddScreen(),
+      AddScreen(
+        pressedFromPage: currentIndex,
+      ),
       QueryScreen(),
-      SettingsScreen()
+      const SettingsScreen()
     ];
   }
 
   List<PersistentBottomNavBarItem> _navBarItems(BuildContext context) {
     return [
       PersistentBottomNavBarItem(
-        icon: const Icon(CupertinoIcons.arrow_right_arrow_left),
-        activeColorPrimary: CupertinoColors.activeBlue,
-        inactiveColorPrimary: CupertinoColors.systemGrey,
-      ),
-      PersistentBottomNavBarItem(
-        icon: const Icon(CupertinoIcons.rectangle_stack_person_crop_fill),
-        activeColorPrimary: CupertinoColors.activeBlue,
+        icon: const Icon(
+          Icons.home_rounded,
+          size: 35.0,
+        ),
+        activeColorPrimary: CupertinoColors.activeBlue.withOpacity(0.9),
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
         icon: const Icon(
-          CupertinoIcons.add,
-          color: Colors.white,
+          Icons.wallet_outlined,
+          size: 35.0,
         ),
-        activeColorPrimary: CupertinoColors.systemPurple,
+        activeColorPrimary: CupertinoColors.activeBlue.withOpacity(0.9),
+        inactiveColorPrimary: CupertinoColors.systemGrey,
+      ),
+      PersistentBottomNavBarItem(
+        icon: const Icon(
+          Icons.add,
+          color: Colors.white,
+          size: 35.0,
+        ),
+        activeColorPrimary: const Color(0xFFFFB200).withOpacity(0.9),
         inactiveColorPrimary: CupertinoColors.systemGrey,
         onPressed: (value) {
           showModalBottomSheet(
             context: context,
             builder: (context) {
-              return AddScreen();
+              return Padding(
+                padding: MediaQuery.of(context).viewInsets,
+                child: AddScreen(
+                  pressedFromPage: currentIndex,
+                ),
+              );
             },
             isDismissible: true,
+            isScrollControlled: true,
           );
         },
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(CupertinoIcons.search),
-        activeColorPrimary: CupertinoColors.activeBlue,
+        icon: const Icon(
+          Icons.bar_chart_rounded,
+          size: 35.0,
+        ),
+        activeColorPrimary: CupertinoColors.activeBlue.withOpacity(0.9),
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
       PersistentBottomNavBarItem(
-        icon: const Icon(CupertinoIcons.gear_solid),
-        activeColorPrimary: CupertinoColors.activeBlue,
+        icon: const Icon(
+          Icons.settings,
+          size: 35.0,
+        ),
+        activeColorPrimary: CupertinoColors.activeBlue.withOpacity(0.9),
         inactiveColorPrimary: CupertinoColors.systemGrey,
       ),
     ];

@@ -18,6 +18,10 @@ dependencies:
   http: ^1.2.0
   hive_generator: ^2.0.1
   persistent_bottom_nav_bar: ^5.0.2
+  flutter_iconpicker: ^3.2.4
+  flutter_colorpicker: ^1.1.0
+  flutter_slidable: ^3.1.1
+  intl: ^0.18.0
 
   # Testing packages
   mockito: ^5.4.4
@@ -31,3 +35,5 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/sun-tornado.png

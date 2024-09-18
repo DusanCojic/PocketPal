@@ -1,13 +1,68 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_pal/widgets/category_list.dart';
 
 class SettingsScreen extends StatelessWidget {
-  SettingsScreen({super.key});
+  const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('Settings screen'),
+    return Scaffold(
+      backgroundColor: const Color.fromRGBO(245, 245, 247, 1.0),
+      body: Column(
+        children: [
+          const Padding(
+            padding: EdgeInsets.only(top: 20.0, right: 150.0, bottom: 20.0),
+            child: SizedBox(
+              child: Text(
+                "Settings",
+                style: TextStyle(
+                  fontSize: 38.0,
+                  color: Colors.black54,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+          ),
+          Center(
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20.0),
+                  child: GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        useRootNavigator: true,
+                        builder: (BuildContext context) {
+                          return const CategoryList();
+                        },
+                      );
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width - 60,
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                      child: const Padding(
+                        padding: EdgeInsets.only(top: 13.0, left: 30.0),
+                        child: Text(
+                          "Edit Categories",
+                          style: TextStyle(
+                            fontFamily: 'Roboto',
+                            fontSize: 17.0,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
