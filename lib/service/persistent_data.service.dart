@@ -4,7 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pocket_pal/interface/category_service.dart';
 import 'package:pocket_pal/model/expense.dart';
 import 'package:pocket_pal/model/income.dart';
-import 'package:pocket_pal/model/saving.dart';
+import 'package:pocket_pal/model/account.dart';
 import 'package:pocket_pal/service/persistent_category_service.dart';
 import '../model/category.dart';
 
@@ -28,7 +28,7 @@ class PersistentDataService implements DataService {
     Hive.registerAdapter(CategoryAdapter());
     Hive.registerAdapter(ExpenseAdapter());
     Hive.registerAdapter(IncomeAdapter());
-    Hive.registerAdapter(SavingAdapter());
+    Hive.registerAdapter(AccountAdapter());
 
     _expenseService = PersistentExpenseService(
       box: await Hive.openBox("expenses"),
