@@ -11,6 +11,7 @@ class AddAccount extends StatefulWidget {
 
 class _AddAccountState extends State<AddAccount> {
   final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _amountController = TextEditingController();
 
   Color currentColor = Colors.blueAccent;
   Color pickerColor = Colors.blueAccent;
@@ -20,11 +21,18 @@ class _AddAccountState extends State<AddAccount> {
   }
 
   bool isNameEmpty = false;
+  bool isAmountEmpty = false;
+
+  @override
+  void initState() {
+    _amountController.text = "0.00";
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 280,
+      height: 350,
       child: Column(
         children: [
           Padding(
@@ -79,6 +87,16 @@ class _AddAccountState extends State<AddAccount> {
                       ),
                     ],
                   ),
+                  const SizedBox(height: 20.0),
+                  TextFormField(
+                    controller: _amountController,
+                    keyboardType: TextInputType.number,
+                    decoration: customInputDecoration(
+                      label: "Initial account balance",
+                      emptyCheck: isAmountEmpty,
+                      icon: null,
+                    ),
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(top: 15.0),
                     child: ElevatedButton(
@@ -89,9 +107,10 @@ class _AddAccountState extends State<AddAccount> {
                       onPressed: () async {
                         setState(() {
                           isNameEmpty = _nameController.text.isEmpty;
+                          isAmountEmpty = _amountController.text.isEmpty;
                         });
 
-                        if (isNameEmpty) {
+                        if (isNameEmpty || isAmountEmpty) {
                           return;
                         }
 
