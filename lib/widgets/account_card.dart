@@ -48,12 +48,63 @@ class _AccountCardState extends State<AccountCard> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(right: 10.0),
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.more_horiz_rounded,
-                        color: Colors.white,
-                        size: 35.0,
+                    child: PopupMenuTheme(
+                      data: const PopupMenuThemeData(
+                        surfaceTintColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(30.0),
+                          ),
+                        ),
+                        shadowColor: Colors.white,
+                      ),
+                      child: PopupMenuButton<String>(
+                        onSelected: (String value) {
+                          if (value == "Delete") {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text("Delete account"),
+                                  content: const Text(
+                                      "Are you sure you want to delete \"Salary\" account?"),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text("No"),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {},
+                                      child: const Text("Yes"),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }
+                        },
+                        itemBuilder: (BuildContext context) {
+                          return ['Delete'].map((String value) {
+                            return PopupMenuItem<String>(
+                              value: value,
+                              child: Center(
+                                child: Text(
+                                  value,
+                                  style: const TextStyle(
+                                    fontSize: 14.0,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }).toList();
+                        },
+                        child: const Icon(
+                          Icons.more_horiz_rounded,
+                          color: Colors.white,
+                          size: 35.0,
+                        ),
                       ),
                     ),
                   ),

@@ -7,14 +7,17 @@ class IncomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-        body: Padding(
-      padding: EdgeInsets.all(15),
-      child: Column(children: [
-        AccountCard(),
-        AccountCard(),
-        AccountCard(),
-        AccountCard(),
-      ]),
-    ));
+      body: Padding(
+        padding: EdgeInsets.all(15),
+        child: Column(
+          children: [
+            AccountCard(),
+            AccountCard(),
+            AccountCard(),
+            AccountCard(),
+          ],
+        ),
+      ),
+    );
   }
 }
