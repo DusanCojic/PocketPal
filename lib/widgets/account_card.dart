@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_pal/widgets/add_income.dart';
 
 class AccountCard extends StatefulWidget {
   const AccountCard({super.key});
@@ -20,7 +21,7 @@ class _AccountCardState extends State<AccountCard> {
         ),
         child: Container(
           width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height / 6,
+          height: MediaQuery.of(context).size.height / 5,
           decoration: BoxDecoration(
             image: DecorationImage(
               image: Image.asset("assets/Lines.png").image,
@@ -64,7 +65,7 @@ class _AccountCardState extends State<AccountCard> {
                   const Column(
                     children: [
                       Padding(
-                        padding: EdgeInsets.only(right: 90.0),
+                        padding: EdgeInsets.only(right: 90.0, top: 35.0),
                         child: Text(
                           "Total income",
                           style: TextStyle(
@@ -88,9 +89,21 @@ class _AccountCardState extends State<AccountCard> {
                     ],
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 70.0, top: 35.0),
+                    padding: const EdgeInsets.only(left: 70.0, top: 60.0),
                     child: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          useRootNavigator: true,
+                          isScrollControlled: true,
+                          builder: (BuildContext context) {
+                            return Padding(
+                              padding: MediaQuery.of(context).viewInsets,
+                              child: const AddIncome(),
+                            );
+                          },
+                        );
+                      },
                       icon: const Icon(
                         Icons.add_circle_rounded,
                         color: Colors.white,

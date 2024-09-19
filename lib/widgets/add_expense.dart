@@ -46,7 +46,7 @@ class _AddExpenseState extends State<AddExpense> {
         top: 15.0,
       ),
       child: SizedBox(
-        height: 500,
+        height: 470,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
