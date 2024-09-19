@@ -36,7 +36,7 @@ class _AccountCardState extends State<AccountCard> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Padding(
-                    padding: EdgeInsets.only(left: 25.0, top: 10.0),
+                    padding: EdgeInsets.only(left: 25.0, top: 15.0),
                     child: Text(
                       "Salary",
                       style: TextStyle(
@@ -47,7 +47,7 @@ class _AccountCardState extends State<AccountCard> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(right: 10.0),
+                    padding: const EdgeInsets.only(right: 15.0),
                     child: PopupMenuTheme(
                       data: const PopupMenuThemeData(
                         surfaceTintColor: Colors.white,
@@ -111,13 +111,15 @@ class _AccountCardState extends State<AccountCard> {
                 ],
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Column(
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(right: 90.0, top: 35.0),
-                        child: Text(
+                  const Padding(
+                    padding: EdgeInsets.only(left: 20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 30),
+                        Text(
                           "Total income",
                           style: TextStyle(
                             fontSize: 14.0,
@@ -125,22 +127,19 @@ class _AccountCardState extends State<AccountCard> {
                             color: Colors.white70,
                           ),
                         ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(left: 20.0),
-                        child: Text(
-                          "\$120,435.65",
+                        Text(
+                          "\$125,365.76",
                           style: TextStyle(
                             fontSize: 34,
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 70.0, top: 60.0),
+                    padding: const EdgeInsets.only(right: 5.0, top: 60.0),
                     child: IconButton(
                       onPressed: () {
                         showModalBottomSheet(
