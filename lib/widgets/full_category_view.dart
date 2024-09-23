@@ -76,7 +76,7 @@ class _FullCategoryViewState extends State<FullCategoryView> {
           const Padding(
             padding: EdgeInsets.only(top: 20.0),
             child: Text(
-              "View and edit a category",
+              "View and edit category",
               style: TextStyle(
                 fontSize: 26.0,
                 fontWeight: FontWeight.bold,

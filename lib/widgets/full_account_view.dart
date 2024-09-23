@@ -118,7 +118,7 @@ class _FullAccountViewState extends State<FullAccountView> {
                             .updateAccount(widget.account);
                       },
                       child: const Text(
-                        "Edit",
+                        "Save",
                         style: TextStyle(color: Colors.white),
                       ),
                     ),

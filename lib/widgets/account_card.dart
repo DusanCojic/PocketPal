@@ -67,6 +67,31 @@ class _AccountCardState extends State<AccountCard> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       Padding(
+                        padding: const EdgeInsets.only(right: 5.0, top: 5.0),
+                        child: IconButton(
+                          onPressed: () {
+                            showModalBottomSheet(
+                              context: context,
+                              useRootNavigator: true,
+                              isScrollControlled: true,
+                              builder: (BuildContext context) {
+                                return Padding(
+                                  padding: MediaQuery.of(context).viewInsets,
+                                  child: AddIncome(
+                                    account: widget.account,
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          icon: const Icon(
+                            Icons.add_circle_rounded,
+                            color: Colors.white,
+                            size: 32.0,
+                          ),
+                        ),
+                      ),
+                      Padding(
                         padding: const EdgeInsets.only(right: 5.0, top: 10.0),
                         child: PopupMenuTheme(
                           data: const PopupMenuThemeData(
@@ -131,7 +156,7 @@ class _AccountCardState extends State<AccountCard> {
                               }
                             },
                             itemBuilder: (BuildContext context) {
-                              return ['Delete', 'Edit'].map((String value) {
+                              return ['Edit', 'Delete'].map((String value) {
                                 return PopupMenuItem<String>(
                                   value: value,
                                   child: Center(
@@ -150,31 +175,6 @@ class _AccountCardState extends State<AccountCard> {
                               color: Colors.white,
                               size: 33.0,
                             ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 5.0, top: 10.0),
-                        child: IconButton(
-                          onPressed: () {
-                            showModalBottomSheet(
-                              context: context,
-                              useRootNavigator: true,
-                              isScrollControlled: true,
-                              builder: (BuildContext context) {
-                                return Padding(
-                                  padding: MediaQuery.of(context).viewInsets,
-                                  child: AddIncome(
-                                    account: widget.account,
-                                  ),
-                                );
-                              },
-                            );
-                          },
-                          icon: const Icon(
-                            Icons.add_circle_rounded,
-                            color: Colors.white,
-                            size: 32.0,
                           ),
                         ),
                       ),
