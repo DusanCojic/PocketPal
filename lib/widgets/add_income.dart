@@ -92,8 +92,8 @@ class _AddIncomeState extends State<AddIncome> {
                       ),
                       onPressed: () async {
                         setState(() {
-                          isDateEmpty = _amountController.text.isEmpty;
-                          isAmountEmpty = _dateController.text.isEmpty;
+                          isDateEmpty = _dateController.text.isEmpty;
+                          isAmountEmpty = _amountController.text.isEmpty;
                         });
 
                         if (isDateEmpty || isAmountEmpty) {

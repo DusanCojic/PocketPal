@@ -15,7 +15,6 @@ class FullAccountView extends StatefulWidget {
 
 class _FullAccountViewState extends State<FullAccountView> {
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _amountController = TextEditingController();
 
   Color currentColor = Colors.blueAccent;
   Color pickerColor = Colors.blueAccent;
@@ -25,12 +24,10 @@ class _FullAccountViewState extends State<FullAccountView> {
   }
 
   bool isNameEmpty = false;
-  bool isAmountEmpty = false;
 
   @override
   void initState() {
     _nameController.text = widget.account.name;
-    _amountController.text = widget.account.initialBalance.toString();
     currentColor = Color(widget.account.colorCode);
     super.initState();
   }
@@ -38,7 +35,7 @@ class _FullAccountViewState extends State<FullAccountView> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 350,
+      height: 280,
       child: Column(
         children: [
           Padding(
@@ -93,16 +90,6 @@ class _FullAccountViewState extends State<FullAccountView> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20.0),
-                  TextFormField(
-                    controller: _amountController,
-                    keyboardType: TextInputType.number,
-                    decoration: customInputDecoration(
-                      label: "Initial account balance",
-                      emptyCheck: isAmountEmpty,
-                      icon: null,
-                    ),
-                  ),
                   Padding(
                     padding: const EdgeInsets.only(top: 15.0),
                     child: ElevatedButton(
@@ -113,24 +100,16 @@ class _FullAccountViewState extends State<FullAccountView> {
                       onPressed: () async {
                         setState(() {
                           isNameEmpty = _nameController.text.isEmpty;
-                          isAmountEmpty = _amountController.text.isEmpty;
                         });
 
                         if (isNameEmpty ||
-                            isAmountEmpty ||
-                            (double.parse(_amountController.text) ==
-                                    widget.account.initialBalance &&
-                                _nameController.text == widget.account.name &&
+                            (_nameController.text == widget.account.name &&
                                 widget.account.colorCode ==
                                     currentColor.value)) {
                           return;
                         }
 
                         widget.account.name = _nameController.text;
-                        widget.account.total -= widget.account.initialBalance;
-                        widget.account.initialBalance = double.parse(
-                            _amountController.text.replaceAll(',', '.'));
-                        widget.account.total += widget.account.initialBalance;
                         widget.account.colorCode = currentColor.value;
 
                         await ManagerService()

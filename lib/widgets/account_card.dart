@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:pocket_pal/model/account.dart';
 import 'package:pocket_pal/service/manager_service.dart';
 import 'package:pocket_pal/widgets/add_income.dart';

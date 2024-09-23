@@ -39,7 +39,7 @@ class _IncomeListState extends State<IncomeList> implements Subscriber {
         width: MediaQuery.of(context).size.width,
         child: Column(
           children: [
-            const SizedBox(height: 20),
+            const SizedBox(height: 25),
             Container(
               width: 35,
               height: 7,
