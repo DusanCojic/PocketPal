@@ -1,19 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:pocket_pal/model/account.dart';
+import 'package:pocket_pal/model/income.dart';
+import 'package:pocket_pal/service/manager_service.dart';
 import 'package:pocket_pal/widgets/input_field_style.dart';
 
 class AddIncome extends StatefulWidget {
-  const AddIncome({super.key});
+  final Account account;
+
+  const AddIncome({super.key, required this.account});
 
   @override
   State<StatefulWidget> createState() => _AddIncomeState();
 }
 
 class _AddIncomeState extends State<AddIncome> {
-  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _amountController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
 
-  bool isNameEmpty = false;
   bool isAmountEmpty = false;
+  bool isDateEmpty = false;
+
+  @override
+  void initState() {
+    _dateController.text = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,16 +61,6 @@ class _AddIncomeState extends State<AddIncome> {
               child: Column(
                 children: [
                   TextFormField(
-                    controller: _nameController,
-                    keyboardType: TextInputType.text,
-                    decoration: customInputDecoration(
-                      label: "Name",
-                      emptyCheck: isNameEmpty,
-                      icon: null,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                  TextFormField(
                     controller: _amountController,
                     keyboardType: TextInputType.number,
                     decoration: customInputDecoration(
@@ -66,6 +68,20 @@ class _AddIncomeState extends State<AddIncome> {
                       emptyCheck: isAmountEmpty,
                       icon: null,
                     ),
+                  ),
+                  const SizedBox(height: 10),
+                  TextFormField(
+                    controller: _dateController,
+                    keyboardType: TextInputType.number,
+                    decoration: customInputDecoration(
+                      label: "Date",
+                      emptyCheck: isDateEmpty,
+                      icon: null,
+                    ),
+                    readOnly: true,
+                    onTap: () {
+                      _selectDate();
+                    },
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 15.0),
@@ -76,15 +92,28 @@ class _AddIncomeState extends State<AddIncome> {
                       ),
                       onPressed: () async {
                         setState(() {
-                          isNameEmpty = _nameController.text.isEmpty;
-                          isAmountEmpty = _amountController.text.isEmpty;
+                          isDateEmpty = _amountController.text.isEmpty;
+                          isAmountEmpty = _dateController.text.isEmpty;
                         });
 
-                        if (isNameEmpty || isAmountEmpty) {
+                        if (isDateEmpty || isAmountEmpty) {
                           return;
                         }
 
-                        _nameController.clear();
+                        Income newIncome = Income(
+                          amount: double.parse(_amountController.text),
+                          date: DateTime.parse(_dateController.text),
+                        );
+
+                        await ManagerService()
+                            .service
+                            .getAccountService()
+                            .addIncome(
+                              widget.account,
+                              newIncome,
+                            );
+
+                        _amountController.clear();
                       },
                       child: const Text(
                         "Add",
@@ -99,5 +128,20 @@ class _AddIncomeState extends State<AddIncome> {
         ],
       ),
     );
+  }
+
+  Future<void> _selectDate() async {
+    DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
+
+    if (picked != null) {
+      setState(() {
+        _dateController.text = picked.toString().split(" ")[0];
+      });
+    }
   }
 }

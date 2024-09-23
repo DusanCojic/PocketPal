@@ -4,14 +4,16 @@ import 'package:pocket_pal/model/account.dart';
 import 'package:pocket_pal/service/manager_service.dart';
 import 'package:pocket_pal/widgets/input_field_style.dart';
 
-class AddAccount extends StatefulWidget {
-  const AddAccount({super.key});
+class FullAccountView extends StatefulWidget {
+  final Account account;
+
+  const FullAccountView({super.key, required this.account});
 
   @override
-  State<StatefulWidget> createState() => _AddAccountState();
+  State<StatefulWidget> createState() => _FullAccountViewState();
 }
 
-class _AddAccountState extends State<AddAccount> {
+class _FullAccountViewState extends State<FullAccountView> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _amountController = TextEditingController();
 
@@ -27,7 +29,9 @@ class _AddAccountState extends State<AddAccount> {
 
   @override
   void initState() {
-    _amountController.text = "0.00";
+    _nameController.text = widget.account.name;
+    _amountController.text = widget.account.initialBalance.toString();
+    currentColor = Color(widget.account.colorCode);
     super.initState();
   }
 
@@ -51,7 +55,7 @@ class _AddAccountState extends State<AddAccount> {
           const Padding(
             padding: EdgeInsets.only(top: 20.0),
             child: Text(
-              "Add Account",
+              "View and edit account",
               style: TextStyle(
                 fontSize: 26.0,
                 fontWeight: FontWeight.bold,
@@ -112,29 +116,30 @@ class _AddAccountState extends State<AddAccount> {
                           isAmountEmpty = _amountController.text.isEmpty;
                         });
 
-                        if (isNameEmpty || isAmountEmpty) {
+                        if (isNameEmpty ||
+                            isAmountEmpty ||
+                            (double.parse(_amountController.text) ==
+                                    widget.account.initialBalance &&
+                                _nameController.text == widget.account.name &&
+                                widget.account.colorCode ==
+                                    currentColor.value)) {
                           return;
                         }
 
-                        Account newAccount = Account(
-                          name: _nameController.text,
-                          colorCode: currentColor.value,
-                          initialBalance: double.parse(_amountController.text),
-                          total: double.parse(_amountController.text),
-                        );
+                        widget.account.name = _nameController.text;
+                        widget.account.total -= widget.account.initialBalance;
+                        widget.account.initialBalance =
+                            double.parse(_amountController.text);
+                        widget.account.total += widget.account.initialBalance;
+                        widget.account.colorCode = currentColor.value;
 
                         await ManagerService()
                             .service
                             .getAccountService()
-                            .saveAccount(newAccount);
-
-                        _nameController.clear();
-                        setState(() {
-                          currentColor = Colors.blueAccent;
-                        });
+                            .updateAccount(widget.account);
                       },
                       child: const Text(
-                        "Add",
+                        "Edit",
                         style: TextStyle(color: Colors.white),
                       ),
                     ),

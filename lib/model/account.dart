@@ -9,21 +9,31 @@ class Account extends HiveObject {
   String name;
 
   @HiveField(1)
-  double total = 0;
+  double initialBalance;
 
   @HiveField(2)
+  double total;
+
+  @HiveField(3)
   int colorCode;
 
-  @HiveField(2)
+  @HiveField(4)
   List<Income> incomeList = [];
 
   Account({
     required this.name,
     required this.colorCode,
+    this.initialBalance = 0,
+    this.total = 0,
   });
 
   void addIncome(Income income) {
     incomeList.add(income);
     total += income.amount;
+  }
+
+  void removeIncome(Income income) {
+    incomeList.remove(income);
+    total -= income.amount;
   }
 }

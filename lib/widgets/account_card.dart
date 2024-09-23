@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:pocket_pal/model/account.dart';
+import 'package:pocket_pal/service/manager_service.dart';
 import 'package:pocket_pal/widgets/add_income.dart';
+import 'package:pocket_pal/widgets/full_account_view.dart';
+import 'package:pocket_pal/widgets/income_list.dart';
 
 class AccountCard extends StatefulWidget {
-  const AccountCard({super.key});
+  final Account account;
+
+  const AccountCard({super.key, required this.account});
 
   @override
   State<StatefulWidget> createState() => _AccountCardState();
@@ -12,10 +18,21 @@ class _AccountCardState extends State<AccountCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {},
+      onTap: () {
+        showModalBottomSheet(
+          context: context,
+          useRootNavigator: true,
+          isScrollControlled: true,
+          builder: (BuildContext context) {
+            return IncomeList(
+              account: widget.account,
+            );
+          },
+        );
+      },
       child: Card(
-        elevation: 0,
-        color: Colors.lightBlue,
+        elevation: 3,
+        color: Color(widget.account.colorCode),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(30.0)),
         ),
@@ -35,11 +52,11 @@ class _AccountCardState extends State<AccountCard> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 25.0, top: 15.0),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 25.0, top: 15.0),
                     child: Text(
-                      "Salary",
-                      style: TextStyle(
+                      widget.account.name,
+                      style: const TextStyle(
                         fontSize: 26.0,
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -60,33 +77,56 @@ class _AccountCardState extends State<AccountCard> {
                       ),
                       child: PopupMenuButton<String>(
                         onSelected: (String value) {
-                          if (value == "Delete") {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text("Delete account"),
-                                  content: const Text(
-                                      "Are you sure you want to delete \"Salary\" account?"),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text("No"),
+                          switch (value) {
+                            case 'Delete':
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text("Delete account"),
+                                    content: Text(
+                                        "Are you sure you want to delete \"${widget.account.name}\" account?"),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text("No"),
+                                      ),
+                                      TextButton(
+                                        onPressed: () async {
+                                          await ManagerService()
+                                              .service
+                                              .getAccountService()
+                                              .deleteAccount(widget.account);
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text("Yes"),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                              break;
+                            case 'Edit':
+                              showModalBottomSheet(
+                                context: context,
+                                useRootNavigator: true,
+                                isScrollControlled: true,
+                                builder: (BuildContext context) {
+                                  return Padding(
+                                    padding: MediaQuery.of(context).viewInsets,
+                                    child: FullAccountView(
+                                      account: widget.account,
                                     ),
-                                    TextButton(
-                                      onPressed: () {},
-                                      child: const Text("Yes"),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
+                                  );
+                                },
+                              );
+                              break;
                           }
                         },
                         itemBuilder: (BuildContext context) {
-                          return ['Delete'].map((String value) {
+                          return ['Delete', 'Edit'].map((String value) {
                             return PopupMenuItem<String>(
                               value: value,
                               child: Center(
@@ -113,13 +153,13 @@ class _AccountCardState extends State<AccountCard> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.only(left: 20.0),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 30),
-                        Text(
+                        const SizedBox(height: 30),
+                        const Text(
                           "Total income",
                           style: TextStyle(
                             fontSize: 14.0,
@@ -128,8 +168,8 @@ class _AccountCardState extends State<AccountCard> {
                           ),
                         ),
                         Text(
-                          "\$125,365.76",
-                          style: TextStyle(
+                          '\$${widget.account.total.toString()}',
+                          style: const TextStyle(
                             fontSize: 34,
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
@@ -149,7 +189,9 @@ class _AccountCardState extends State<AccountCard> {
                           builder: (BuildContext context) {
                             return Padding(
                               padding: MediaQuery.of(context).viewInsets,
-                              child: const AddIncome(),
+                              child: AddIncome(
+                                account: widget.account,
+                              ),
                             );
                           },
                         );

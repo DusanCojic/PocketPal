@@ -236,7 +236,8 @@ class _AddExpenseState extends State<AddExpense> {
                           await saveExpense(newExpense);
 
                           _amountController.clear();
-                          _dateController.clear();
+                          _dateController.text =
+                              DateFormat('yyyy-MM-dd').format(DateTime.now());
                           _descriptionController.clear();
                           setState(() {
                             dropdownValue = null;
