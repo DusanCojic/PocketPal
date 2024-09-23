@@ -75,7 +75,7 @@ class _TotalExpenseCardState extends State<TotalExpenseCard>
                       TextSpan(
                         text: totalExpense,
                         style: TextStyle(
-                          fontSize: 42.0,
+                          fontSize: 40.0,
                           fontWeight: FontWeight.bold,
                           color: CupertinoColors.activeBlue.withOpacity(0.9),
                         ),
