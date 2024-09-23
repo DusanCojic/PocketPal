@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pocket_pal/interface/subscriber.dart';
 import 'package:pocket_pal/model/category.dart';
 import 'package:pocket_pal/util/time_period.dart';
@@ -52,7 +53,7 @@ class _TotalExpenseCardState extends State<TotalExpenseCard>
             ),
             builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
               String totalExpense = snapshot.hasData && snapshot.data != null
-                  ? '\$${snapshot.data!.toStringAsFixed(2)}'
+                  ? '\$${NumberFormat('#,##0.00').format(snapshot.data!)}'
                   : '\$0.00';
               return Padding(
                 padding: const EdgeInsets.only(top: 35.0, left: 30.0),
@@ -74,7 +75,7 @@ class _TotalExpenseCardState extends State<TotalExpenseCard>
                       TextSpan(
                         text: totalExpense,
                         style: TextStyle(
-                          fontSize: 42.0,
+                          fontSize: 40.0,
                           fontWeight: FontWeight.bold,
                           color: CupertinoColors.activeBlue.withOpacity(0.9),
                         ),

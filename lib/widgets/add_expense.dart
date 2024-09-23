@@ -46,7 +46,7 @@ class _AddExpenseState extends State<AddExpense> {
         top: 15.0,
       ),
       child: SizedBox(
-        height: 500,
+        height: 470,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -236,7 +236,8 @@ class _AddExpenseState extends State<AddExpense> {
                           await saveExpense(newExpense);
 
                           _amountController.clear();
-                          _dateController.clear();
+                          _dateController.text =
+                              DateFormat('yyyy-MM-dd').format(DateTime.now());
                           _descriptionController.clear();
                           setState(() {
                             dropdownValue = null;

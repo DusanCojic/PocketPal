@@ -191,8 +191,8 @@ class _FullExpenseViewState extends State<FullExpenseView> {
                           Category category =
                               await getCategoryFromName(categoryName);
 
-                          widget.expense.amount =
-                              double.parse(_amountController.text);
+                          widget.expense.amount = double.parse(
+                              _amountController.text.replaceAll(',', '.'));
                           widget.expense.date =
                               DateTime.parse(_dateController.text);
                           widget.expense.categoryId = category.key;

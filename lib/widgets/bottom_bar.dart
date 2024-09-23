@@ -96,7 +96,7 @@ class BottomBar extends StatelessWidget {
           color: Colors.white,
           size: 35.0,
         ),
-        activeColorPrimary: const Color(0xFFFFB200).withOpacity(0.9),
+        activeColorPrimary: const Color(0xFFFFB200),
         inactiveColorPrimary: CupertinoColors.systemGrey,
         onPressed: (value) {
           showModalBottomSheet(
