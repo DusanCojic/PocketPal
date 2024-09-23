@@ -101,7 +101,8 @@ class _AddIncomeState extends State<AddIncome> {
                         }
 
                         Income newIncome = Income(
-                          amount: double.parse(_amountController.text),
+                          amount: double.parse(
+                              _amountController.text.replaceAll(',', '.')),
                           date: DateTime.parse(_dateController.text),
                         );
 

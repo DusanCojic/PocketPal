@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:intl/intl.dart';
 import 'package:pocket_pal/model/income.dart';
 
 class IncomeCard extends StatefulWidget {
@@ -51,7 +51,7 @@ class _IncomeCardState extends State<IncomeCard> {
                 Padding(
                   padding: const EdgeInsets.only(left: 15.0),
                   child: Text(
-                    '\$${widget.income.amount.toStringAsFixed(2)}',
+                    '\$${NumberFormat('#,##0.00').format(widget.income.amount)}',
                     style: const TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,

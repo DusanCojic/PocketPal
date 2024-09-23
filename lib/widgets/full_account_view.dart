@@ -128,8 +128,8 @@ class _FullAccountViewState extends State<FullAccountView> {
 
                         widget.account.name = _nameController.text;
                         widget.account.total -= widget.account.initialBalance;
-                        widget.account.initialBalance =
-                            double.parse(_amountController.text);
+                        widget.account.initialBalance = double.parse(
+                            _amountController.text.replaceAll(',', '.'));
                         widget.account.total += widget.account.initialBalance;
                         widget.account.colorCode = currentColor.value;
 

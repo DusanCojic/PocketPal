@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pocket_pal/model/account.dart';
 import 'package:pocket_pal/service/manager_service.dart';
 import 'package:pocket_pal/widgets/add_income.dart';
@@ -168,7 +169,7 @@ class _AccountCardState extends State<AccountCard> {
                           ),
                         ),
                         Text(
-                          '\$${widget.account.total.toString()}',
+                          '\$${NumberFormat('#,##0.00').format(widget.account.total)}',
                           style: const TextStyle(
                             fontSize: 34,
                             color: Colors.white,

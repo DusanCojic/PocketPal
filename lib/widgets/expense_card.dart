@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:pocket_pal/model/expense.dart';
 import 'package:pocket_pal/widgets/full_expense_view.dart';
 
@@ -79,7 +80,7 @@ class _ExpenseCardState extends State<ExpenseCard> {
                           Padding(
                             padding: const EdgeInsets.only(right: 20.0),
                             child: Text(
-                              '\$${widget.expense.amount.toStringAsFixed(2)}',
+                              '\$${NumberFormat('#,##0.00').format(widget.expense.amount)}',
                               style: const TextStyle(
                                 fontSize: 15.0,
                                 fontWeight: FontWeight.w600,
