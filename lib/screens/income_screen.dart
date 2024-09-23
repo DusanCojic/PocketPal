@@ -10,7 +10,25 @@ class IncomeScreen extends StatelessWidget {
       backgroundColor: Color.fromRGBO(233, 234, 236, 0.2),
       body: Padding(
         padding: EdgeInsets.all(15),
-        child: AccountList(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(left: 30.0),
+              child: Text(
+                "Accounts",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black54,
+                ),
+              ),
+            ),
+            Expanded(
+              child: AccountList(),
+            ),
+          ],
+        ),
       ),
     );
   }
