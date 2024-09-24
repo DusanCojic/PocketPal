@@ -63,11 +63,11 @@ class BottomBar extends StatelessWidget {
   List<Widget> _buildScreens() {
     return [
       const ExpenseScreen(),
-      IncomeScreen(),
+      const IncomeScreen(),
       AddScreen(
         pressedFromPage: currentIndex,
       ),
-      QueryScreen(),
+      const StatsScreen(),
       const SettingsScreen()
     ];
   }
