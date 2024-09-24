@@ -38,6 +38,9 @@ abstract class ExpenseService {
   Future<List<Expense>> filterByPeriodAndCategory(TimePeriod period,
       Category category, Subscriber? sub, DateTime? from, DateTime? to);
 
+  Future<Map<Category, double>> totalExpensesForEveryCategory(
+      TimePeriod period, Subscriber? sub);
+
   void subscribe(Subscriber sub);
   void unsubscribe(Subscriber sub);
 }

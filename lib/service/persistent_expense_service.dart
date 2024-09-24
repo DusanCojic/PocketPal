@@ -283,4 +283,21 @@ class PersistentExpenseService implements ExpenseService {
   void unsubscribe(Subscriber sub) {
     expensesChangeNotifier.unsubscribe(sub);
   }
+
+  @override
+  Future<Map<Category, double>> totalExpensesForEveryCategory(
+      TimePeriod period, Subscriber? sub) async {
+    if (sub != null) expensesChangeNotifier.subscribe(sub);
+    Map<Category, double> result = {};
+
+    List<Category> categories =
+        await ManagerService().service.getCategoryService().getCategories(sub);
+
+    for (Category category in categories) {
+      result[category] = await totalExpensesByPeriodAndCategory(
+          period, category, sub, null, null);
+    }
+
+    return result;
+  }
 }
