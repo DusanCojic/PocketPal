@@ -22,6 +22,18 @@ class ExpenseByCategoryTable extends StatefulWidget {
 class _ExpenseByCategoryTableState extends State<ExpenseByCategoryTable>
     implements Subscriber {
   @override
+  void initState() {
+    ManagerService().service.getExpenseService().subscribe(this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    ManagerService().service.getExpenseService().unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: getData(widget.period, this),

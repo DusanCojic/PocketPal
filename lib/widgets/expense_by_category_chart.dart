@@ -20,6 +20,12 @@ class ExpenseByCategoryChart extends StatefulWidget {
 class _ExpenseByCategoryChartState extends State<ExpenseByCategoryChart>
     implements Subscriber {
   @override
+  void initState() {
+    ManagerService().service.getExpenseService().subscribe(this);
+    super.initState();
+  }
+
+  @override
   void dispose() {
     ManagerService().service.getExpenseService().unsubscribe(this);
     super.dispose();
