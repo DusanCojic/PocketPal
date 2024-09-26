@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pocket_pal/util/time_period.dart';
+import 'package:pocket_pal/widgets/daily_expense_chart.dart';
 import 'package:pocket_pal/widgets/expense_by_category_chart.dart';
 import 'package:pocket_pal/widgets/expense_by_category_table.dart';
 import 'package:pocket_pal/widgets/monthly_expense_chart.dart';
@@ -106,6 +107,7 @@ class _ExpenseStatsState extends State<ExpenseStats> {
             sort: ascSort,
           ),
           const MonthlyExpenseChart(),
+          const DailyExpenseChart(),
           const SizedBox(height: 55),
         ],
       ),

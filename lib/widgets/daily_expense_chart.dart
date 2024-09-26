@@ -2,20 +2,28 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:pocket_pal/interface/subscriber.dart';
 import 'package:pocket_pal/service/manager_service.dart';
-// ignore: library_prefixes
 import 'package:pocket_pal/widgets/year_picker.dart' as YP;
+import 'package:pocket_pal/widgets/month_picker.dart' as MP;
 
-class MonthlyExpenseChart extends StatefulWidget {
-  const MonthlyExpenseChart({super.key});
+class DailyExpenseChart extends StatefulWidget {
+  const DailyExpenseChart({super.key});
 
   @override
-  State<StatefulWidget> createState() => _MonthlyExpenseChartState();
+  State<StatefulWidget> createState() => _DailyExpenseChartState();
 }
 
-class _MonthlyExpenseChartState extends State<MonthlyExpenseChart>
+class _DailyExpenseChartState extends State<DailyExpenseChart>
     implements Subscriber {
+  late int month;
   late int year;
-  late bool firstHalf;
+
+  @override
+  void initState() {
+    month = DateTime.now().month;
+    year = DateTime.now().year;
+    ManagerService().service.getExpenseService().subscribe(this);
+    super.initState();
+  }
 
   void handleSelectedYear(int newYear) {
     setState(() {
@@ -23,12 +31,10 @@ class _MonthlyExpenseChartState extends State<MonthlyExpenseChart>
     });
   }
 
-  @override
-  void initState() {
-    year = DateTime.now().year;
-    firstHalf = (DateTime.now().month <= 6) ? true : false;
-    ManagerService().service.getExpenseService().subscribe(this);
-    super.initState();
+  void handleSelectedMonth(int newMonth) {
+    setState(() {
+      month = newMonth;
+    });
   }
 
   @override
@@ -49,23 +55,19 @@ class _MonthlyExpenseChartState extends State<MonthlyExpenseChart>
               height: 300.0,
               child: Padding(
                 padding: const EdgeInsets.only(
-                  top: 30.0,
-                  left: 25.0,
-                  right: 25.0,
+                  left: 20.0,
+                  right: 20.0,
+                  top: 20.0,
                 ),
-                child: FutureBuilder<List<BarChartGroupData>>(
-                  future: getGroupData(this),
+                child: FutureBuilder<List<FlSpot>>(
+                  future: getSpots(this),
                   builder: (context, snapshot) {
-                    return BarChart(
-                      BarChartData(
-                        gridData: FlGridData(
-                          show: true,
-                          drawVerticalLine: false,
-                          getDrawingHorizontalLine: (value) => const FlLine(
-                            strokeWidth: 0.5,
-                            color: Colors.black12,
-                          ),
-                        ),
+                    if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return Container();
+                    }
+
+                    return LineChart(
+                      LineChartData(
                         borderData: FlBorderData(show: false),
                         titlesData: FlTitlesData(
                           bottomTitles: AxisTitles(
@@ -75,22 +77,59 @@ class _MonthlyExpenseChartState extends State<MonthlyExpenseChart>
                               getTitlesWidget: getBottomTitles,
                             ),
                           ),
+                          topTitles: const AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: false,
+                            ),
+                          ),
                           leftTitles: AxisTitles(
                             sideTitles: SideTitles(
                               showTitles: true,
-                              reservedSize: 30.0,
+                              reservedSize: 35.0,
                               getTitlesWidget: getLeftTitles,
                               maxIncluded: false,
                             ),
                           ),
-                          topTitles: const AxisTitles(
-                            sideTitles: SideTitles(showTitles: false),
-                          ),
                           rightTitles: const AxisTitles(
-                            sideTitles: SideTitles(showTitles: false),
+                            sideTitles: SideTitles(
+                              showTitles: false,
+                            ),
                           ),
                         ),
-                        barGroups: snapshot.data,
+                        gridData: FlGridData(
+                          show: true,
+                          getDrawingHorizontalLine: (value) => const FlLine(
+                            strokeWidth: 0.5,
+                            color: Colors.black12,
+                          ),
+                          getDrawingVerticalLine: (value) => const FlLine(
+                            strokeWidth: 0.5,
+                            color: Colors.black12,
+                          ),
+                        ),
+                        lineBarsData: [
+                          LineChartBarData(
+                            isCurved: true,
+                            spots: snapshot.data!,
+                            isStrokeCapRound: true,
+                            dotData: const FlDotData(show: false),
+                            gradient: const LinearGradient(
+                              colors: [
+                                Color(0xff8bc6ec),
+                                Color(0xff9599e2),
+                              ],
+                            ),
+                            belowBarData: BarAreaData(
+                              show: true,
+                              gradient: LinearGradient(
+                                colors: [
+                                  const Color(0xff8bc6ec).withOpacity(0.4),
+                                  const Color(0xff9599e2).withOpacity(0.4),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     );
                   },
@@ -133,9 +172,15 @@ class _MonthlyExpenseChartState extends State<MonthlyExpenseChart>
                   padding: const EdgeInsets.only(left: 40.0),
                   child: ElevatedButton(
                     onPressed: () {
-                      setState(() {
-                        firstHalf = !firstHalf;
-                      });
+                      showModalBottomSheet(
+                        context: context,
+                        useRootNavigator: true,
+                        builder: (BuildContext context) {
+                          return MP.MonthPicker(
+                            onSelectedMonth: handleSelectedMonth,
+                          );
+                        },
+                      );
                     },
                     style: ElevatedButton.styleFrom(
                       elevation: 0,
@@ -146,7 +191,7 @@ class _MonthlyExpenseChartState extends State<MonthlyExpenseChart>
                       backgroundColor: const Color.fromARGB(255, 245, 245, 245),
                     ),
                     child: Text(
-                      firstHalf ? "Jan - Jun" : "Jul - Dec",
+                      getMonthName(month),
                       style: const TextStyle(
                         color: Colors.black,
                       ),
@@ -161,28 +206,19 @@ class _MonthlyExpenseChartState extends State<MonthlyExpenseChart>
     );
   }
 
-  Future<List<BarChartGroupData>> getGroupData(Subscriber? sub) async {
+  Future<List<FlSpot>> getSpots(Subscriber? sub) async {
     List<double> data = await ManagerService()
         .service
         .getExpenseService()
-        .totalMonthlyExpenses(year, sub);
+        .totalDailyExpenses(month, year, sub);
 
-    List<BarChartGroupData> result = [];
+    List<FlSpot> result = [];
 
-    int loopEnd = firstHalf ? 6 : 12;
-    for (int index = firstHalf ? 0 : 6; index < loopEnd; index++) {
+    for (int i = 0; i < data.length; i++) {
       result.add(
-        BarChartGroupData(
-          x: index,
-          barRods: [
-            BarChartRodData(
-              toY: double.parse(
-                data[index].toStringAsFixed(2),
-              ),
-              width: 10.0,
-              color: Colors.lightBlue.withOpacity(0.8),
-            ),
-          ],
+        FlSpot(
+          double.parse((i + 1).toString()),
+          data[i],
         ),
       );
     }
@@ -191,57 +227,16 @@ class _MonthlyExpenseChartState extends State<MonthlyExpenseChart>
   }
 
   Widget getBottomTitles(double value, TitleMeta meta) {
-    const style = TextStyle(
-      color: Colors.black26,
-      fontWeight: FontWeight.bold,
-      fontSize: 14,
-    );
-    String text;
-    switch (value.toInt()) {
-      case 0:
-        text = 'Jan';
-        break;
-      case 1:
-        text = 'Feb';
-        break;
-      case 2:
-        text = 'Mar';
-        break;
-      case 3:
-        text = 'Apr';
-        break;
-      case 4:
-        text = 'May';
-        break;
-      case 5:
-        text = 'Jun';
-        break;
-      case 6:
-        text = 'Jul';
-        break;
-      case 7:
-        text = 'Aug';
-        break;
-      case 8:
-        text = 'Sep';
-        break;
-      case 9:
-        text = 'Oct';
-        break;
-      case 10:
-        text = 'Nov';
-        break;
-      case 11:
-        text = 'Dec';
-        break;
-      default:
-        text = '';
-        break;
-    }
     return SideTitleWidget(
       axisSide: meta.axisSide,
-      space: 4,
-      child: Text(text, style: style),
+      child: Text(
+        meta.formattedValue,
+        style: const TextStyle(
+          fontSize: 12.0,
+          fontWeight: FontWeight.w500,
+          color: Colors.black54,
+        ),
+      ),
     );
   }
 
@@ -257,6 +252,36 @@ class _MonthlyExpenseChartState extends State<MonthlyExpenseChart>
         ),
       ),
     );
+  }
+
+  String getMonthName(int number) {
+    switch (number) {
+      case 1:
+        return "January";
+      case 2:
+        return "February";
+      case 3:
+        return "March";
+      case 4:
+        return "April";
+      case 5:
+        return "May";
+      case 6:
+        return "June";
+      case 7:
+        return "July";
+      case 8:
+        return "August";
+      case 9:
+        return "September";
+      case 10:
+        return "October";
+      case 11:
+        return "November";
+      case 12:
+        return "December";
+    }
+    return "";
   }
 
   @override

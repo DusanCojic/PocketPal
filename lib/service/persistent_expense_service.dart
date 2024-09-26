@@ -315,9 +315,37 @@ class PersistentExpenseService implements ExpenseService {
       DateTime from = DateTime(year, i, 1).subtract(
         const Duration(days: 1),
       );
-      DateTime to = DateTime(year, i + 1, 1).subtract(
+      DateTime to =
+          (i != 12 ? DateTime(year, i + 1, 1) : DateTime(year + 1, 1, 1))
+              .subtract(
         const Duration(days: 1),
       );
+
+      result.add(
+        await getTotalCustomPeriodExpense(from, to),
+      );
+    }
+
+    return result;
+  }
+
+  @override
+  Future<List<double>> totalDailyExpenses(
+      int month, int year, Subscriber? sub) async {
+    if (sub != null) expensesChangeNotifier.subscribe(sub);
+
+    List<double> result = [];
+
+    int numberOfDays =
+        ((month < 12) ? DateTime(year, month + 1, 1) : DateTime(year + 1, 1, 1))
+            .subtract(
+              const Duration(days: 1),
+            )
+            .day;
+
+    for (int i = 1; i <= numberOfDays; i++) {
+      DateTime from = DateTime(year, month, i - 1);
+      DateTime to = DateTime(year, month, i + 1);
 
       result.add(
         await getTotalCustomPeriodExpense(from, to),

@@ -41,6 +41,7 @@ abstract class ExpenseService {
   Future<Map<Category, double>> totalExpensesForEveryCategory(
       TimePeriod period, Subscriber? sub);
   Future<List<double>> totalMonthlyExpenses(int year, Subscriber? sub);
+  Future<List<double>> totalDailyExpenses(int month, int year, Subscriber? sub);
 
   void subscribe(Subscriber sub);
   void unsubscribe(Subscriber sub);
