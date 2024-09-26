@@ -300,4 +300,30 @@ class PersistentExpenseService implements ExpenseService {
 
     return result;
   }
+
+  @override
+  Future<List<double>> totalMonthlyExpenses(int year, Subscriber? sub) async {
+    if (sub != null) expensesChangeNotifier.subscribe(sub);
+
+    List<double> result = [];
+
+    if (year < 2000 || year > DateTime.now().year) {
+      return result;
+    }
+
+    for (int i = 1; i <= 12; i++) {
+      DateTime from = DateTime(year, i, 1).subtract(
+        const Duration(days: 1),
+      );
+      DateTime to = DateTime(year, i + 1, 1).subtract(
+        const Duration(days: 1),
+      );
+
+      result.add(
+        await getTotalCustomPeriodExpense(from, to),
+      );
+    }
+
+    return result;
+  }
 }
