@@ -15,6 +15,7 @@ class MonthlyExpenseChart extends StatefulWidget {
 class _MonthlyExpenseChartState extends State<MonthlyExpenseChart>
     implements Subscriber {
   late int year;
+  late bool firstHalf;
 
   void handleSelectedYear(int newYear) {
     setState(() {
@@ -25,6 +26,7 @@ class _MonthlyExpenseChartState extends State<MonthlyExpenseChart>
   @override
   void initState() {
     year = DateTime.now().year;
+    firstHalf = (DateTime.now().month <= 6) ? true : false;
     ManagerService().service.getExpenseService().subscribe(this);
     super.initState();
   }
@@ -46,73 +48,112 @@ class _MonthlyExpenseChartState extends State<MonthlyExpenseChart>
             SizedBox(
               height: 300.0,
               child: Padding(
-                padding: const EdgeInsets.all(5.0),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 15.0,
-                  ),
-                  child: FutureBuilder<List<BarChartGroupData>>(
-                    future: getBarGroups(this),
-                    builder: (context, snapshot) {
-                      return BarChart(
-                        BarChartData(
-                          gridData: const FlGridData(show: false),
-                          borderData: FlBorderData(show: false),
-                          titlesData: FlTitlesData(
-                            bottomTitles: AxisTitles(
-                              sideTitles: SideTitles(
-                                showTitles: true,
-                                reservedSize: 25.0,
-                                getTitlesWidget: getTitles,
-                              ),
-                            ),
-                            leftTitles: const AxisTitles(
-                              sideTitles: SideTitles(showTitles: false),
-                            ),
-                            topTitles: const AxisTitles(
-                              sideTitles: SideTitles(showTitles: false),
-                            ),
-                            rightTitles: const AxisTitles(
-                              sideTitles: SideTitles(showTitles: false),
+                padding: const EdgeInsets.only(
+                  top: 25.0,
+                  left: 25.0,
+                  right: 25.0,
+                ),
+                child: FutureBuilder<List<BarChartGroupData>>(
+                  future: getGroupData(this),
+                  builder: (context, snapshot) {
+                    return BarChart(
+                      BarChartData(
+                        gridData: FlGridData(
+                          show: true,
+                          drawVerticalLine: false,
+                          getDrawingHorizontalLine: (value) => const FlLine(
+                            strokeWidth: 0.5,
+                            color: Colors.black12,
+                          ),
+                        ),
+                        borderData: FlBorderData(show: false),
+                        titlesData: FlTitlesData(
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 25.0,
+                              getTitlesWidget: getBottomTitles,
                             ),
                           ),
-                          barGroups: snapshot.data,
+                          leftTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              reservedSize: 30.0,
+                              getTitlesWidget: getLeftTitles,
+                              maxIncluded: false,
+                            ),
+                          ),
+                          topTitles: const AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
+                          rightTitles: const AxisTitles(
+                            sideTitles: SideTitles(showTitles: false),
+                          ),
                         ),
-                      );
-                    },
-                  ),
+                        barGroups: snapshot.data,
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 40.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    useRootNavigator: true,
-                    builder: (BuildContext context) {
-                      return YP.YearPicker(
-                        onSelectedYear: handleSelectedYear,
+            Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 40.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      showModalBottomSheet(
+                        context: context,
+                        useRootNavigator: true,
+                        builder: (BuildContext context) {
+                          return YP.YearPicker(
+                            onSelectedYear: handleSelectedYear,
+                          );
+                        },
                       );
                     },
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  elevation: 0,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 40.0,
-                    vertical: 10.0,
+                    style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 40.0,
+                        vertical: 10.0,
+                      ),
+                      backgroundColor: const Color.fromARGB(255, 245, 245, 245),
+                    ),
+                    child: Text(
+                      year.toString(),
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
                   ),
-                  backgroundColor: const Color.fromARGB(255, 245, 245, 245),
                 ),
-                child: Text(
-                  year.toString(),
-                  style: const TextStyle(
-                    color: Colors.black,
+                Padding(
+                  padding: const EdgeInsets.only(left: 40.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        firstHalf = !firstHalf;
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 40.0,
+                        vertical: 10.0,
+                      ),
+                      backgroundColor: const Color.fromARGB(255, 245, 245, 245),
+                    ),
+                    child: Text(
+                      firstHalf ? "Jan - Jun" : "Jul - Dec",
+                      style: const TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
                   ),
                 ),
-              ),
+              ],
             ),
           ],
         ),
@@ -120,7 +161,36 @@ class _MonthlyExpenseChartState extends State<MonthlyExpenseChart>
     );
   }
 
-  Widget getTitles(double value, TitleMeta meta) {
+  Future<List<BarChartGroupData>> getGroupData(Subscriber? sub) async {
+    List<double> data = await ManagerService()
+        .service
+        .getExpenseService()
+        .totalMonthlyExpenses(year, sub);
+
+    List<BarChartGroupData> result = [];
+
+    int loopEnd = firstHalf ? 6 : 12;
+    for (int index = firstHalf ? 0 : 6; index < loopEnd; index++) {
+      result.add(
+        BarChartGroupData(
+          x: index,
+          barRods: [
+            BarChartRodData(
+              toY: double.parse(
+                data[index].toStringAsFixed(2),
+              ),
+              width: 10.0,
+              color: Colors.lightBlue.withOpacity(0.8),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return result;
+  }
+
+  Widget getBottomTitles(double value, TitleMeta meta) {
     const style = TextStyle(
       color: Colors.black26,
       fontWeight: FontWeight.bold,
@@ -150,7 +220,7 @@ class _MonthlyExpenseChartState extends State<MonthlyExpenseChart>
         text = 'Jul';
         break;
       case 7:
-        text = 'Avg';
+        text = 'Aug';
         break;
       case 8:
         text = 'Sep';
@@ -175,32 +245,18 @@ class _MonthlyExpenseChartState extends State<MonthlyExpenseChart>
     );
   }
 
-  Future<List<BarChartGroupData>> getBarGroups(Subscriber? sub) async {
-    List<double> data = await ManagerService()
-        .service
-        .getExpenseService()
-        .totalMonthlyExpenses(year, sub);
-
-    List<BarChartGroupData> result = [];
-
-    for (int i = 0; i < 12; i++) {
-      result.add(
-        BarChartGroupData(
-          x: i,
-          barRods: [
-            BarChartRodData(
-              toY: double.parse(
-                data[i].toStringAsFixed(2),
-              ),
-              width: 12.0,
-              color: Colors.lightBlue.withOpacity(0.8),
-            ),
-          ],
+  Widget getLeftTitles(double value, TitleMeta meta) {
+    return SideTitleWidget(
+      axisSide: meta.axisSide,
+      child: Text(
+        meta.formattedValue,
+        style: const TextStyle(
+          fontSize: 12.0,
+          fontWeight: FontWeight.w500,
+          color: Colors.black54,
         ),
-      );
-    }
-
-    return result;
+      ),
+    );
   }
 
   @override
