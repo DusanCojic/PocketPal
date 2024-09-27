@@ -56,6 +56,10 @@ class _MonthlyExpenseChartState extends State<MonthlyExpenseChart>
                 child: FutureBuilder<List<BarChartGroupData>>(
                   future: getGroupData(this),
                   builder: (context, snapshot) {
+                    if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return Container();
+                    }
+
                     return BarChart(
                       BarChartData(
                         gridData: FlGridData(
@@ -124,7 +128,7 @@ class _MonthlyExpenseChartState extends State<MonthlyExpenseChart>
                     child: Text(
                       year.toString(),
                       style: const TextStyle(
-                        color: Colors.black,
+                        color: Colors.black54,
                       ),
                     ),
                   ),
@@ -148,7 +152,7 @@ class _MonthlyExpenseChartState extends State<MonthlyExpenseChart>
                     child: Text(
                       firstHalf ? "Jan - Jun" : "Jul - Dec",
                       style: const TextStyle(
-                        color: Colors.black,
+                        color: Colors.black54,
                       ),
                     ),
                   ),
@@ -180,7 +184,14 @@ class _MonthlyExpenseChartState extends State<MonthlyExpenseChart>
                 data[index].toStringAsFixed(2),
               ),
               width: 10.0,
-              color: Colors.lightBlue.withOpacity(0.8),
+              gradient: LinearGradient(
+                colors: [
+                  const Color(0xff8bc6ec).withOpacity(0.8),
+                  const Color(0xff9599e2).withOpacity(0.8),
+                ],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
             ),
           ],
         ),
@@ -193,7 +204,7 @@ class _MonthlyExpenseChartState extends State<MonthlyExpenseChart>
   Widget getBottomTitles(double value, TitleMeta meta) {
     const style = TextStyle(
       color: Colors.black26,
-      fontWeight: FontWeight.bold,
+      fontWeight: FontWeight.w500,
       fontSize: 14,
     );
     String text;

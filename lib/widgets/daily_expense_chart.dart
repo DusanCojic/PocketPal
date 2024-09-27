@@ -130,6 +130,19 @@ class _DailyExpenseChartState extends State<DailyExpenseChart>
                             ),
                           ),
                         ],
+                        lineTouchData: LineTouchData(
+                          touchTooltipData: LineTouchTooltipData(
+                              getTooltipItems: (touchedSpot) {
+                            return touchedSpot.map((touchedSpot) {
+                              final text =
+                                  '${touchedSpot.x.toInt()} : ${touchedSpot.y}';
+                              return LineTooltipItem(
+                                text,
+                                const TextStyle(color: Colors.white),
+                              );
+                            }).toList();
+                          }),
+                        ),
                       ),
                     );
                   },
@@ -163,7 +176,7 @@ class _DailyExpenseChartState extends State<DailyExpenseChart>
                     child: Text(
                       year.toString(),
                       style: const TextStyle(
-                        color: Colors.black,
+                        color: Colors.black54,
                       ),
                     ),
                   ),
@@ -193,7 +206,7 @@ class _DailyExpenseChartState extends State<DailyExpenseChart>
                     child: Text(
                       getMonthName(month),
                       style: const TextStyle(
-                        color: Colors.black,
+                        color: Colors.black54,
                       ),
                     ),
                   ),

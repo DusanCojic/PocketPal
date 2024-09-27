@@ -17,6 +17,8 @@ class _ExpenseStatsState extends State<ExpenseStats> {
   TimePeriod period = TimePeriod.thisMonth;
   bool ascSort = false;
 
+  int selected = 1;
+
   void handleSelectedPeriod(TimePeriod newPeriod) {
     setState(() {
       period = newPeriod;
@@ -106,9 +108,77 @@ class _ExpenseStatsState extends State<ExpenseStats> {
             period: period,
             sort: ascSort,
           ),
-          const MonthlyExpenseChart(),
-          const DailyExpenseChart(),
-          const SizedBox(height: 55),
+          SizedBox(
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 40.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            selected = 1;
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 40.0,
+                            vertical: 10.0,
+                          ),
+                          backgroundColor:
+                              const Color.fromARGB(255, 248, 248, 248),
+                        ),
+                        child: Text(
+                          "Monthly",
+                          style: TextStyle(
+                            color: selected == 1
+                                ? const Color.fromARGB(255, 125, 189, 231)
+                                : Colors.grey,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 40.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          setState(() {
+                            selected = 2;
+                          });
+                        },
+                        style: ElevatedButton.styleFrom(
+                          elevation: 0,
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 40.0,
+                            vertical: 10.0,
+                          ),
+                          backgroundColor:
+                              const Color.fromARGB(255, 248, 248, 248),
+                        ),
+                        child: Text(
+                          "Daily",
+                          style: TextStyle(
+                            color: selected == 2
+                                ? const Color(0xff9599e2)
+                                : Colors.grey,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20.0),
+                SizedBox(
+                  child: selected == 1
+                      ? const MonthlyExpenseChart()
+                      : const DailyExpenseChart(),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 50.0),
         ],
       ),
     );
