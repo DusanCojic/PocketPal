@@ -133,9 +133,7 @@ class _ExpenseStatsState extends State<ExpenseStats> {
                         child: Text(
                           "Monthly",
                           style: TextStyle(
-                            color: selected == 1
-                                ? const Color.fromARGB(255, 125, 189, 231)
-                                : Colors.grey,
+                            color: selected == 1 ? Colors.black87 : Colors.grey,
                           ),
                         ),
                       ),
@@ -160,9 +158,7 @@ class _ExpenseStatsState extends State<ExpenseStats> {
                         child: Text(
                           "Daily",
                           style: TextStyle(
-                            color: selected == 2
-                                ? const Color(0xff9599e2)
-                                : Colors.grey,
+                            color: selected == 2 ? Colors.black87 : Colors.grey,
                           ),
                         ),
                       ),

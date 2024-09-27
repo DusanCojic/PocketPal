@@ -32,6 +32,12 @@ class _MonthlyExpenseChartState extends State<MonthlyExpenseChart>
   }
 
   @override
+  void dispose() {
+    ManagerService().service.getExpenseService().unsubscribe(this);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),

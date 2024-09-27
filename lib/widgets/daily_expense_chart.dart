@@ -25,6 +25,12 @@ class _DailyExpenseChartState extends State<DailyExpenseChart>
     super.initState();
   }
 
+  @override
+  void dispose() {
+    ManagerService().service.getExpenseService().unsubscribe(this);
+    super.dispose();
+  }
+
   void handleSelectedYear(int newYear) {
     setState(() {
       year = newYear;
