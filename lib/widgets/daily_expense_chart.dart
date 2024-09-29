@@ -45,16 +45,28 @@ class _DailyExpenseChartState extends State<DailyExpenseChart>
   Widget build(BuildContext context) {
     return DailyLineChart(
       future: getData,
+      lineNames: const [
+        "Total",
+        "Average",
+      ],
+      chartName: "Daily Expenses",
       onMonthChanged: handleSelectedMonth,
       onYearChanged: handleSelectedYear,
     );
   }
 
-  Future<List<double>> getData(int month, int year, Subscriber? sub) async {
-    return await ManagerService()
-        .service
-        .getExpenseService()
-        .totalDailyExpenses(month, year, sub);
+  Future<List<List<double>>> getData(
+      int month, int year, Subscriber? sub) async {
+    return [
+      await ManagerService()
+          .service
+          .getExpenseService()
+          .totalDailyExpenses(month, year, sub),
+      await ManagerService()
+          .service
+          .getExpenseService()
+          .averageDailyExpense(month, year, sub),
+    ];
   }
 
   @override

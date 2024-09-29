@@ -7,12 +7,14 @@ import 'package:pocket_pal/widgets/year_picker.dart' as YP;
 
 class MonthlyBarChart extends StatefulWidget {
   final Function(int) onYearChanged;
-  final Future<List<double>> Function(int, Subscriber?) future;
+  final List<String> barNames;
+  final Future<List<List<double>>> Function(int, Subscriber?) future;
 
   const MonthlyBarChart({
     super.key,
     required this.future,
     required this.onYearChanged,
+    required this.barNames,
   });
 
   @override
@@ -23,6 +25,41 @@ class _MonthlyBarChartState extends State<MonthlyBarChart>
     implements Subscriber {
   late int year;
   late bool firstHalf;
+
+  final List<LinearGradient> gradients = [
+    LinearGradient(
+      colors: [
+        const Color(0xff8bc6ec).withOpacity(0.8),
+        const Color(0xff9599e2).withOpacity(0.8),
+      ],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    ),
+    LinearGradient(
+      colors: [
+        const Color.fromARGB(255, 255, 179, 64).withOpacity(0.8),
+        const Color(0xfffb8c00).withOpacity(0.8),
+      ],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    ),
+    LinearGradient(
+      colors: [
+        const Color(0xffff5252).withOpacity(0.8),
+        const Color(0xfff44336).withOpacity(0.8),
+      ],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    ),
+    LinearGradient(
+      colors: [
+        const Color(0xff81c784).withOpacity(0.8),
+        const Color(0xff4caf50).withOpacity(0.8),
+      ],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    ),
+  ];
 
   void handleSelectedYear(int newYear) {
     setState(() {
@@ -51,7 +88,7 @@ class _MonthlyBarChartState extends State<MonthlyBarChart>
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Container(
-        height: 365,
+        height: 420,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -68,7 +105,7 @@ class _MonthlyBarChartState extends State<MonthlyBarChart>
                   left: 25.0,
                   right: 25.0,
                 ),
-                child: FutureBuilder<List<double>>(
+                child: FutureBuilder<List<List<double>>>(
                   future: widget.future(year, this),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -114,6 +151,14 @@ class _MonthlyBarChartState extends State<MonthlyBarChart>
                     );
                   },
                 ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 19.0),
+              child: Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                children: getLegendItems(),
               ),
             ),
             Row(
@@ -180,30 +225,63 @@ class _MonthlyBarChartState extends State<MonthlyBarChart>
     );
   }
 
-  List<BarChartGroupData> getGroupData(List<double> data) {
+  List<BarChartGroupData> getGroupData(List<List<double>> data) {
     List<BarChartGroupData> result = [];
 
+    int gradientIndex = 0;
     int loopEnd = firstHalf ? 6 : 12;
     for (int index = firstHalf ? 0 : 6; index < loopEnd; index++) {
+      List<BarChartRodData> rodData = [];
+
+      for (List<double> l in data) {
+        rodData.add(
+          BarChartRodData(
+            toY: double.parse(
+              l[index].toStringAsFixed(2),
+            ),
+            width: 10.0,
+            gradient: gradients[(gradientIndex++) % gradients.length],
+          ),
+        );
+      }
+
+      gradientIndex = 0;
+
       result.add(
         BarChartGroupData(
           x: index,
-          barRods: [
-            BarChartRodData(
-              toY: double.parse(
-                data[index].toStringAsFixed(2),
+          barRods: rodData,
+        ),
+      );
+    }
+
+    return result;
+  }
+
+  List<SizedBox> getLegendItems() {
+    int gradientIndex = 0;
+
+    List<SizedBox> result = [];
+    for (String barName in widget.barNames) {
+      result.add(
+        SizedBox(
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 12,
+                height: 12,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  gradient: gradients[(gradientIndex++) % gradients.length],
+                ),
               ),
-              width: 10.0,
-              gradient: LinearGradient(
-                colors: [
-                  const Color(0xff8bc6ec).withOpacity(0.8),
-                  const Color(0xff9599e2).withOpacity(0.8),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-          ],
+              const SizedBox(width: 5),
+              Text(barName),
+              const SizedBox(width: 15),
+            ],
+          ),
         ),
       );
     }

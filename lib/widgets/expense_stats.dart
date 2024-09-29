@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pocket_pal/util/time_period.dart';
-import 'package:pocket_pal/widgets/average_daily_expense_chart.dart';
-import 'package:pocket_pal/widgets/average_monthly_expense_chart.dart';
 import 'package:pocket_pal/widgets/daily_expense_chart.dart';
 import 'package:pocket_pal/widgets/expense_by_category_chart.dart';
 import 'package:pocket_pal/widgets/expense_by_category_table.dart';
@@ -175,12 +173,6 @@ class _ExpenseStatsState extends State<ExpenseStats> {
                 ),
               ],
             ),
-          ),
-          const SizedBox(height: 25.0),
-          SizedBox(
-            child: selected == 1
-                ? const AverageMonthlyExpenseChart()
-                : const AverageDailyExpenseChart(),
           ),
           const SizedBox(height: 50.0),
         ],

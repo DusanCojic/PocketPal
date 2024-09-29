@@ -37,16 +37,25 @@ class _MonthlyExpenseChartState extends State<MonthlyExpenseChart>
   Widget build(BuildContext context) {
     return MonthlyBarChart(
       future: getData,
-      title: "",
+      barNames: const [
+        "Total",
+        "Average",
+      ],
       onYearChanged: handleSelectedYear,
     );
   }
 
-  Future<List<double>> getData(int year, Subscriber? sub) async {
-    return await ManagerService()
-        .service
-        .getExpenseService()
-        .totalMonthlyExpenses(year, sub);
+  Future<List<List<double>>> getData(int year, Subscriber? sub) async {
+    return [
+      await ManagerService()
+          .service
+          .getExpenseService()
+          .totalMonthlyExpenses(year, sub),
+      await ManagerService()
+          .service
+          .getExpenseService()
+          .averageMonthlyExpanse(year, sub),
+    ];
   }
 
   @override

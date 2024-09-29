@@ -8,13 +8,17 @@ import 'package:pocket_pal/widgets/month_picker.dart' as MP;
 class DailyLineChart extends StatefulWidget {
   final Function(int) onMonthChanged;
   final Function(int) onYearChanged;
-  final Future<List<double>> Function(int, int, Subscriber?) future;
+  final String chartName;
+  final List<String> lineNames;
+  final Future<List<List<double>>> Function(int, int, Subscriber?) future;
 
   const DailyLineChart({
     super.key,
     required this.future,
     required this.onMonthChanged,
     required this.onYearChanged,
+    required this.lineNames,
+    required this.chartName,
   });
 
   @override
@@ -24,6 +28,27 @@ class DailyLineChart extends StatefulWidget {
 class _DailyLineChartState extends State<DailyLineChart> implements Subscriber {
   late int month;
   late int year;
+
+  int currentChart = 0;
+
+  final List<List<Color>> colors = [
+    [
+      const Color(0xff8bc6ec).withOpacity(0.8),
+      const Color(0xff9599e2).withOpacity(0.8),
+    ],
+    [
+      const Color.fromARGB(255, 255, 179, 64).withOpacity(0.8),
+      const Color(0xfffb8c00).withOpacity(0.8),
+    ],
+    [
+      const Color(0xffff5252).withOpacity(0.8),
+      const Color(0xfff44336).withOpacity(0.8),
+    ],
+    [
+      const Color(0xff81c784).withOpacity(0.8),
+      const Color(0xff4caf50).withOpacity(0.8),
+    ],
+  ];
 
   @override
   void initState() {
@@ -60,7 +85,7 @@ class _DailyLineChartState extends State<DailyLineChart> implements Subscriber {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Container(
-        height: 365,
+        height: 420,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -69,6 +94,47 @@ class _DailyLineChartState extends State<DailyLineChart> implements Subscriber {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 35.0),
+                  child: Text(
+                    widget.chartName,
+                    style: const TextStyle(
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 10.0, right: 20.0),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        currentChart =
+                            (currentChart + 1) % widget.lineNames.length;
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 40.0,
+                        vertical: 10.0,
+                      ),
+                      backgroundColor: const Color.fromARGB(255, 245, 245, 245),
+                    ),
+                    child: Text(
+                      widget.lineNames[currentChart],
+                      style: const TextStyle(
+                        color: Colors.black54,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
             SizedBox(
               height: 300.0,
               child: Padding(
@@ -77,7 +143,7 @@ class _DailyLineChartState extends State<DailyLineChart> implements Subscriber {
                   right: 20.0,
                   top: 20.0,
                 ),
-                child: FutureBuilder<List<double>>(
+                child: FutureBuilder<List<List<double>>>(
                   future: widget.future(month, year, this),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -125,29 +191,7 @@ class _DailyLineChartState extends State<DailyLineChart> implements Subscriber {
                             color: Colors.black12,
                           ),
                         ),
-                        lineBarsData: [
-                          LineChartBarData(
-                            isCurved: true,
-                            spots: getSpots(snapshot.data!),
-                            isStrokeCapRound: true,
-                            dotData: const FlDotData(show: false),
-                            gradient: const LinearGradient(
-                              colors: [
-                                Color(0xff8bc6ec),
-                                Color(0xff9599e2),
-                              ],
-                            ),
-                            belowBarData: BarAreaData(
-                              show: true,
-                              gradient: LinearGradient(
-                                colors: [
-                                  const Color(0xff8bc6ec).withOpacity(0.4),
-                                  const Color(0xff9599e2).withOpacity(0.4),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
+                        lineBarsData: getBarData(snapshot.data![currentChart]),
                         lineTouchData: LineTouchData(
                           touchTooltipData: LineTouchTooltipData(
                               getTooltipItems: (touchedSpot) {
@@ -235,6 +279,35 @@ class _DailyLineChartState extends State<DailyLineChart> implements Subscriber {
         ),
       ),
     );
+  }
+
+  List<LineChartBarData> getBarData(List<double> data) {
+    List<LineChartBarData> barData = [];
+
+    barData.add(
+      LineChartBarData(
+        isCurved: true,
+        spots: getSpots(data),
+        isStrokeCapRound: true,
+        dotData: const FlDotData(show: false),
+        gradient: LinearGradient(
+          colors: colors[currentChart],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        belowBarData: BarAreaData(
+          show: true,
+          gradient: LinearGradient(
+            colors:
+                colors[currentChart].map((e) => e.withOpacity(0.4)).toList(),
+            begin: Alignment.topLeft,
+            end: Alignment.bottomLeft,
+          ),
+        ),
+      ),
+    );
+
+    return barData;
   }
 
   List<FlSpot> getSpots(List<double> data) {
