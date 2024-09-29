@@ -354,4 +354,59 @@ class PersistentExpenseService implements ExpenseService {
 
     return result;
   }
+
+  @override
+  Future<List<double>> averageMonthlyExpanse(int year, Subscriber? sub) async {
+    if (sub != null) expensesChangeNotifier.subscribe(sub);
+
+    List<double> result = [];
+
+    for (int i = 1; i <= 12; i++) {
+      DateTime from = DateTime(year, i, 1).subtract(
+        const Duration(days: 1),
+      );
+
+      DateTime to = (i == 12)
+          ? DateTime(year + 1, 1, 1)
+          : DateTime(year, i + 1, 1).subtract(const Duration(days: 1));
+
+      List<Expense> data = await getCustomPeriodExpenses(from, to);
+
+      if (data.isNotEmpty) {
+        double sum = data.map((e) => e.amount).reduce((a, b) => a + b);
+        result.add(sum / data.length);
+      } else {
+        result.add(0.0);
+      }
+    }
+
+    return result;
+  }
+
+  @override
+  Future<List<double>> averageDailyExpense(
+      int month, int year, Subscriber? sub) async {
+    if (sub != null) expensesChangeNotifier.subscribe(sub);
+
+    List<double> result = [];
+
+    int loopEnd = (month == 12)
+        ? DateTime(year + 1, 1, 1).subtract(const Duration(days: 1)).day
+        : DateTime(year, month + 1, 1).subtract(const Duration(days: 1)).day;
+
+    for (int i = 1; i <= loopEnd; i++) {
+      List<Expense> data = await getExpensesForExactDate(
+        DateTime(year, month, i),
+      );
+
+      if (data.isNotEmpty) {
+        double sum = data.map((e) => e.amount).reduce((a, b) => a + b);
+        result.add(sum / data.length);
+      } else {
+        result.add(0.0);
+      }
+    }
+
+    return result;
+  }
 }

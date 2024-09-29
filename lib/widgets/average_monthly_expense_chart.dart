@@ -3,14 +3,14 @@ import 'package:pocket_pal/interface/subscriber.dart';
 import 'package:pocket_pal/service/manager_service.dart';
 import 'package:pocket_pal/widgets/monthly_bar_chart.dart';
 
-class MonthlyExpenseChart extends StatefulWidget {
-  const MonthlyExpenseChart({super.key});
+class AverageMonthlyExpenseChart extends StatefulWidget {
+  const AverageMonthlyExpenseChart({super.key});
 
   @override
-  State<StatefulWidget> createState() => _MonthlyExpenseChartState();
+  State<StatefulWidget> createState() => _AverageMonthlyExpenseChartState();
 }
 
-class _MonthlyExpenseChartState extends State<MonthlyExpenseChart>
+class _AverageMonthlyExpenseChartState extends State<AverageMonthlyExpenseChart>
     implements Subscriber {
   late int year;
 
@@ -37,7 +37,6 @@ class _MonthlyExpenseChartState extends State<MonthlyExpenseChart>
   Widget build(BuildContext context) {
     return MonthlyBarChart(
       future: getData,
-      title: "",
       onYearChanged: handleSelectedYear,
     );
   }
@@ -46,7 +45,7 @@ class _MonthlyExpenseChartState extends State<MonthlyExpenseChart>
     return await ManagerService()
         .service
         .getExpenseService()
-        .totalMonthlyExpenses(year, sub);
+        .averageMonthlyExpanse(year, sub);
   }
 
   @override
