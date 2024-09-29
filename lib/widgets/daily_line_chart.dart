@@ -197,7 +197,7 @@ class _DailyLineChartState extends State<DailyLineChart> implements Subscriber {
                               getTooltipItems: (touchedSpot) {
                             return touchedSpot.map((touchedSpot) {
                               final text =
-                                  '${touchedSpot.x.toInt()} : ${touchedSpot.y}';
+                                  '${touchedSpot.x.toInt()} : ${double.parse(touchedSpot.y.toStringAsFixed(2))}';
                               return LineTooltipItem(
                                 text,
                                 const TextStyle(color: Colors.white),

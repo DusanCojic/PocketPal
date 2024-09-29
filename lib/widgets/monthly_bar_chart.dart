@@ -9,24 +9,17 @@ class MonthlyBarChart extends StatefulWidget {
   final Function(int) onYearChanged;
   final List<String> barNames;
   final Future<List<List<double>>> Function(int, Subscriber?) future;
+  final List<LinearGradient> gradients;
 
-  const MonthlyBarChart({
+  MonthlyBarChart({
     super.key,
     required this.future,
     required this.onYearChanged,
     required this.barNames,
-  });
+    List<LinearGradient>? gradients,
+  }) : gradients = gradients ?? _defaultGradients;
 
-  @override
-  State<StatefulWidget> createState() => _MonthlyBarChartState();
-}
-
-class _MonthlyBarChartState extends State<MonthlyBarChart>
-    implements Subscriber {
-  late int year;
-  late bool firstHalf;
-
-  final List<LinearGradient> gradients = [
+  static final List<LinearGradient> _defaultGradients = [
     LinearGradient(
       colors: [
         const Color(0xff8bc6ec).withOpacity(0.8),
@@ -45,22 +38,30 @@ class _MonthlyBarChartState extends State<MonthlyBarChart>
     ),
     LinearGradient(
       colors: [
-        const Color(0xffff5252).withOpacity(0.8),
-        const Color(0xfff44336).withOpacity(0.8),
-      ],
-      begin: Alignment.topLeft,
-      end: Alignment.bottomRight,
-    ),
-    LinearGradient(
-      colors: [
         const Color(0xff81c784).withOpacity(0.8),
         const Color(0xff4caf50).withOpacity(0.8),
       ],
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
     ),
+    LinearGradient(
+      colors: [
+        const Color(0xffff5252).withOpacity(0.8),
+        const Color(0xfff44336).withOpacity(0.8),
+      ],
+      begin: Alignment.topLeft,
+      end: Alignment.bottomRight,
+    ),
   ];
 
+  @override
+  State<StatefulWidget> createState() => _MonthlyBarChartState();
+}
+
+class _MonthlyBarChartState extends State<MonthlyBarChart>
+    implements Subscriber {
+  late int year;
+  late bool firstHalf;
   void handleSelectedYear(int newYear) {
     setState(() {
       year = newYear;
@@ -240,7 +241,8 @@ class _MonthlyBarChartState extends State<MonthlyBarChart>
               l[index].toStringAsFixed(2),
             ),
             width: 10.0,
-            gradient: gradients[(gradientIndex++) % gradients.length],
+            gradient:
+                widget.gradients[(gradientIndex++) % widget.gradients.length],
           ),
         );
       }
@@ -274,7 +276,8 @@ class _MonthlyBarChartState extends State<MonthlyBarChart>
                 height: 12,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  gradient: gradients[(gradientIndex++) % gradients.length],
+                  gradient: widget
+                      .gradients[(gradientIndex++) % widget.gradients.length],
                 ),
               ),
               const SizedBox(width: 5),
