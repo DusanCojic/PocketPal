@@ -10,6 +10,7 @@ class MonthlyBarChart extends StatefulWidget {
   final List<String> barNames;
   final Future<List<List<double>>> Function(int, Subscriber?) future;
   final List<LinearGradient> gradients;
+  final bool showLegend;
 
   MonthlyBarChart({
     super.key,
@@ -17,6 +18,7 @@ class MonthlyBarChart extends StatefulWidget {
     required this.onYearChanged,
     required this.barNames,
     List<LinearGradient>? gradients,
+    this.showLegend = true,
   }) : gradients = gradients ?? _defaultGradients;
 
   static final List<LinearGradient> _defaultGradients = [
@@ -75,12 +77,14 @@ class _MonthlyBarChartState extends State<MonthlyBarChart>
     year = DateTime.now().year;
     firstHalf = (DateTime.now().month <= 6) ? true : false;
     ManagerService().service.getExpenseService().subscribe(this);
+    ManagerService().service.getAccountService().subscribe(this);
     super.initState();
   }
 
   @override
   void dispose() {
     ManagerService().service.getExpenseService().unsubscribe(this);
+    ManagerService().service.getAccountService().unsubscribe(this);
     super.dispose();
   }
 
@@ -89,7 +93,7 @@ class _MonthlyBarChartState extends State<MonthlyBarChart>
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Container(
-        height: 420,
+        height: widget.showLegend ? 420 : 365,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -135,7 +139,7 @@ class _MonthlyBarChartState extends State<MonthlyBarChart>
                           leftTitles: AxisTitles(
                             sideTitles: SideTitles(
                               showTitles: true,
-                              reservedSize: 30.0,
+                              reservedSize: 35.0,
                               getTitlesWidget: getLeftTitles,
                               maxIncluded: false,
                             ),
@@ -154,14 +158,16 @@ class _MonthlyBarChartState extends State<MonthlyBarChart>
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 19.0),
-              child: Wrap(
-                spacing: 10,
-                runSpacing: 10,
-                children: getLegendItems(),
-              ),
-            ),
+            widget.showLegend
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 19.0),
+                    child: Wrap(
+                      spacing: 10,
+                      runSpacing: 10,
+                      children: getLegendItems(),
+                    ),
+                  )
+                : Container(),
             Row(
               children: [
                 Padding(

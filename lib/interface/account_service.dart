@@ -9,6 +9,9 @@ abstract class AccountService {
   Future<void> removeIncome(Account account, Income income);
   Future<void> updateAccount(Account account);
   Future<void> deleteAccount(Account account);
+
+  Future<List<double>> getMonthlyIncomeForAccount(Account account, int year);
+
   void subscribe(Subscriber sub);
   void unsubscribe(Subscriber sub);
 }

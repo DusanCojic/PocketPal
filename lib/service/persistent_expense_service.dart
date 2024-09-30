@@ -316,10 +316,7 @@ class PersistentExpenseService implements ExpenseService {
         const Duration(days: 1),
       );
       DateTime to =
-          (i != 12 ? DateTime(year, i + 1, 1) : DateTime(year + 1, 1, 1))
-              .subtract(
-        const Duration(days: 1),
-      );
+          (i != 12 ? DateTime(year, i + 1, 1) : DateTime(year + 1, 1, 1));
 
       result.add(
         await getTotalCustomPeriodExpense(from, to),
@@ -366,9 +363,8 @@ class PersistentExpenseService implements ExpenseService {
         const Duration(days: 1),
       );
 
-      DateTime to = (i == 12)
-          ? DateTime(year + 1, 1, 1)
-          : DateTime(year, i + 1, 1).subtract(const Duration(days: 1));
+      DateTime to =
+          (i == 12) ? DateTime(year + 1, 1, 1) : DateTime(year, i + 1, 1);
 
       List<Expense> data = await getCustomPeriodExpenses(from, to);
 

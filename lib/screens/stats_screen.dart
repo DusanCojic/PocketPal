@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pocket_pal/widgets/expense_stats.dart';
+import 'package:pocket_pal/widgets/income_stats.dart';
 
 class StatsScreen extends StatefulWidget {
   const StatsScreen({super.key});
@@ -92,9 +93,7 @@ class _StatsScreenState extends State<StatsScreen> {
             physics: NeverScrollableScrollPhysics(),
             children: [
               ExpenseStats(),
-              Center(
-                child: Text("Income"),
-              ),
+              IncomeStats(),
             ],
           ),
         ),

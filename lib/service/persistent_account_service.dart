@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:pocket_pal/extension/persistent_account_service_total_extension.dart';
 import 'package:pocket_pal/interface/account_service.dart';
 import 'package:pocket_pal/interface/subscriber.dart';
 import 'package:pocket_pal/model/account.dart';
@@ -59,5 +60,23 @@ class PersistentAccountService implements AccountService {
     account.removeIncome(income);
     await box.put(account.key, account);
     accountChangeNotifier.notifySubscribers();
+  }
+
+  @override
+  Future<List<double>> getMonthlyIncomeForAccount(
+      Account account, int year) async {
+    List<double> result = [];
+
+    for (int i = 1; i <= 12; i++) {
+      DateTime from = DateTime(year, i, 1).subtract(const Duration(days: 1));
+      DateTime to =
+          (i == 12) ? DateTime(year + 1, 1, 1) : DateTime(year, i + 1, 1);
+
+      result.add(
+        await getTotalCustomPeriodIncomeForAccount(account, from, to),
+      );
+    }
+
+    return result;
   }
 }
