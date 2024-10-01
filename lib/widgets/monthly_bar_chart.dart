@@ -235,22 +235,28 @@ class _MonthlyBarChartState extends State<MonthlyBarChart>
   List<BarChartGroupData> getGroupData(List<List<double>> data) {
     List<BarChartGroupData> result = [];
 
+    if (data.isEmpty) {
+      return result;
+    }
+
     int gradientIndex = 0;
     int loopEnd = firstHalf ? 6 : 12;
     for (int index = firstHalf ? 0 : 6; index < loopEnd; index++) {
       List<BarChartRodData> rodData = [];
 
       for (List<double> l in data) {
-        rodData.add(
-          BarChartRodData(
-            toY: double.parse(
-              l[index].toStringAsFixed(2),
+        if (l.isNotEmpty) {
+          rodData.add(
+            BarChartRodData(
+              toY: double.parse(
+                l[index].toStringAsFixed(2),
+              ),
+              width: 10.0,
+              gradient:
+                  widget.gradients[(gradientIndex++) % widget.gradients.length],
             ),
-            width: 10.0,
-            gradient:
-                widget.gradients[(gradientIndex++) % widget.gradients.length],
-          ),
-        );
+          );
+        }
       }
 
       gradientIndex = 0;
