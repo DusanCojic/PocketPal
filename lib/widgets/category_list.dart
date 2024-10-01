@@ -15,6 +15,12 @@ class CategoryList extends StatefulWidget {
 
 class _CategoryListState extends State<CategoryList> implements Subscriber {
   @override
+  void initState() {
+    ManagerService().service.getCategoryService().subscribe(this);
+    super.initState();
+  }
+
+  @override
   void dispose() {
     ManagerService().service.getCategoryService().unsubscribe(this);
     super.dispose();
@@ -32,7 +38,7 @@ class _CategoryListState extends State<CategoryList> implements Subscriber {
             builder: (BuildContext context) {
               return Padding(
                 padding: MediaQuery.of(context).viewInsets,
-                child: AddCategory(onCategoryAdded: getCategories),
+                child: AddCategory(onCategoryAdded: update),
               );
             },
           );

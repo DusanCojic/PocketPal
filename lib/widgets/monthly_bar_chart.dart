@@ -64,6 +64,7 @@ class _MonthlyBarChartState extends State<MonthlyBarChart>
     implements Subscriber {
   late int year;
   late bool firstHalf;
+
   void handleSelectedYear(int newYear) {
     setState(() {
       year = newYear;

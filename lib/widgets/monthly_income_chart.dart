@@ -120,21 +120,30 @@ class _MonthlyIncomeChartState extends State<MonthlyIncomeChart>
           ),
           Padding(
             padding: const EdgeInsets.only(top: 10.0),
-            child: MonthlyBarChart(
-              future: getData,
-              onYearChanged: handleSelectedYear,
-              barNames: const [],
-              showLegend: false,
-              gradients: [
-                LinearGradient(
-                  colors: [
-                    const Color(0xff81c784).withOpacity(0.8),
-                    const Color(0xff4caf50).withOpacity(0.8),
+            child: FutureBuilder<List<List<double>>>(
+              future: getData(year, null),
+              builder: (context, snapshot) {
+                if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Container();
+                }
+
+                return MonthlyBarChart(
+                  future: getData,
+                  onYearChanged: handleSelectedYear,
+                  barNames: const [],
+                  showLegend: false,
+                  gradients: [
+                    LinearGradient(
+                      colors: [
+                        const Color(0xff81c784).withOpacity(0.8),
+                        const Color(0xff4caf50).withOpacity(0.8),
+                      ],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
                   ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ],
+                );
+              },
             ),
           ),
         ],
