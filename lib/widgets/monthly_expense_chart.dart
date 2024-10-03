@@ -42,6 +42,7 @@ class _MonthlyExpenseChartState extends State<MonthlyExpenseChart>
         "Average",
       ],
       onYearChanged: handleSelectedYear,
+      showLegend: false,
     );
   }
 
@@ -51,10 +52,6 @@ class _MonthlyExpenseChartState extends State<MonthlyExpenseChart>
           .service
           .getExpenseService()
           .totalMonthlyExpenses(year, sub),
-      await ManagerService()
-          .service
-          .getExpenseService()
-          .averageMonthlyExpanse(year, sub),
     ];
   }
 

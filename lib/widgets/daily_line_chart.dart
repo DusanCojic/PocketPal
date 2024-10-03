@@ -33,12 +33,12 @@ class _DailyLineChartState extends State<DailyLineChart> implements Subscriber {
 
   final List<List<Color>> colors = [
     [
-      const Color(0xff8bc6ec).withOpacity(0.8),
-      const Color(0xff9599e2).withOpacity(0.8),
-    ],
-    [
       const Color.fromARGB(255, 255, 179, 64).withOpacity(0.8),
       const Color(0xfffb8c00).withOpacity(0.8),
+    ],
+    [
+      const Color(0xff8bc6ec).withOpacity(0.8),
+      const Color(0xff9599e2).withOpacity(0.8),
     ],
     [
       const Color(0xffff5252).withOpacity(0.8),
@@ -95,44 +95,36 @@ class _DailyLineChartState extends State<DailyLineChart> implements Subscriber {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 35.0),
-                  child: Text(
-                    widget.chartName,
-                    style: const TextStyle(
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black87,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0, right: 20.0),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      setState(() {
-                        currentChart =
-                            (currentChart + 1) % widget.lineNames.length;
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                      elevation: 0,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 40.0,
-                        vertical: 10.0,
-                      ),
-                      backgroundColor: const Color.fromARGB(255, 245, 245, 245),
-                    ),
-                    child: Text(
-                      widget.lineNames[currentChart],
-                      style: const TextStyle(
-                        color: Colors.black54,
-                      ),
-                    ),
-                  ),
-                ),
+                widget.lineNames.length > 1
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 10.0, right: 0.0),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              currentChart =
+                                  (currentChart + 1) % widget.lineNames.length;
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                            elevation: 0,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 60.0,
+                              vertical: 10.0,
+                            ),
+                            backgroundColor:
+                                const Color.fromARGB(255, 245, 245, 245),
+                          ),
+                          child: Text(
+                            widget.lineNames[currentChart],
+                            style: const TextStyle(
+                              color: Colors.black54,
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(),
               ],
             ),
             SizedBox(
@@ -158,6 +150,7 @@ class _DailyLineChartState extends State<DailyLineChart> implements Subscriber {
                             sideTitles: SideTitles(
                               showTitles: true,
                               reservedSize: 25.0,
+                              maxIncluded: false,
                               getTitlesWidget: getBottomTitles,
                             ),
                           ),

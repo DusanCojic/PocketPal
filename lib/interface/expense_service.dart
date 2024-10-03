@@ -43,9 +43,7 @@ abstract class ExpenseService {
   Future<List<double>> totalMonthlyExpenses(int year, Subscriber? sub);
   Future<List<double>> totalDailyExpenses(int month, int year, Subscriber? sub);
 
-  Future<List<double>> averageMonthlyExpanse(int year, Subscriber? sub);
-  Future<List<double>> averageDailyExpense(
-      int month, int year, Subscriber? sub);
+  Future<double> monthlyAverage(int year, Subscriber? sub);
 
   void subscribe(Subscriber sub);
   void unsubscribe(Subscriber sub);

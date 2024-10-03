@@ -47,7 +47,6 @@ class _DailyExpenseChartState extends State<DailyExpenseChart>
       future: getData,
       lineNames: const [
         "Total",
-        "Average",
       ],
       chartName: "Daily Expenses",
       onMonthChanged: handleSelectedMonth,
@@ -62,10 +61,6 @@ class _DailyExpenseChartState extends State<DailyExpenseChart>
           .service
           .getExpenseService()
           .totalDailyExpenses(month, year, sub),
-      await ManagerService()
-          .service
-          .getExpenseService()
-          .averageDailyExpense(month, year, sub),
     ];
   }
 
