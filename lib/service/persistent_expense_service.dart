@@ -363,7 +363,7 @@ class PersistentExpenseService implements ExpenseService {
         const Duration(days: 1),
       );
       DateTime to =
-          (i == 12) ? DateTime(year + 1, i, 1) : DateTime(year, i + 1, 1);
+          (i == 12) ? DateTime(year, 12, 31) : DateTime(year, i + 1, 1);
 
       double ithMonth = await getTotalCustomPeriodExpense(from, to);
       if (ithMonth != 0) {
@@ -377,5 +377,82 @@ class PersistentExpenseService implements ExpenseService {
     } else {
       return 0.0;
     }
+  }
+
+  @override
+  Future<int> monthWithTheHighestExpenses(int year, Subscriber? sub) async {
+    if (sub != null) expensesChangeNotifier.subscribe(sub);
+
+    double max = 0.0;
+    int month = 1;
+    for (int i = 1; i <= 12; i++) {
+      DateTime from = DateTime(year, i, 1).subtract(
+        const Duration(days: 1),
+      );
+      DateTime to =
+          (i == 12) ? DateTime(year, 12, 31) : DateTime(year, i + 1, 1);
+
+      double ithMonth = await getTotalCustomPeriodExpense(from, to);
+      if (ithMonth > max) {
+        max = ithMonth;
+        month = i;
+      }
+    }
+
+    if (max == 0) {
+      return -1;
+    }
+
+    return month;
+  }
+
+  @override
+  Future<double> dailyAverage(int month, int year, Subscriber? sub) async {
+    if (sub != null) expensesChangeNotifier.subscribe(sub);
+
+    int numberOfDays =
+        ((month < 12) ? DateTime(year, month + 1, 1) : DateTime(year + 1, 1, 1))
+            .subtract(
+              const Duration(days: 1),
+            )
+            .day;
+
+    double sum = 0;
+    for (int i = 1; i <= numberOfDays; i++) {
+      DateTime from = DateTime(year, month, i - 1);
+      DateTime to = DateTime(year, month, i + 1);
+
+      sum += await getTotalCustomPeriodExpense(from, to);
+    }
+
+    return sum / numberOfDays;
+  }
+
+  @override
+  Future<int> dayWithTheHighestExpenses(
+      int month, int year, Subscriber? sub) async {
+    if (sub != null) expensesChangeNotifier.subscribe(sub);
+
+    int numberOfDays =
+        ((month < 12) ? DateTime(year, month + 1, 1) : DateTime(year + 1, 1, 1))
+            .subtract(
+              const Duration(days: 1),
+            )
+            .day;
+
+    double max = 0;
+    int day = 1;
+    for (int i = 1; i <= numberOfDays; i++) {
+      DateTime from = DateTime(year, month, i - 1);
+      DateTime to = DateTime(year, month, i + 1);
+
+      double ithDay = await getTotalCustomPeriodExpense(from, to);
+      if (ithDay > max) {
+        max = ithDay;
+        day = i;
+      }
+    }
+
+    return day;
   }
 }

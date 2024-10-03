@@ -85,7 +85,7 @@ class _DailyLineChartState extends State<DailyLineChart> implements Subscriber {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Container(
-        height: 420,
+        height: widget.lineNames.length > 1 ? 420 : 365,
         width: MediaQuery.of(context).size.width,
         decoration: BoxDecoration(
           color: Colors.white,

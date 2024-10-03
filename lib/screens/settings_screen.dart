@@ -44,7 +44,8 @@ class SettingsScreen extends StatelessWidget {
                     },
                     style: ElevatedButton.styleFrom(
                       elevation: 0,
-                      padding: const EdgeInsets.symmetric(horizontal: 120.0),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 120.0, vertical: 15.0),
                     ),
                     child: const Text(
                       "Edit categories",
