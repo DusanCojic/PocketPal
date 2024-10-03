@@ -12,6 +12,9 @@ abstract class AccountService {
 
   Future<List<double>> getMonthlyIncomeForAccount(Account account, int year);
 
+  Future<double> monthlyAverageForAccount(Account account, int year);
+  Future<int> monthWithTheHighestIncome(Account account, int year);
+
   void subscribe(Subscriber sub);
   void unsubscribe(Subscriber sub);
 }

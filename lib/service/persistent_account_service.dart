@@ -79,4 +79,50 @@ class PersistentAccountService implements AccountService {
 
     return result;
   }
+
+  @override
+  Future<double> monthlyAverageForAccount(Account account, int year) async {
+    double sum = 0;
+    int numberOfMonths = 0;
+
+    for (int i = 1; i <= 12; i++) {
+      DateTime from = DateTime(year, i, 1).subtract(const Duration(days: 1));
+      DateTime to =
+          (i == 12) ? DateTime(year + 1, 1, 1) : DateTime(year, i + 1, 1);
+
+      double ithMonth =
+          await getTotalCustomPeriodIncomeForAccount(account, from, to);
+      if (ithMonth > 0) {
+        sum += ithMonth;
+        numberOfMonths++;
+      }
+    }
+
+    if (numberOfMonths == 0) {
+      return 0.0;
+    }
+
+    return sum / numberOfMonths;
+  }
+
+  @override
+  Future<int> monthWithTheHighestIncome(Account account, int year) async {
+    int month = 1;
+    double max = 0;
+
+    for (int i = 1; i <= 12; i++) {
+      DateTime from = DateTime(year, i, 1).subtract(const Duration(days: 1));
+      DateTime to =
+          (i == 12) ? DateTime(year + 1, 1, 1) : DateTime(year, i + 1, 1);
+
+      double ithMonth =
+          await getTotalCustomPeriodIncomeForAccount(account, from, to);
+      if (ithMonth > max) {
+        max = ithMonth;
+        month = i;
+      }
+    }
+
+    return month;
+  }
 }

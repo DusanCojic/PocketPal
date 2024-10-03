@@ -11,6 +11,11 @@ extension PersistentAccountFilterExtension on PersistentAccountService {
     }
 
     List<Account> accounts = box.values.cast<Account>().toList();
+
+    if (accounts.isEmpty || !accounts.contains(account)) {
+      return [];
+    }
+
     return accounts
         .firstWhere((element) => element == account)
         .incomeList
