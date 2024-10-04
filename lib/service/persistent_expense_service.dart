@@ -291,7 +291,7 @@ class PersistentExpenseService implements ExpenseService {
     Map<Category, double> result = {};
 
     List<Category> categories =
-        await ManagerService().service.getCategoryService().getCategories(sub);
+        await ManagerService().service.getCategoryService().getCategories(null);
 
     for (Category category in categories) {
       result[category] = await totalExpensesByPeriodAndCategory(
