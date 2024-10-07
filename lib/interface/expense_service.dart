@@ -38,6 +38,17 @@ abstract class ExpenseService {
   Future<List<Expense>> filterByPeriodAndCategory(TimePeriod period,
       Category category, Subscriber? sub, DateTime? from, DateTime? to);
 
+  Future<Map<Category, double>> totalExpensesForEveryCategory(
+      TimePeriod period, Subscriber? sub);
+  Future<List<double>> totalMonthlyExpenses(int year, Subscriber? sub);
+  Future<List<double>> totalDailyExpenses(int month, int year, Subscriber? sub);
+
+  Future<double> monthlyAverage(int year, Subscriber? sub);
+  Future<int> monthWithTheHighestExpenses(int year, Subscriber? sub);
+
+  Future<double> dailyAverage(int month, int year, Subscriber? sub);
+  Future<int> dayWithTheHighestExpenses(int month, int year, Subscriber? sub);
+
   void subscribe(Subscriber sub);
   void unsubscribe(Subscriber sub);
 }

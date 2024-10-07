@@ -14,6 +14,23 @@ class CategoryList extends StatefulWidget {
 }
 
 class _CategoryListState extends State<CategoryList> implements Subscriber {
+  List<Category> categories = [];
+
+  @override
+  void initState() {
+    super.initState();
+    ManagerService().service.getCategoryService().subscribe(this);
+    _fetchCategories();
+  }
+
+  Future<void> _fetchCategories() async {
+    List<Category> fetchedCategories =
+        await ManagerService().service.getCategoryService().getCategories(null);
+    setState(() {
+      categories = fetchedCategories.reversed.toList();
+    });
+  }
+
   @override
   void dispose() {
     ManagerService().service.getCategoryService().unsubscribe(this);
@@ -22,6 +39,33 @@ class _CategoryListState extends State<CategoryList> implements Subscriber {
 
   @override
   Widget build(BuildContext context) {
+    if (categories.isEmpty) {
+      return Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        color: const Color.fromRGBO(245, 245, 247, 1.0),
+        child: Column(
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 8.0, left: 10.0),
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(
+                    Icons.close_rounded,
+                    size: 25.0,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -32,7 +76,7 @@ class _CategoryListState extends State<CategoryList> implements Subscriber {
             builder: (BuildContext context) {
               return Padding(
                 padding: MediaQuery.of(context).viewInsets,
-                child: AddCategory(onCategoryAdded: getCategories),
+                child: AddCategory(onCategoryAdded: update),
               );
             },
           );
@@ -46,201 +90,162 @@ class _CategoryListState extends State<CategoryList> implements Subscriber {
           color: Colors.white,
         ),
       ),
-      body: FutureBuilder<List<Category>>(
-        future: getCategories(),
-        builder:
-            (BuildContext context, AsyncSnapshot<List<Category>> snapshot) {
-          if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Container(
-              width: MediaQuery.of(context).size.width,
-              height: MediaQuery.of(context).size.height,
-              color: const Color.fromRGBO(245, 245, 247, 1.0),
-              child: Column(
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 8.0, left: 10.0),
-                      child: IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: const Icon(
-                          Icons.close_rounded,
-                          size: 25.0,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          final categories = snapshot.data!.reversed.toList();
-          return Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height,
-            color: const Color.fromRGBO(245, 245, 247, 1.0),
-            child: Column(
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 8.0, left: 10.0),
-                    child: IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(
-                        Icons.close_rounded,
-                        size: 25.0,
-                      ),
-                    ),
+      body: Container(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        color: const Color.fromRGBO(245, 245, 247, 1.0),
+        child: Column(
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(top: 8.0, left: 10.0),
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: const Icon(
+                    Icons.close_rounded,
+                    size: 25.0,
                   ),
                 ),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: categories.length,
-                    itemBuilder: (context, index) {
-                      Category category = categories[index];
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: categories.length,
+                itemBuilder: (context, index) {
+                  Category category = categories[index];
 
-                      if (category.name == "Uncategorized") {
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                          child: Card(
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(30.0),
-                            ),
-                            color: Colors.white,
-                            child: SizedBox(
-                              width: MediaQuery.of(context).size.width - 30,
-                              height: MediaQuery.of(context).size.height / 10,
-                              child: Padding(
-                                padding: const EdgeInsets.only(left: 20.0),
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      width: 46,
-                                      height: 46,
-                                      decoration: BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: category.color.withOpacity(0.1),
-                                      ),
-                                      child: Icon(
-                                        IconData(category.iconCode,
-                                            fontFamily: "MaterialIcons"),
-                                        color: category.color,
-                                        size: 30.0,
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding:
-                                          const EdgeInsets.only(left: 20.0),
-                                      child: Text(
-                                        category.name,
-                                        style: const TextStyle(fontSize: 18.0),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                      }
-
-                      return Slidable(
-                        key: ValueKey(index - categories[index].hashCode),
-                        endActionPane: ActionPane(
-                          motion: const DrawerMotion(),
-                          children: [
-                            SlidableAction(
-                              onPressed: (context) async {
-                                await deleteCategory(categories[index]);
-                              },
-                              backgroundColor:
-                                  Colors.redAccent.withOpacity(0.2),
-                              foregroundColor: Colors.redAccent,
-                              borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(30),
-                                bottomLeft: Radius.circular(30),
-                              ),
-                              icon: Icons.delete,
-                              label: 'Delete',
-                            ),
-                          ],
+                  if (category.name == "Uncategorized") {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      child: Card(
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
                         ),
-                        child: Center(
-                          child: GestureDetector(
-                            onTap: () {
-                              showModalBottomSheet(
-                                context: context,
-                                isScrollControlled: true,
-                                builder: (BuildContext context) {
-                                  return Padding(
-                                    padding: MediaQuery.of(context).viewInsets,
-                                    child: FullCategoryView(
-                                      category: category,
-                                      onCategoryEditted: getCategories,
-                                    ),
-                                  );
-                                },
-                              );
-                            },
-                            child: Card(
-                              elevation: 0,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(30.0),
-                              ),
-                              color: Colors.white,
-                              child: SizedBox(
-                                width: MediaQuery.of(context).size.width - 30,
-                                height: MediaQuery.of(context).size.height / 10,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 20.0),
-                                  child: Row(
-                                    children: [
-                                      Container(
-                                        width: 46,
-                                        height: 46,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color:
-                                              category.color.withOpacity(0.1),
-                                        ),
-                                        child: Icon(
-                                          IconData(category.iconCode,
-                                              fontFamily: "MaterialIcons"),
-                                          color: category.color,
-                                          size: 30.0,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 20.0),
-                                        child: Text(
-                                          category.name,
-                                          style:
-                                              const TextStyle(fontSize: 18.0),
-                                        ),
-                                      ),
-                                    ],
+                        color: Colors.white,
+                        child: SizedBox(
+                          width: MediaQuery.of(context).size.width - 30,
+                          height: MediaQuery.of(context).size.height / 10,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 20.0),
+                            child: Row(
+                              children: [
+                                Container(
+                                  width: 46,
+                                  height: 46,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: category.color.withOpacity(0.1),
+                                  ),
+                                  child: Icon(
+                                    IconData(category.iconCode,
+                                        fontFamily: "MaterialIcons"),
+                                    color: category.color,
+                                    size: 30.0,
                                   ),
                                 ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 20.0),
+                                  child: Text(
+                                    category.name,
+                                    style: const TextStyle(fontSize: 18.0),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+
+                  return Slidable(
+                    key: ValueKey(index - categories[index].hashCode),
+                    endActionPane: ActionPane(
+                      motion: const DrawerMotion(),
+                      children: [
+                        SlidableAction(
+                          onPressed: (context) async {
+                            await deleteCategory(categories[index]);
+                          },
+                          backgroundColor: Colors.redAccent.withOpacity(0.2),
+                          foregroundColor: Colors.redAccent,
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(30),
+                            bottomLeft: Radius.circular(30),
+                          ),
+                          icon: Icons.delete,
+                          label: 'Delete',
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: GestureDetector(
+                        onTap: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (BuildContext context) {
+                              return Padding(
+                                padding: MediaQuery.of(context).viewInsets,
+                                child: FullCategoryView(
+                                  category: category,
+                                  onCategoryEditted: getCategories,
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        child: Card(
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          color: Colors.white,
+                          child: SizedBox(
+                            width: MediaQuery.of(context).size.width - 30,
+                            height: MediaQuery.of(context).size.height / 10,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 20.0),
+                              child: Row(
+                                children: [
+                                  Container(
+                                    width: 46,
+                                    height: 46,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: category.color.withOpacity(0.1),
+                                    ),
+                                    child: Icon(
+                                      IconData(category.iconCode,
+                                          fontFamily: "MaterialIcons"),
+                                      color: category.color,
+                                      size: 30.0,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 20.0),
+                                    child: Text(
+                                      category.name,
+                                      style: const TextStyle(fontSize: 18.0),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
                         ),
-                      );
-                    },
-                  ),
-                ),
-              ],
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
-          );
-        },
+          ],
+        ),
       ),
     );
   }
@@ -258,6 +263,6 @@ class _CategoryListState extends State<CategoryList> implements Subscriber {
 
   @override
   void update() {
-    setState(() {});
+    _fetchCategories();
   }
 }

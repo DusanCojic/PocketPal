@@ -28,33 +28,29 @@ class SettingsScreen extends StatelessWidget {
               children: [
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20.0),
-                  child: GestureDetector(
-                    onTap: () {
-                      showDialog(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      showModalBottomSheet(
                         context: context,
                         useRootNavigator: true,
-                        builder: (BuildContext context) {
-                          return const CategoryList();
+                        isScrollControlled: true,
+                        builder: (context) {
+                          return const Padding(
+                            padding: EdgeInsets.only(top: 25.0),
+                            child: CategoryList(),
+                          );
                         },
                       );
                     },
-                    child: Container(
-                      width: MediaQuery.of(context).size.width - 60,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(20.0),
-                      ),
-                      child: const Padding(
-                        padding: EdgeInsets.only(top: 13.0, left: 30.0),
-                        child: Text(
-                          "Edit Categories",
-                          style: TextStyle(
-                            fontFamily: 'Roboto',
-                            fontSize: 17.0,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
+                    style: ElevatedButton.styleFrom(
+                      elevation: 0,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 120.0, vertical: 15.0),
+                    ),
+                    child: const Text(
+                      "Edit categories",
+                      style: TextStyle(
+                        color: Colors.black87,
                       ),
                     ),
                   ),
