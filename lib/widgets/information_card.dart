@@ -36,7 +36,7 @@ class InformationCard extends StatelessWidget {
                 title,
                 style: const TextStyle(
                   color: Colors.black45,
-                  fontWeight: FontWeight.w500,
+                  fontWeight: FontWeight.w400,
                 ),
               ),
             ),
@@ -45,7 +45,7 @@ class InformationCard extends StatelessWidget {
               child: Text(
                 info,
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w500,
                   fontSize: 17.0,
                   color: color,
                 ),
