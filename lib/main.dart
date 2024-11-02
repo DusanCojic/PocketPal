@@ -15,6 +15,10 @@ void main() async {
     ),
   );
 
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+  ]);
+
   await ManagerService().initialize();
 
   Category uncategorized = Category(
