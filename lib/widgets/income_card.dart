@@ -51,7 +51,7 @@ class _IncomeCardState extends State<IncomeCard> {
                 Padding(
                   padding: const EdgeInsets.only(left: 15.0),
                   child: Text(
-                    '\$${NumberFormat('#,##0.00').format(widget.income.amount)}',
+                    NumberFormat('#,##0.00').format(widget.income.amount),
                     style: const TextStyle(
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,

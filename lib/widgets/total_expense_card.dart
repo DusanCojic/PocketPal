@@ -53,8 +53,8 @@ class _TotalExpenseCardState extends State<TotalExpenseCard>
             ),
             builder: (BuildContext context, AsyncSnapshot<double> snapshot) {
               String totalExpense = snapshot.hasData && snapshot.data != null
-                  ? '\$${NumberFormat('#,##0.00').format(snapshot.data!)}'
-                  : '\$0.00';
+                  ? NumberFormat('#,##0.00').format(snapshot.data!)
+                  : '0.00';
               return Padding(
                 padding: const EdgeInsets.only(top: 35.0, left: 30.0),
                 child: RichText(

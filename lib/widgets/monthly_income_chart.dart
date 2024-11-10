@@ -194,7 +194,7 @@ class _MonthlyIncomeChartState extends State<MonthlyIncomeChart>
             children: [
               InformationCard(
                 title: "Monthly average",
-                info: "\$${average.toStringAsFixed(2)}",
+                info: average.toStringAsFixed(2),
                 color: const Color(0xff81c784),
                 width: (MediaQuery.of(context).size.width - 80) / 2,
                 height: 70.0,

@@ -59,7 +59,7 @@ class ExpenseByCategoryCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(right: 20.0),
               child: Text(
-                "\$${NumberFormat("#,##0.00").format(value)}",
+                NumberFormat("#,##0.00").format(value),
                 style: const TextStyle(
                   fontSize: 14.0,
                   fontWeight: FontWeight.w600,

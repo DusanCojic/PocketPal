@@ -91,7 +91,7 @@ class _DailyExpenseChartState extends State<DailyExpenseChart>
             children: [
               InformationCard(
                 title: "Daily average",
-                info: "\$${average.toStringAsFixed(2)}",
+                info: average.toStringAsFixed(2),
                 color: const Color.fromARGB(255, 255, 179, 64),
                 width: (MediaQuery.of(context).size.width - 80) / 2,
                 height: 70.0,

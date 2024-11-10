@@ -63,7 +63,7 @@ class _ExpenseByCategoryChartState extends State<ExpenseByCategoryChart>
                               final total = snapshot.data ?? 0.00;
 
                               return Text(
-                                "\$${NumberFormat("#,##0.00").format(total)}",
+                                NumberFormat("#,##0.00").format(total),
                                 style: const TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 16.0,

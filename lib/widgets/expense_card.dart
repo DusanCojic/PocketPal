@@ -80,7 +80,8 @@ class _ExpenseCardState extends State<ExpenseCard> {
                           Padding(
                             padding: const EdgeInsets.only(right: 20.0),
                             child: Text(
-                              '\$${NumberFormat('#,##0.00').format(widget.expense.amount)}',
+                              NumberFormat('#,##0.00')
+                                  .format(widget.expense.amount),
                               style: const TextStyle(
                                 fontSize: 15.0,
                                 fontWeight: FontWeight.w600,

@@ -119,7 +119,7 @@ class _MonthlyExpenseChartState extends State<MonthlyExpenseChart>
             children: [
               InformationCard(
                 title: "Monthly average",
-                info: "\$${average.toStringAsFixed(2)}",
+                info: average.toStringAsFixed(2),
                 color: const Color(0xff8bc6ec),
                 width: (MediaQuery.of(context).size.width - 80) / 2,
                 height: 70.0,
